@@ -11,31 +11,20 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
-    "@repo/ui": "*",
+    "daisyui": "^5.0.35",
     "next": "16.2.0",
     "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*"
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@tailwindcss/postcss": "^4.1.10",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
-    "typescript": "5.9.2",
-    "@repo/ui": "*"
-  },
-  "peerDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "@repo/ui": "*"
-  },
-  "optionalDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "@repo/ui": "*"
+    "tailwindcss": "^4.1.10",
+    "typescript": "5.9.2"
   }
 }
