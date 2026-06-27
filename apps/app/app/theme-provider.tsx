@@ -2,6 +2,7 @@
 
 import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
+import { lightTokens, darkTokens } from "@repo/theme-tokens";
 
 export default function ThemeProvider({
   children,
@@ -18,10 +19,21 @@ export default function ThemeProvider({
     return () => mq.removeEventListener("change", handler);
   }, []);
 
+  useEffect(() => {
+    const tokens = isDark ? darkTokens : lightTokens;
+    document.body.style.backgroundColor = tokens.colorBgContainer ?? "";
+    document.body.style.color = tokens.colorText ?? "";
+  }, [isDark]);
+
   return (
     <ConfigProvider
       theme={{
         algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+        token: {
+          ...(isDark ? darkTokens : lightTokens),
+          fontFamily:
+            "ui-sans-serif, system-ui, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+        },
       }}
     >
       {children}
