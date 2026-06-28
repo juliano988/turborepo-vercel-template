@@ -18,6 +18,12 @@ export default function Home() {
             Abrir App
           </a>
           <a
+            href={`${process.env.NEXT_PUBLIC_ADMIN_URL}/admin`}
+            className="btn btn-outline"
+          >
+            Ver BackOffice
+          </a>
+          <a
             href={`${process.env.NEXT_PUBLIC_DOCS_URL}/docs`}
             className="btn btn-outline"
           >

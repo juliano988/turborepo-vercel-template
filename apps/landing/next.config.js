@@ -13,6 +13,14 @@ const nextConfig = withEnv({
         destination: `${process.env.NEXT_PUBLIC_APP_URL}/app/:path*`,
       },
       {
+        source: '/admin',
+        destination: `${process.env.NEXT_PUBLIC_ADMIN_URL}/admin`,
+      },
+      {
+        source: '/admin/:path*',
+        destination: `${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/:path*`,
+      },
+      {
         source: '/docs',
         destination: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
       },
