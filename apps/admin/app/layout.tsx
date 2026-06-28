@@ -1,6 +1,6 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
+import { ThemeProviderAntd } from "@repo/theme-tokens";
 import type { Metadata } from "next";
-import ThemeProvider from "./theme-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <AntdRegistry>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProviderAntd>{children}</ThemeProviderAntd>
         </AntdRegistry>
       </body>
     </html>
