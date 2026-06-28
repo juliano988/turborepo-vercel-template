@@ -4,11 +4,10 @@ import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
 import { ThemeContextAntd } from "./ThemeContextAntd";
 import { darkTokens, lightTokens } from "./tokens";
+import { readThemePreference, writeThemePreference } from "./themeStorage";
 
 const FONT_FAMILY =
   'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
-
-const STORAGE_KEY = "theme-preference";
 
 export default function ThemeProviderAntd({
   children,
@@ -18,8 +17,8 @@ export default function ThemeProviderAntd({
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "dark" || stored === "light") {
+    const stored = readThemePreference();
+    if (stored) {
       setIsDark(stored === "dark");
     } else {
       setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
@@ -27,7 +26,7 @@ export default function ThemeProviderAntd({
 
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
+      if (!readThemePreference()) {
         setIsDark(e.matches);
       }
     };
@@ -44,7 +43,7 @@ export default function ThemeProviderAntd({
   const toggle = () => {
     setIsDark((prev) => {
       const next = !prev;
-      localStorage.setItem(STORAGE_KEY, next ? "dark" : "light");
+      writeThemePreference(next ? "dark" : "light");
       return next;
     });
   };

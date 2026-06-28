@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-const STORAGE_KEY = "theme-preference";
+import { readThemePreference, writeThemePreference } from "./themeStorage";
 
 function SunIcon() {
   return (
@@ -42,10 +41,9 @@ export function ThemeToggleDaisyUI() {
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "dark" || stored === "light") {
-      const dark = stored === "dark";
-      setIsDark(dark);
+    const stored = readThemePreference();
+    if (stored) {
+      setIsDark(stored === "dark");
       document.documentElement.setAttribute("data-theme", stored);
     } else {
       const prefersDark = window.matchMedia(
@@ -56,7 +54,7 @@ export function ThemeToggleDaisyUI() {
 
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const handler = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem(STORAGE_KEY)) {
+      if (!readThemePreference()) {
         setIsDark(e.matches);
         document.documentElement.removeAttribute("data-theme");
       }
@@ -69,7 +67,7 @@ export function ThemeToggleDaisyUI() {
     const next = !isDark;
     setIsDark(next);
     const t = next ? "dark" : "light";
-    localStorage.setItem(STORAGE_KEY, t);
+    writeThemePreference(t);
     document.documentElement.setAttribute("data-theme", t);
   };
 
