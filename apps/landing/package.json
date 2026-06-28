@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@repo/env": "*",
+    "@repo/theme-tokens": "*",
     "daisyui": "^5.0.35",
     "next": "16.2.0",
     "react": "^19.2.0",

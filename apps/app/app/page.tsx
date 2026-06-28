@@ -1,12 +1,17 @@
 "use client";
 
 import { Flex, Typography } from "antd";
+import { ThemeToggleAntd } from "@repo/theme-tokens";
 
 const { Title, Text } = Typography;
 
 export default function Home() {
   return (
-    <Flex align="center" justify="center" style={{ minHeight: "100vh" }}>
+    <>
+      <div style={{ position: "fixed", top: 16, right: 16 }}>
+        <ThemeToggleAntd />
+      </div>
+      <Flex align="center" justify="center" style={{ minHeight: "100vh" }}>
       <div style={{ textAlign: "center", maxWidth: 448 }}>
         {/* text-sm font-medium tracking-widest uppercase opacity-50 */}
         <Text
@@ -47,6 +52,7 @@ export default function Home() {
           SEO.
         </Text>
       </div>
-    </Flex>
+      </Flex>
+    </>
   );
 }
