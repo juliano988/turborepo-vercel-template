@@ -10,6 +10,20 @@ export default function Home() {
           Aqui vai o conteúdo de marketing. Otimizado para SEO, rápido por
           padrão.
         </p>
+        <div className="flex gap-4 justify-center pt-4">
+          <a
+            href={`${process.env.NEXT_PUBLIC_APP_URL}/app`}
+            className="btn btn-primary"
+          >
+            Abrir App
+          </a>
+          <a
+            href={`${process.env.NEXT_PUBLIC_DOCS_URL}/docs`}
+            className="btn btn-outline"
+          >
+            Ver Docs
+          </a>
+        </div>
       </div>
     </div>
   );

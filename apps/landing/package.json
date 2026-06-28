@@ -11,6 +11,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/env": "*",
     "daisyui": "^5.0.35",
     "next": "16.2.0",
     "react": "^19.2.0",
