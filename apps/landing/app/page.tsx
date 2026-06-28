@@ -1,4 +1,4 @@
-import { ThemeToggleDaisyUI } from "@repo/theme-tokens";
+import { ThemeToggleDaisyUI } from "@repo/ui";
 
 export default function Home() {
   return (

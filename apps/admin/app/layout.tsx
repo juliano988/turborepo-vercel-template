@@ -1,5 +1,5 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ThemeProviderAntd } from "@repo/theme-tokens";
+import { ThemeProviderAntd } from "@repo/ui";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

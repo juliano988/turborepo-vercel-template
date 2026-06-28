@@ -1,6 +1,6 @@
 "use client";
 
-import { ThemeToggleAntd } from "@repo/theme-tokens";
+import { ThemeToggleAntd } from "@repo/ui";
 import { Flex, Typography } from "antd";
 
 const { Title, Text } = Typography;

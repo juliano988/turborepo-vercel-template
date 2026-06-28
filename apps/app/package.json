@@ -13,7 +13,7 @@
   "dependencies": {
     "@repo/env": "*",
     "@ant-design/nextjs-registry": "^1.0.2",
-    "@repo/theme-tokens": "*",
+    "@repo/ui": "*",
     "antd": "^5.25.4",
     "next": "16.2.0",
     "react": "^19.2.0",
