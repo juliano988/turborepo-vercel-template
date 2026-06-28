@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { readThemePreference, writeThemePreference } from "../../modules/themeStorage";
+import {
+  readThemePreference,
+  writeThemePreference,
+} from "../../modules/themeStorage";
 
 function SunIcon() {
   return (
@@ -38,36 +41,47 @@ function MoonIcon() {
 export function ThemeToggleDaisyUI() {
   const [isDark, setIsDark] = useState(false);
 
+  function applyTheme(dark: boolean, persist = false) {
+    setIsDark(dark);
+    const t = dark ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", t);
+    if (persist) writeThemePreference(t);
+  }
+
   useEffect(() => {
-    const stored = readThemePreference();
-    if (stored) {
-      setIsDark(stored === "dark");
-      document.documentElement.setAttribute("data-theme", stored);
-    } else {
-      const prefersDark = window.matchMedia(
-        "(prefers-color-scheme: dark)"
-      ).matches;
-      setIsDark(prefersDark);
+    function syncFromStorage() {
+      const stored = readThemePreference();
+      if (stored) {
+        applyTheme(stored === "dark");
+      } else {
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        applyTheme(prefersDark);
+      }
     }
 
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = (e: MediaQueryListEvent) => {
-      if (!readThemePreference()) {
-        setIsDark(e.matches);
-        document.documentElement.removeAttribute("data-theme");
-      }
+    syncFromStorage();
+
+    // Resincroniza ao restaurar do bfcache (back/forward navigation)
+    const handlePageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) syncFromStorage();
     };
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
+    window.addEventListener("pageshow", handlePageShow);
+
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const mqHandler = (e: MediaQueryListEvent) => {
+      if (!readThemePreference()) applyTheme(e.matches);
+    };
+    mq.addEventListener("change", mqHandler);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      mq.removeEventListener("change", mqHandler);
+    };
   }, []);
 
-  const toggle = () => {
-    const next = !isDark;
-    setIsDark(next);
-    const t = next ? "dark" : "light";
-    writeThemePreference(t);
-    document.documentElement.setAttribute("data-theme", t);
-  };
+  const toggle = () => applyTheme(!isDark, true);
 
   return (
     <button
