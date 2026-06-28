@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { readThemePreference, writeThemePreference } from "./themeStorage";
+import { readThemePreference, writeThemePreference } from "../../modules/themeStorage";
 
 function SunIcon() {
   return (

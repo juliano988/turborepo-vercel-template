@@ -2,7 +2,7 @@
 
 import { MoonOutlined, SunOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { useThemeAntd } from "./ThemeContextAntd";
+import { useThemeAntd } from "../../modules/ThemeContext";
 
 export function ThemeToggleAntd() {
   const { isDark, toggle } = useThemeAntd();

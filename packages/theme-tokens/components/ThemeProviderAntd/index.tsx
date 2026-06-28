@@ -2,12 +2,10 @@
 
 import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
-import { ThemeContextAntd } from "./ThemeContextAntd";
-import { darkTokens, lightTokens } from "./tokens";
-import { readThemePreference, writeThemePreference } from "./themeStorage";
-
-const FONT_FAMILY =
-  'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"';
+import { FONT_FAMILY } from "../../constants";
+import { ThemeContextAntd } from "../../modules/ThemeContext";
+import { readThemePreference, writeThemePreference } from "../../modules/themeStorage";
+import { darkTokens, lightTokens } from "../../modules/tokens";
 
 export default function ThemeProviderAntd({
   children,

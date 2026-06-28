@@ -1,5 +1,4 @@
-const KEY = "theme-preference";
-const MAX_AGE = 60 * 60 * 24 * 365; // 1 ano
+import { THEME_COOKIE_KEY, THEME_COOKIE_MAX_AGE } from "../constants";
 
 /** Em prod deriva ".example.com"; em localhost não define domain (compartilhado por porta). */
 function getDomain(): string {
@@ -10,7 +9,9 @@ function getDomain(): string {
 }
 
 export function readThemePreference(): "dark" | "light" | null {
-  const match = document.cookie.match(/(?:^|;\s*)theme-preference=([^;]+)/);
+  const match = document.cookie.match(
+    /(?:^|;\s*)theme-preference=([^;]+)/
+  );
   const val = match?.[1];
   return val === "dark" || val === "light" ? val : null;
 }
@@ -18,5 +19,5 @@ export function readThemePreference(): "dark" | "light" | null {
 export function writeThemePreference(value: "dark" | "light"): void {
   const domain = getDomain();
   const domainAttr = domain ? `; domain=${domain}` : "";
-  document.cookie = `${KEY}=${value}; path=/${domainAttr}; max-age=${MAX_AGE}; SameSite=Lax`;
+  document.cookie = `${THEME_COOKIE_KEY}=${value}; path=/${domainAttr}; max-age=${THEME_COOKIE_MAX_AGE}; SameSite=Lax`;
 }
