@@ -4,13 +4,14 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "dev": "next dev",
-    "start": "next start",
+    "dev": "next dev --port 3003",
+    "start": "next start --port 3003",
     "types:check": "fumadocs-mdx && next typegen && tsc --noEmit",
     "postinstall": "fumadocs-mdx",
     "lint": "eslint"
   },
   "dependencies": {
+    "@repo/env": "*",
     "cnfast": "^0.0.8",
     "fumadocs-core": "16.10.6",
     "fumadocs-mdx": "15.0.13",
