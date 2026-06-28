@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@repo/env": "*",
+    "@repo/ui": "*",
     "cnfast": "^0.0.8",
     "fumadocs-core": "16.10.6",
     "fumadocs-mdx": "15.0.13",
