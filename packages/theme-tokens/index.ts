@@ -5,3 +5,4 @@ export { ThemeToggleAntd } from "./components/ThemeToggleAntd";
 export { ThemeToggleDaisyUI } from "./components/ThemeToggleDaisyUI";
 export { readThemePreference, writeThemePreference } from "./modules/themeStorage";
 export type { ThemeContextValue } from "./types";
+export * from "lucide-react";

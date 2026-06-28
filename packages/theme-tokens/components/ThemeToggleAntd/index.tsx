@@ -1,6 +1,6 @@
 "use client";
 
-import { MoonOutlined, SunOutlined } from "@ant-design/icons";
+import { Moon, Sun } from "lucide-react";
 import { Button } from "antd";
 import { useThemeAntd } from "../../modules/ThemeContext";
 
@@ -11,7 +11,7 @@ export function ThemeToggleAntd() {
     <Button
       type="text"
       shape="circle"
-      icon={isDark ? <SunOutlined /> : <MoonOutlined />}
+      icon={isDark ? <Sun size={16} /> : <Moon size={16} />}
       onClick={toggle}
       aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
     />
