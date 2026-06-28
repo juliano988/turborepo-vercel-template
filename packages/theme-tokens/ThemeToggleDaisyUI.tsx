@@ -37,10 +37,8 @@ function MoonIcon() {
 
 export function ThemeToggleDaisyUI() {
   const [isDark, setIsDark] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const stored = readThemePreference();
     if (stored) {
       setIsDark(stored === "dark");
@@ -76,7 +74,6 @@ export function ThemeToggleDaisyUI() {
       className="btn btn-ghost btn-circle"
       onClick={toggle}
       aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
-      style={{ opacity: mounted ? 1 : 0 }}
     >
       {isDark ? <SunIcon /> : <MoonIcon />}
     </button>
