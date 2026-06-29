@@ -1,6 +1,6 @@
 import type { Config } from "prettier";
 import * as tailwindPlugin from "prettier-plugin-tailwindcss";
-import baseConfig from "./index.js";
+import baseConfig from "./index.ts";
 
 const config: Config = {
   ...baseConfig,

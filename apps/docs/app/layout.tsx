@@ -25,7 +25,7 @@ export default async function Layout({ children }: LayoutProps<"/">) {
 
   return (
     <html lang="en" className={inter.className} suppressHydrationWarning>
-      <body className="flex flex-col min-h-screen">
+      <body className="flex min-h-screen flex-col">
         <ThemeProviderFumaDocs defaultTheme={defaultTheme}>
           <RootProvider theme={{ enabled: false }}>
             <DocsLayout tree={source.getPageTree()} {...baseOptions()}>
@@ -37,7 +37,7 @@ export default async function Layout({ children }: LayoutProps<"/">) {
                     buttonVariants({
                       variant: "secondary",
                       className: "text-fd-muted-foreground rounded-2xl",
-                    }),
+                    })
                   )}
                 >
                   <MessageCircleIcon className="size-4.5" />

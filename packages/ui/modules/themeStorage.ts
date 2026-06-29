@@ -9,9 +9,7 @@ function getDomain(): string {
 }
 
 export function readThemePreference(): "dark" | "light" | null {
-  const match = document.cookie.match(
-    /(?:^|;\s*)theme-preference=([^;]+)/
-  );
+  const match = document.cookie.match(/(?:^|;\s*)theme-preference=([^;]+)/);
   const val = match?.[1];
   return val === "dark" || val === "light" ? val : null;
 }

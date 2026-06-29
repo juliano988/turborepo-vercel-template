@@ -28,7 +28,7 @@ const FD_MAP: Record<string, keyof DaisyTheme> = {
  */
 export function applyFumadocsTheme(
   themeName: string,
-  root: HTMLElement = document.documentElement,
+  root: HTMLElement = document.documentElement
 ): void {
   const theme = (themes as Record<string, DaisyTheme>)[themeName];
   if (!theme) return;

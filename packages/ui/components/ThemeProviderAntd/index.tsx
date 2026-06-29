@@ -4,7 +4,10 @@ import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
 import { FONT_FAMILY } from "../../constants";
 import { ThemeContextAntd } from "../../modules/ThemeContext";
-import { readThemePreference, writeThemePreference } from "../../modules/themeStorage";
+import {
+  readThemePreference,
+  writeThemePreference,
+} from "../../modules/themeStorage";
 import { darkTokens, lightTokens } from "../../modules/tokens";
 
 export default function ThemeProviderAntd({

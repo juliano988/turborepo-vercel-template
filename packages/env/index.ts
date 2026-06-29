@@ -1,7 +1,7 @@
-import { config } from 'dotenv';
-import { resolve, dirname } from 'path';
-import { existsSync } from 'fs';
-import type { NextConfig } from 'next';
+import { config } from "dotenv";
+import { resolve, dirname } from "path";
+import { existsSync } from "fs";
+import type { NextConfig } from "next";
 
 /**
  * Sobe a árvore de diretórios até encontrar turbo.json,
@@ -10,7 +10,7 @@ import type { NextConfig } from 'next';
 function findMonorepoRoot(startDir: string): string {
   let dir = startDir;
   while (true) {
-    if (existsSync(resolve(dir, 'turbo.json'))) {
+    if (existsSync(resolve(dir, "turbo.json"))) {
       return dir;
     }
     const parent = dirname(dir);
@@ -31,6 +31,6 @@ function findMonorepoRoot(startDir: string): string {
  */
 export function withEnv(nextConfig: NextConfig = {}): NextConfig {
   const root = findMonorepoRoot(process.cwd());
-  config({ path: resolve(root, '.env'), override: false });
+  config({ path: resolve(root, ".env"), override: false });
   return nextConfig;
 }
