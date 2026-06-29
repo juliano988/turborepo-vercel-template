@@ -1,0 +1,17 @@
+{
+  "name": "@repo/prettier-config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./index.ts",
+    "./with-tailwind": "./with-tailwind.ts"
+  },
+  "dependencies": {
+    "prettier-plugin-tailwindcss": "^0.6.12"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "prettier": "^3.7.4"
+  }
+}

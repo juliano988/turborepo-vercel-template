@@ -5,6 +5,7 @@
     "": {
       "name": "turborepo-vercel-template",
       "devDependencies": {
+        "@repo/prettier-config": "*",
         "prettier": "^3.7.4",
         "turbo": "^2.10.0",
         "typescript": "5.9.2",
@@ -27,6 +28,7 @@
       "devDependencies": {
         "@repo/env": "*",
         "@repo/eslint-config": "*",
+        "@repo/prettier-config": "*",
         "@repo/typescript-config": "*",
         "@repo/ui": "*",
         "@types/node": "^22.15.3",
@@ -62,6 +64,7 @@
       },
       "devDependencies": {
         "@repo/eslint-config": "*",
+        "@repo/prettier-config": "*",
         "@repo/typescript-config": "*",
         "@types/node": "^22.15.3",
         "@types/react": "19.2.2",
@@ -98,6 +101,7 @@
         "zod": "^4.4.3",
       },
       "devDependencies": {
+        "@repo/prettier-config": "*",
         "@tailwindcss/postcss": "^4.3.1",
         "@types/hast": "^3.0.4",
         "@types/mdx": "^2.0.14",
@@ -124,6 +128,7 @@
       },
       "devDependencies": {
         "@repo/eslint-config": "*",
+        "@repo/prettier-config": "*",
         "@repo/typescript-config": "*",
         "@tailwindcss/postcss": "^4.1.10",
         "@types/node": "^22.15.3",
@@ -164,6 +169,17 @@
         "typescript-eslint": "^8.50.0",
       },
     },
+    "packages/prettier-config": {
+      "name": "@repo/prettier-config",
+      "version": "0.0.0",
+      "dependencies": {
+        "prettier-plugin-tailwindcss": "^0.6.12",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "*",
+        "prettier": "^3.7.4",
+      },
+    },
     "packages/typescript-config": {
       "name": "@repo/typescript-config",
       "version": "0.0.0",
@@ -181,7 +197,6 @@
         "@types/react": "^19.2.17",
         "antd": "^5.25.4",
         "daisyui": "^5.6.3",
-        "next-themes": "^0.4.6",
       },
       "peerDependencies": {
         "antd": ">=5",
@@ -541,6 +556,8 @@
     "@repo/env": ["@repo/env@workspace:packages/env"],
 
     "@repo/eslint-config": ["@repo/eslint-config@workspace:packages/eslint-config"],
+
+    "@repo/prettier-config": ["@repo/prettier-config@workspace:packages/prettier-config"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
 
@@ -1401,6 +1418,8 @@
     "prelude-ls": ["prelude-ls@1.2.1", "", {}, "sha512-vkcDPrRZo1QZLbn5RLGPpg/WmIQ65qoWWhcGKf/b5eplkkarX0m9z8ppCat4mlOqUsWpyNuYgO3VRyrYHSzX5g=="],
 
     "prettier": ["prettier@3.9.0", "", { "bin": { "prettier": "bin/prettier.cjs" } }, "sha512-LjIqSIC5VYLzs9WedVmJ2ljNAGnU+DteIClbahu4L/DBeWjZ6iT/k1lAYyu9JUh+1xINxWadaPw/Pl63y/agAw=="],
+
+    "prettier-plugin-tailwindcss": ["prettier-plugin-tailwindcss@0.6.14", "", { "peerDependencies": { "@ianvs/prettier-plugin-sort-imports": "*", "@prettier/plugin-hermes": "*", "@prettier/plugin-oxc": "*", "@prettier/plugin-pug": "*", "@shopify/prettier-plugin-liquid": "*", "@trivago/prettier-plugin-sort-imports": "*", "@zackad/prettier-plugin-twig": "*", "prettier": "^3.0", "prettier-plugin-astro": "*", "prettier-plugin-css-order": "*", "prettier-plugin-import-sort": "*", "prettier-plugin-jsdoc": "*", "prettier-plugin-marko": "*", "prettier-plugin-multiline-arrays": "*", "prettier-plugin-organize-attributes": "*", "prettier-plugin-organize-imports": "*", "prettier-plugin-sort-imports": "*", "prettier-plugin-style-order": "*", "prettier-plugin-svelte": "*" }, "optionalPeers": ["@ianvs/prettier-plugin-sort-imports", "@prettier/plugin-hermes", "@prettier/plugin-oxc", "@prettier/plugin-pug", "@shopify/prettier-plugin-liquid", "@trivago/prettier-plugin-sort-imports", "@zackad/prettier-plugin-twig", "prettier-plugin-astro", "prettier-plugin-css-order", "prettier-plugin-import-sort", "prettier-plugin-jsdoc", "prettier-plugin-marko", "prettier-plugin-multiline-arrays", "prettier-plugin-organize-attributes", "prettier-plugin-organize-imports", "prettier-plugin-sort-imports", "prettier-plugin-style-order", "prettier-plugin-svelte"] }, "sha512-pi2e/+ZygeIqntN+vC573BcW5Cve8zUB0SSAGxqpB4f96boZF4M3phPVoOFCeypwkpRYdi7+jQ5YJJUwrkGUAg=="],
 
     "prop-types": ["prop-types@15.8.1", "", { "dependencies": { "loose-envify": "^1.4.0", "object-assign": "^4.1.1", "react-is": "^16.13.1" } }, "sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg=="],
 
