@@ -3,9 +3,15 @@ import type { Config } from "prettier";
 const config: Config = {
   semi: true,
   singleQuote: false,
+  jsxSingleQuote: false,
   tabWidth: 2,
+  useTabs: false,
   trailingComma: "es5",
   printWidth: 80,
+  bracketSpacing: true,
+  bracketSameLine: false,
+  arrowParens: "always",
+  endOfLine: "lf",
 };
 
 export default config;
