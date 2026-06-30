@@ -20,19 +20,19 @@ export default function Home() {
           </p>
           <div className="flex justify-center gap-4 pt-4">
             <a
-              href={`${process.env.NEXT_PUBLIC_APP_URL}/app`}
+              href="/app"
               className="btn btn-primary"
             >
               Abrir App
             </a>
             <a
-              href={`${process.env.NEXT_PUBLIC_ADMIN_URL}/admin`}
+              href="/admin"
               className="btn btn-outline"
             >
               Ver BackOffice
             </a>
             <a
-              href={`${process.env.NEXT_PUBLIC_DOCS_URL}/docs`}
+              href="/docs"
               className="btn btn-outline"
             >
               Ver Docs
