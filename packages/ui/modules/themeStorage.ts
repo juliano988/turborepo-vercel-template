@@ -18,4 +18,11 @@ export function writeThemePreference(value: "dark" | "light"): void {
   const domain = getDomain();
   const domainAttr = domain ? `; domain=${domain}` : "";
   document.cookie = `${THEME_COOKIE_KEY}=${value}; path=/${domainAttr}; max-age=${THEME_COOKIE_MAX_AGE}; SameSite=Lax`;
+
+  // Domínios como `.vercel.app` estão na Public Suffix List e browsers rejeitam
+  // cookies com esse atributo. Se o cookie não foi salvo, grava sem `domain`
+  // (persiste apenas no hostname atual, mas resolve a persistência em produção).
+  if (!readThemePreference()) {
+    document.cookie = `${THEME_COOKIE_KEY}=${value}; path=/; max-age=${THEME_COOKIE_MAX_AGE}; SameSite=Lax`;
+  }
 }
