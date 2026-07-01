@@ -13,7 +13,13 @@ function getTrustedOrigins(): string[] {
     ...new Set(
       Object.values(process.env)
         .filter((v): v is string => !!v && urlRegex.test(v))
-        .map((v) => new URL(v).origin)
+        .flatMap((v) => {
+          try {
+            return [new URL(v).origin];
+          } catch {
+            return [];
+          }
+        })
     ),
   ];
 }
@@ -21,7 +27,7 @@ function getTrustedOrigins(): string[] {
 export const auth = betterAuth({
   database: mongodbAdapter(db),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  baseURL: process.env.BETTER_AUTH_URL,
   trustedOrigins: getTrustedOrigins(),
   emailAndPassword: {
     enabled: true,
