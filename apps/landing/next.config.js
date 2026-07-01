@@ -28,6 +28,22 @@ const nextConfig = withEnv({
         source: '/docs/:path*',
         destination: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs/:path*`,
       },
+      {
+        source: '/login',
+        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/login`,
+      },
+      {
+        source: '/register',
+        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/register`,
+      },
+      {
+        source: '/auth/:path*',
+        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/auth/:path*`,
+      },
+      {
+        source: '/api/auth/:path*',
+        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/api/auth/:path*`,
+      },
     ];
   },
 });

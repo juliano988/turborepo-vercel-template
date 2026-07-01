@@ -1,0 +1,56 @@
+{
+  "name": "auth",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3004",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint --max-warnings 0",
+    "check-types": "next typegen && tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/env": "*",
+    "@repo/ui": "*",
+    "daisyui": "^5.0.35",
+    "next": "16.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "@repo/auth": "*",
+    "@repo/eslint-config": "*",
+    "@repo/prettier-config": "*",
+    "@repo/typescript-config": "*"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/prettier-config": "*",
+    "@repo/typescript-config": "*",
+    "@tailwindcss/postcss": "^4.1.10",
+    "@types/node": "^22.15.3",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "eslint": "^9.39.1",
+    "tailwindcss": "^4.1.10",
+    "typescript": "5.9.2",
+    "@repo/auth": "*",
+    "@repo/env": "*",
+    "@repo/ui": "*"
+  },
+  "peerDependencies": {
+    "@repo/auth": "*",
+    "@repo/env": "*",
+    "@repo/eslint-config": "*",
+    "@repo/prettier-config": "*",
+    "@repo/typescript-config": "*",
+    "@repo/ui": "*"
+  },
+  "optionalDependencies": {
+    "@repo/auth": "*",
+    "@repo/env": "*",
+    "@repo/eslint-config": "*",
+    "@repo/prettier-config": "*",
+    "@repo/typescript-config": "*",
+    "@repo/ui": "*"
+  }
+}
