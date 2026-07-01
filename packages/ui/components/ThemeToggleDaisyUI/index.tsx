@@ -54,11 +54,11 @@ export function ThemeToggleDaisyUI() {
 
   return (
     <button
-      className="btn btn-ghost btn-circle"
+      className="btn btn-circle"
       onClick={toggle}
       aria-label={isDark ? "Ativar tema claro" : "Ativar tema escuro"}
     >
-      {isDark ? <Sun size={20} /> : <Moon size={20} />}
+      {isDark ? <Sun size={16} /> : <Moon size={16} />}
     </button>
   );
 }
