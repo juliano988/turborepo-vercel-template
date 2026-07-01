@@ -5,7 +5,12 @@
   "private": true,
   "exports": {
     ".": "./index.ts",
-    "./client": "./client.ts"
+    "./client": "./client.ts",
+    "./components": "./components/index.ts"
+  },
+  "peerDependencies": {
+    "antd": ">=5",
+    "react": ">=18"
   },
   "dependencies": {
     "better-auth": "^1.2.7",

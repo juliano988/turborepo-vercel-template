@@ -11,6 +11,7 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@repo/auth": "*",
     "@repo/env": "*",
     "@ant-design/nextjs-registry": "^1.0.2",
     "@repo/ui": "*",

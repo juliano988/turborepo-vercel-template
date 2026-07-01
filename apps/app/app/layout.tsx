@@ -1,5 +1,6 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { ThemeProviderAntd } from "@repo/ui";
+import { AuthGuard } from "@repo/auth/components";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -16,7 +17,9 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body>
         <AntdRegistry>
-          <ThemeProviderAntd>{children}</ThemeProviderAntd>
+          <ThemeProviderAntd>
+            <AuthGuard>{children}</AuthGuard>
+          </ThemeProviderAntd>
         </AntdRegistry>
       </body>
     </html>
