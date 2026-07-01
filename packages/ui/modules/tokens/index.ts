@@ -1,29 +1,7 @@
-import type { ThemeConfig } from "antd";
 import themes from "daisyui/theme/object.js";
-import { converter, formatHex, parse } from "culori";
-
-const toRgb = converter("rgb");
-
-function blendOnBg(fg: string, bg: string, alpha: number): string {
-  const fgRgb = toRgb(parse(fg));
-  const bgRgb = toRgb(parse(bg));
-  if (!fgRgb || !bgRgb) return "#000000";
-  return (
-    formatHex({
-      mode: "rgb",
-      r: (fgRgb.r ?? 0) * alpha + (bgRgb.r ?? 0) * (1 - alpha),
-      g: (fgRgb.g ?? 0) * alpha + (bgRgb.g ?? 0) * (1 - alpha),
-      b: (fgRgb.b ?? 0) * alpha + (bgRgb.b ?? 0) * (1 - alpha),
-    }) ?? "#000000"
-  );
-}
-
-function oklchToHex(str: string): string {
-  const color = parse(str);
-  return color ? (formatHex(color) ?? "#000000") : "#000000";
-}
-
-type Token = NonNullable<ThemeConfig["token"]>;
+import blendOnBg from "./modules/blendOnBg";
+import oklchToHex from "./modules/oklchToHex";
+import { Token } from "./types";
 
 function buildTokens(theme: (typeof themes)[keyof typeof themes]): Token {
   const c = (key: string) => oklchToHex(theme[key as keyof typeof theme]);
