@@ -27,7 +27,7 @@ function getTrustedOrigins(): string[] {
 export const auth = betterAuth({
   database: mongodbAdapter(db),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   trustedOrigins: getTrustedOrigins(),
   emailAndPassword: {
     enabled: true,
