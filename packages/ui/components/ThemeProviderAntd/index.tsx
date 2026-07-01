@@ -3,7 +3,7 @@
 import { ConfigProvider, theme } from "antd";
 import { useEffect, useState } from "react";
 import { FONT_FAMILY } from "../../constants";
-import { ThemeContextAntd } from "../../modules/ThemeContext";
+import { ThemeContextAntd } from "../../contexts/ThemeContext";
 import {
   readThemePreference,
   writeThemePreference,

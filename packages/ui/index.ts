@@ -3,7 +3,7 @@ export { default as ThemeProviderAntd } from "./components/ThemeProviderAntd";
 export { ThemeProviderFumaDocs } from "./components/ThemeProviderFumaDocs";
 export { ThemeToggleAntd } from "./components/ThemeToggleAntd";
 export { ThemeToggleDaisyUI } from "./components/ThemeToggleDaisyUI";
-export { ThemeContextAntd, useThemeAntd } from "./modules/ThemeContext";
+export { ThemeContextAntd, useThemeAntd } from "./contexts/ThemeContext";
 export {
   readThemePreference,
   writeThemePreference,
