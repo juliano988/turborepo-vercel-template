@@ -11,7 +11,7 @@ export default function Home() {
       <div style={{ position: "fixed", top: 16, right: 16 }}>
         <ThemeToggleAntd />
       </div>
-      <Flex align="center" justify="center" style={{ minHeight: "100vh" }}>
+      <Flex align="center" justify="center" style={{ minHeight: "100dvh" }}>
         <div style={{ textAlign: "center", maxWidth: 448 }}>
           {/* text-sm font-medium tracking-widest uppercase opacity-50 */}
           <Text
