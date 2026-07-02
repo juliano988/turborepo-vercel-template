@@ -24,7 +24,10 @@
         "POSTGRES_URL",
         "PRISMA_DATABASE_URL",
         "BETTER_AUTH_SECRET",
-        "NEXT_PUBLIC_BETTER_AUTH_URL"
+        "NEXT_PUBLIC_BETTER_AUTH_URL",
+        "VERCEL_ENV",
+        "VERCEL_URL",
+        "VERCEL_BRANCH_URL"
       ]
     },
     "lint": {

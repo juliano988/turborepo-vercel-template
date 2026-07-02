@@ -160,6 +160,52 @@ O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app de
 
 As migrations do banco de dados são aplicadas automaticamente durante o build via `postbuild` no pacote `@repo/db`: quando um arquivo de migration novo é commitado, o Turborepo invalida o cache do pacote e executa `prisma migrate deploy` antes de buildar os apps que dependem dele. Nenhuma configuração adicional no Build Command da Vercel é necessária.
 
+### Variáveis de ambiente no Vercel
+
+As variáveis sensíveis (`DATABASE_URL`, `BETTER_AUTH_SECRET`, etc.) devem ser configuradas manualmente no **Vercel Dashboard → Settings → Environment Variables** de cada projeto.
+
+As variáveis de URL entre apps (`NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_AUTH_URL`, etc.) são derivadas **automaticamente** em tempo de build via `scripts/vercel-env.ts`, sem necessidade de configuração manual por ambiente.
+
+#### Como funciona
+
+Cada app possui um `vercel-env.json` que declara quais URLs precisa e a qual projeto Vercel cada uma corresponde:
+
+```json
+// apps/app/vercel-env.json
+{
+  "NEXT_PUBLIC_APP_URL": "app",
+  "NEXT_PUBLIC_BETTER_AUTH_URL": "landing"
+}
+```
+
+No `prebuild`, o script lê esse arquivo, usa `VERCEL_BRANCH_URL` (variável de sistema injetada automaticamente pela Vercel em Preview Deploys) para extrair o sufixo comum da branch e reconstrói as URLs de todos os apps irmãos:
+
+```
+VERCEL_BRANCH_URL = "app-git-minha-feature-myteam.vercel.app"
+                         ↓ sufixo extraído: -git-minha-feature-myteam.vercel.app
+
+NEXT_PUBLIC_APP_URL         = https://app-git-minha-feature-myteam.vercel.app
+NEXT_PUBLIC_BETTER_AUTH_URL = https://landing-git-minha-feature-myteam.vercel.app
+```
+
+O Next.js lê o `.env.local` gerado antes de avaliar o `next.config.js`, então os rewrites e o bundle do cliente já recebem as URLs corretas do deploy atual — inclusive em **Preview Deploys**.
+
+Em desenvolvimento local e em **Production**, o script encerra imediatamente sem gerar o `.env.local` — para produção, configure as URLs reais (domínios customizados) no Vercel Dashboard.
+
+#### Requisito: nomes dos projetos Vercel
+
+Para a derivação funcionar, os projetos Vercel devem ser nomeados **exatamente** como os valores nos arquivos `vercel-env.json`:
+
+| App | Nome do projeto na Vercel |
+|---|---|
+| `apps/landing` | `landing` |
+| `apps/app` | `app` |
+| `apps/admin` | `admin` |
+| `apps/auth` | `auth` |
+| `apps/docs` | `docs` |
+
+O nome pode ser verificado e alterado em **Vercel Dashboard → Project → Settings → General → Project Name**.
+
 ## Justificativas
 
 ### Infraestrutura como serviço gerenciado

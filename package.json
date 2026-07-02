@@ -18,6 +18,7 @@
   "prettier": "@repo/prettier-config",
   "devDependencies": {
     "@repo/prettier-config": "*",
+    "@types/node": "^26.1.0",
     "effect": "3.21.0",
     "prettier": "^3.7.4",
     "turbo": "^2.10.0",

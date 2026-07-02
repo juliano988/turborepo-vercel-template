@@ -1,0 +1,4 @@
+{
+  "NEXT_PUBLIC_AUTH_URL": "auth",
+  "NEXT_PUBLIC_BETTER_AUTH_URL": "landing"
+}
