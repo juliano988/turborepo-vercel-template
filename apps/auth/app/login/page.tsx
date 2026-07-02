@@ -19,7 +19,7 @@ export default function LoginPage() {
     const { error: err } = await authClient.signIn.email({
       email,
       password,
-      callbackURL: window.location.origin + "/app",
+      callbackURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL + "/app",
     });
 
     if (err) {
@@ -28,7 +28,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/app");
+    router.push(process.env.NEXT_PUBLIC_BETTER_AUTH_URL + "/app");
   }
 
   return (
