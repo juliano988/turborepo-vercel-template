@@ -143,6 +143,37 @@ O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app de
 
 As migrations do banco de dados são aplicadas automaticamente durante o build via `postbuild` no pacote `@repo/db`: quando um arquivo de migration novo é commitado, o Turborepo invalida o cache do pacote e executa `prisma migrate deploy` antes de buildar os apps que dependem dele. Nenhuma configuração adicional no Build Command da Vercel é necessária.
 
+### Preview deploy com URLs sincronizadas entre apps
+
+Cada app executa `prebuild: bun ../../scripts/vercel-env.ts` antes do build na Vercel.
+
+Esse script gera `.env.local` automaticamente em `preview` e `production` a partir de um arquivo `vercel-env.json` no diretorio do app.
+
+Arquivos esperados:
+
+- `apps/landing/vercel-env.json`
+- `apps/app/vercel-env.json`
+- `apps/admin/vercel-env.json`
+- `apps/docs/vercel-env.json`
+
+Formato:
+
+```json
+{
+  "NEXT_PUBLIC_APP_URL": "turborepo-vercel-template-app",
+  "NEXT_PUBLIC_ADMIN_URL": "turborepo-vercel-template-admin",
+  "NEXT_PUBLIC_DOCS_URL": "turborepo-vercel-template-docs",
+  "NEXT_PUBLIC_BETTER_AUTH_URL": "turborepo-vercel-template-landing"
+}
+```
+
+Importante: os valores devem ser exatamente os nomes dos projetos na Vercel.
+
+- `preview`: o script usa `VERCEL_BRANCH_URL` para gerar URLs por branch (ex: `project-git-feature-team.vercel.app`).
+- `production`: o script gera `https://<project>.vercel.app`.
+
+Se os nomes dos projetos na Vercel forem diferentes do exemplo acima, ajuste os 4 arquivos `vercel-env.json` para refletir seus nomes reais.
+
 ## Justificativas
 
 ### Infraestrutura como serviço gerenciado
