@@ -1,0 +1,17 @@
+{
+  "name": "@repo/proxy",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./config": "./config.ts"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/node": "^22.15.3",
+    "next": "16.2.0",
+    "typescript": "5.9.2"
+  }
+}
