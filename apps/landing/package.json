@@ -9,10 +9,11 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
-    "prebuild": "bun ../../scripts/vercel-env.ts"
+    "prebuild": "bun ../../packages/scripts/vercel-env.ts"
   },
   "dependencies": {
     "@repo/env": "*",
+    "@repo/proxy": "*",
     "@repo/ui": "*",
     "@repo/auth": "*",
     "daisyui": "^5.0.35",

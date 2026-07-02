@@ -20,6 +20,7 @@
         "@repo/auth": "*",
         "@repo/env": "*",
         "@repo/eslint-config": "*",
+        "@repo/proxy": "*",
         "@repo/typescript-config": "*",
         "@repo/ui": "*",
         "antd": "^5.25.4",
@@ -28,7 +29,6 @@
         "react-dom": "^19.2.0",
       },
       "devDependencies": {
-        "@repo/env": "*",
         "@repo/eslint-config": "*",
         "@repo/prettier-config": "*",
         "@repo/typescript-config": "*",
@@ -40,13 +40,11 @@
         "typescript": "5.9.2",
       },
       "optionalDependencies": {
-        "@repo/env": "*",
         "@repo/eslint-config": "*",
         "@repo/typescript-config": "*",
         "@repo/ui": "*",
       },
       "peerDependencies": {
-        "@repo/env": "*",
         "@repo/eslint-config": "*",
         "@repo/typescript-config": "*",
         "@repo/ui": "*",
@@ -59,6 +57,7 @@
         "@ant-design/nextjs-registry": "^1.0.2",
         "@repo/auth": "*",
         "@repo/env": "*",
+        "@repo/proxy": "*",
         "@repo/ui": "*",
         "antd": "^5.25.4",
         "next": "16.2.0",
@@ -84,6 +83,7 @@
         "@openrouter/ai-sdk-provider": "^2.9.1",
         "@radix-ui/react-presence": "^1.1.6",
         "@repo/env": "*",
+        "@repo/proxy": "*",
         "@repo/ui": "*",
         "ai": "^6.0.209",
         "class-variance-authority": "^0.7.1",
@@ -124,6 +124,7 @@
       "dependencies": {
         "@repo/auth": "*",
         "@repo/env": "*",
+        "@repo/proxy": "*",
         "@repo/ui": "*",
         "daisyui": "^5.0.35",
         "next": "16.2.0",
@@ -212,6 +213,28 @@
       "devDependencies": {
         "@repo/typescript-config": "*",
         "prettier": "^3.7.4",
+      },
+    },
+    "packages/proxy": {
+      "name": "@repo/proxy",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@repo/typescript-config": "*",
+        "@types/node": "^22.15.3",
+        "next": "16.2.0",
+        "typescript": "5.9.2",
+      },
+    },
+    "packages/scripts": {
+      "name": "@repo/scripts",
+      "version": "0.0.0",
+      "dependencies": {
+        "@repo/proxy": "*",
+      },
+      "devDependencies": {
+        "@repo/typescript-config": "*",
+        "@types/node": "^22.15.3",
+        "typescript": "5.9.2",
       },
     },
     "packages/typescript-config": {
@@ -634,6 +657,10 @@
     "@repo/eslint-config": ["@repo/eslint-config@workspace:packages/eslint-config"],
 
     "@repo/prettier-config": ["@repo/prettier-config@workspace:packages/prettier-config"],
+
+    "@repo/proxy": ["@repo/proxy@workspace:packages/proxy"],
+
+    "@repo/scripts": ["@repo/scripts@workspace:packages/scripts"],
 
     "@repo/typescript-config": ["@repo/typescript-config@workspace:packages/typescript-config"],
 
@@ -1923,6 +1950,10 @@
 
     "@repo/env/@types/node": ["@types/node@22.20.0", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-QWlFW2wf3nTjC13/DqRnBpR4ZO36VJH/JVBkA/vcnmbTBNQIlnObqyqZE1tUR7+Ni23Lda8R1BxMfbXRpCUx5g=="],
 
+    "@repo/proxy/@types/node": ["@types/node@22.20.0", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-QWlFW2wf3nTjC13/DqRnBpR4ZO36VJH/JVBkA/vcnmbTBNQIlnObqyqZE1tUR7+Ni23Lda8R1BxMfbXRpCUx5g=="],
+
+    "@repo/scripts/@types/node": ["@types/node@22.20.0", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-QWlFW2wf3nTjC13/DqRnBpR4ZO36VJH/JVBkA/vcnmbTBNQIlnObqyqZE1tUR7+Ni23Lda8R1BxMfbXRpCUx5g=="],
+
     "@tailwindcss/oxide-wasm32-wasi/@emnapi/core": ["@emnapi/core@1.11.1", "", { "dependencies": { "@emnapi/wasi-threads": "1.2.2", "tslib": "^2.4.0" }, "bundled": true }, "sha512-RSvbQmHzdKzNsLYa/wHrbc3KN4sYLKAdPZxqiM2HATqv/SBk2/ENSHpvXGaLOMcsAyz0poEGqkmmKYG3OWiJEQ=="],
 
     "@tailwindcss/oxide-wasm32-wasi/@emnapi/runtime": ["@emnapi/runtime@1.11.1", "", { "dependencies": { "tslib": "^2.4.0" }, "bundled": true }, "sha512-vgj7R3y3Wgx24IQaGPA/R6YFXLHVMOZ0uVEyIQPaWs+rd1AzfEMXlAC22FYwO1XkKR6NPsq7mUandH8oIRdZFw=="],
@@ -1998,6 +2029,10 @@
     "tsconfig-paths/json5": ["json5@1.0.2", "", { "dependencies": { "minimist": "^1.2.0" }, "bin": { "json5": "lib/cli.js" } }, "sha512-g1MWMLBiz8FKi1e4w0UyVL3w+iJceWAFBAaBnnGKOpNa5f8TLktkbre1+s6oICydWAm+HRUGTmI+//xv2hvXYA=="],
 
     "@repo/env/@types/node/undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
+
+    "@repo/proxy/@types/node/undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
+
+    "@repo/scripts/@types/node/undici-types": ["undici-types@6.21.0", "", {}, "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="],
 
     "@typescript-eslint/typescript-estree/minimatch/brace-expansion": ["brace-expansion@5.0.6", "", { "dependencies": { "balanced-match": "^4.0.2" } }, "sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g=="],
 

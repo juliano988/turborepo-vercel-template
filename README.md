@@ -104,7 +104,7 @@ DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=dis
 
 # Better Auth
 BETTER_AUTH_SECRET=sua-chave-secreta
-NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3002
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
 ```
 
 ## Início rápido
@@ -112,6 +112,9 @@ NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3002
 ```bash
 # Instalar dependências
 bun install
+
+# Subir banco de dados
+bun db:dev
 
 # Rodar todos os apps em modo desenvolvimento
 bun dev

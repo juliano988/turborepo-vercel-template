@@ -9,11 +9,12 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
-    "prebuild": "bun ../../scripts/vercel-env.ts"
+    "prebuild": "bun ../../packages/scripts/vercel-env.ts"
   },
   "dependencies": {
     "@repo/auth": "*",
     "@repo/env": "*",
+    "@repo/proxy": "*",
     "@ant-design/nextjs-registry": "^1.0.2",
     "@repo/ui": "*",
     "antd": "^5.25.4",
@@ -33,17 +34,14 @@
     "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
     "typescript": "5.9.2",
-    "@repo/env": "*",
     "@repo/ui": "*"
   },
   "peerDependencies": {
-    "@repo/env": "*",
     "@repo/eslint-config": "*",
     "@repo/ui": "*",
     "@repo/typescript-config": "*"
   },
   "optionalDependencies": {
-    "@repo/env": "*",
     "@repo/eslint-config": "*",
     "@repo/ui": "*",
     "@repo/typescript-config": "*"
