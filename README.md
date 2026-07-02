@@ -18,8 +18,8 @@ A arquitetura segue os princípios do **Domain-Driven Design (DDD)**, onde cada 
 
 ┌──────────────┐  ┌──────────────┐  ┌──────────────┐
 │   Contextos de Suporte (Supporting Contexts)        │
-│   auth/      │  │   admin/     │  │  landing/    │
-│  Identidade  │  │  Backoffice  │  │  Marketing   │
+│   admin/     │  │  landing/    │                  │
+│  Backoffice  │  │  Marketing   │                  │
 └──────────────┘  └──────────────┘  └──────────────┘
 
 ┌─────────────────────────────────────────────────────┐
@@ -46,24 +46,8 @@ Dão suporte ao contexto principal, mas possuem ciclo de vida e deploy independe
 
 | App | Responsabilidade | Porta |
 |---|---|---|
-| `auth/` | Identidade e acesso — login, registro, sessão | 3004 |
 | `admin/` | Backoffice — gestão interna e operações administrativas | 3002 |
 | `landing/` | Marketing — apresentação do produto e conversão | 3000 |
-
-> [!WARNING]
-> **`auth/` pode ser overengineering para o seu caso.**
->
-> Um app dedicado exclusivamente à autenticação agrega complexidade e só se justifica em cenários específicos. Avalie antes de sair do padrão:
->
-> **Quando faz sentido mantê-lo:**
-> - Múltiplos apps (`app/`, `admin/`, etc.) precisam redirecionar para um único ponto de login (fluxo SSO-like)
-> - A lógica de identidade é complexa o suficiente para merecer um contexto isolado
->
-> **Quando remover ou simplificar:**
-> - Seu produto não precisa de autenticação → remova o app `auth/` inteiro
-> - Prefere manter tudo no mesmo lugar → implemente o fluxo de login diretamente no `app/` ou em qualquer outro app
->
-> Em ambos os casos, o pacote `packages/auth` (Better Auth + Prisma) pode ser usado de forma independente, sem depender do app `auth/`.
 
 ### Contexto Genérico
 
@@ -111,7 +95,6 @@ Crie um arquivo `.env` na raiz do monorepo:
 # URLs das aplicações
 NEXT_PUBLIC_APP_URL=http://localhost:3001
 NEXT_PUBLIC_ADMIN_URL=http://localhost:3002
-NEXT_PUBLIC_AUTH_URL=http://localhost:3004
 NEXT_PUBLIC_DOCS_URL=http://localhost:3003
 
 # Banco de dados (atualizado automaticamente por `bun run db:dev`)
