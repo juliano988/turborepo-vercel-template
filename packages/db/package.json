@@ -9,6 +9,7 @@
   "scripts": {
     "migrate:dev": "bash scripts/dev-migrate.sh",
     "migrate:new": "bash scripts/migrate-new.sh",
+    "migrate:deploy": "prisma migrate deploy",
     "studio": "prisma studio"
   },
   "dependencies": {
