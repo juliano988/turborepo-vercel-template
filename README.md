@@ -158,6 +158,8 @@ bun lint
 
 O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`).
 
+As migrations do banco de dados são aplicadas automaticamente durante o build via `postbuild` no pacote `@repo/db`: quando um arquivo de migration novo é commitado, o Turborepo invalida o cache do pacote e executa `prisma migrate deploy` antes de buildar os apps que dependem dele. Nenhuma configuração adicional no Build Command da Vercel é necessária.
+
 ## Justificativas
 
 ### Infraestrutura como serviço gerenciado

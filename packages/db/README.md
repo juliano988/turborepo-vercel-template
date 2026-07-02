@@ -76,8 +76,24 @@ newgrp docker   # aplica na sessão atual sem precisar relogar
 
 ### Deploy em produção / CI
 
+As migrations são aplicadas automaticamente durante o build na Vercel via `postbuild`:
+
+```
+turbo run build
+  └─ @repo/db#build
+       ├─ prisma generate   (build)
+       └─ prisma migrate deploy  (postbuild)
+```
+
+O fluxo funciona assim:
+
+- Quando uma migration nova é adicionada, os arquivos em `prisma/migrations/` mudam → Turborepo detecta a mudança e invalida o cache do `@repo/db` → `build` e `postbuild` rodam → migration é aplicada no banco de produção.
+- Se nenhum arquivo do pacote mudou, o Turbo usa o cache e não roda o build — o que é correto, pois não há migration nova para aplicar.
+
+Para rodar manualmente (ex: primeiro setup ou emergência):
+
 ```bash
-bunx prisma migrate deploy
+bun run db:migrate:deploy
 ```
 
 ## Uso nos pacotes e apps
