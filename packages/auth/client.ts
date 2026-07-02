@@ -4,7 +4,7 @@ import { createAuthClient } from "better-auth/react";
 // Preview : https://turborepo-vercel-template-landing-git-[branch]-[team].vercel.app
 // Produção: https://turborepo-vercel-template-landing.vercel.app
 export const authClient = createAuthClient({
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URI,
+  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URI + "/api/auth",
 });
 
 export const { signIn, signUp, signOut, useSession, getSession } = authClient;

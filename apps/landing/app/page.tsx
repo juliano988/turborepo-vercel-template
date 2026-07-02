@@ -38,7 +38,7 @@ export default function Home() {
               Ver Docs
             </a>
             <a
-              href="/login"
+              href="/auth/login"
               className="btn btn-outline"
             >
               Entrar

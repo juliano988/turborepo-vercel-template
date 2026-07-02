@@ -30,11 +30,11 @@ const nextConfig = withEnv({
       },
       {
         source: '/login',
-        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/login`,
+        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/auth/login`,
       },
       {
         source: '/register',
-        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/register`,
+        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/auth/register`,
       },
       {
         source: '/auth/:path*',
@@ -42,7 +42,7 @@ const nextConfig = withEnv({
       },
       {
         source: '/api/auth/:path*',
-        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/api/auth/:path*`,
+        destination: `${process.env.NEXT_PUBLIC_AUTH_URL}/auth/api/auth/:path*`,
       },
     ];
   },
