@@ -5,7 +5,7 @@ import { Flex, Typography } from "antd";
 
 const { Title, Text } = Typography;
 
-export default function Home() {
+export default function Page() {
   return (
     <>
       <div style={{ position: "fixed", top: 16, right: 16 }}>

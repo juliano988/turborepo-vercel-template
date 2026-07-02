@@ -1,6 +1,6 @@
 import { ThemeToggleDaisyUI } from "@repo/ui";
 
-export default function Home() {
+export default function Page() {
   return (
     <>
       <div className="fixed top-4 right-4">
