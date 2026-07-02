@@ -15,7 +15,7 @@ function getTrustedOrigins(): string[] {
           return [];
         }
       })
-  );;
+  );
 
   // VERCEL_BRANCH_URL não tem protocolo e não é detectada pelo regex acima.
   // Em preview deploys, deriva e confia nos origins de todos os apps irmãos
@@ -25,7 +25,13 @@ function getTrustedOrigins(): string[] {
     const match = branchUrl.match(/(-git-.+\.vercel\.app)$/);
     if (match) {
       const suffix = match[1];
-      for (const project of ["landing", "app", "admin", "auth", "docs"]) {
+      for (const project of [
+        "turborepo-vercel-template-landing",
+        "turborepo-vercel-template-app",
+        "turborepo-vercel-template-admin",
+        "turborepo-vercel-template-auth",
+        "turborepo-vercel-template-docs",
+      ]) {
         origins.add(`https://${project}${suffix}`);
       }
     }
