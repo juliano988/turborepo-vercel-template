@@ -15,7 +15,7 @@ function getTrustedOrigins(): string[] {
           return [];
         }
       })
-  );
+  );;
 
   // VERCEL_BRANCH_URL não tem protocolo e não é detectada pelo regex acima.
   // Em preview deploys, deriva e confia nos origins de todos os apps irmãos
