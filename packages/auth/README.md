@@ -28,7 +28,7 @@ packages/auth/
 
 ```env
 BETTER_AUTH_SECRET="..."              # Chave secreta para assinar sessões
-NEXT_PUBLIC_BETTER_AUTH_URL="..."     # URL base da API de autenticação (ex: http://localhost:3004)
+NEXT_PUBLIC_BETTER_AUTH_URI="..."     # URL base da API de autenticação (ex: http://localhost:3004)
 DATABASE_URL="postgres://..."         # Herdado de @repo/db
 ```
 

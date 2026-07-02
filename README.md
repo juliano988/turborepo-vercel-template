@@ -119,7 +119,7 @@ DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=dis
 
 # Better Auth
 BETTER_AUTH_SECRET=sua-chave-secreta
-NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3002
+NEXT_PUBLIC_BETTER_AUTH_URI=http://localhost:3002
 ```
 
 ## Início rápido
@@ -174,7 +174,7 @@ Cada app possui um `vercel-env.json` que declara quais URLs precisa e a qual pro
 // apps/app/vercel-env.json
 {
   "NEXT_PUBLIC_APP_URL": "app",
-  "NEXT_PUBLIC_BETTER_AUTH_URL": "landing"
+  "NEXT_PUBLIC_BETTER_AUTH_URI": "landing"
 }
 ```
 
@@ -185,7 +185,7 @@ VERCEL_BRANCH_URL = "app-git-minha-feature-myteam.vercel.app"
                          ↓ sufixo extraído: -git-minha-feature-myteam.vercel.app
 
 NEXT_PUBLIC_APP_URL         = https://app-git-minha-feature-myteam.vercel.app
-NEXT_PUBLIC_BETTER_AUTH_URL = https://landing-git-minha-feature-myteam.vercel.app
+NEXT_PUBLIC_BETTER_AUTH_URI = https://landing-git-minha-feature-myteam.vercel.app
 ```
 
 O Next.js lê o `.env.local` gerado antes de avaliar o `next.config.js`, então os rewrites e o bundle do cliente já recebem as URLs corretas do deploy atual — inclusive em **Preview Deploys**.
@@ -193,11 +193,11 @@ O Next.js lê o `.env.local` gerado antes de avaliar o `next.config.js`, então 
 Em desenvolvimento local e em **Production**, o script encerra imediatamente sem gerar o `.env.local` — para produção, configure as URLs reais (domínios customizados) no Vercel Dashboard.
 
 > [!IMPORTANT]
-> **`NEXT_PUBLIC_BETTER_AUTH_URL` deve ser configurada apenas para Production no Dashboard**, não para Preview.
+> **`NEXT_PUBLIC_BETTER_AUTH_URI` deve ser configurada apenas para Production no Dashboard**, não para Preview.
 > Se marcada para Preview, o valor do Dashboard sobrescreve o `.env.local` gerado pelo script,
 > fazendo o cliente de autenticação chamar a URL de produção a partir de um deploy de preview — o que causa erro de CORS.
 >
-> **Dashboard → Projeto `landing` → Environment Variables → `NEXT_PUBLIC_BETTER_AUTH_URL`:**
+> **Dashboard → Projeto `landing` → Environment Variables → `NEXT_PUBLIC_BETTER_AUTH_URI`:**
 > ```
 > ✅ Production   → https://seu-dominio.com
 > ❌ Preview      → (deixar vazio)

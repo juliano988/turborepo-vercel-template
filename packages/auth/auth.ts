@@ -43,7 +43,7 @@ function getTrustedOrigins(): string[] {
 export const auth = betterAuth({
   database: prismaAdapter(prisma, { provider: "postgresql" }),
   secret: process.env.BETTER_AUTH_SECRET,
-  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
+  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URI,
   trustedOrigins: getTrustedOrigins(),
   emailAndPassword: {
     enabled: true,

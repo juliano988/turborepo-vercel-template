@@ -1,4 +1,4 @@
 {
   "NEXT_PUBLIC_ADMIN_URL": "turborepo-vercel-template-admin",
-  "NEXT_PUBLIC_BETTER_AUTH_URL": "turborepo-vercel-template-landing"
+  "NEXT_PUBLIC_BETTER_AUTH_URI": "turborepo-vercel-template-landing"
 }
