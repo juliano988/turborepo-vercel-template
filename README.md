@@ -16,11 +16,12 @@ A arquitetura segue os princípios do **Domain-Driven Design (DDD)**, onde cada 
 │   app/        Aplicação core do produto              │
 └─────────────────────────────────────────────────────┘
 
-┌──────────────┐  ┌──────────────┐  ┌──────────────┐
-│   Contextos de Suporte (Supporting Contexts)        │
-│   admin/     │  │  landing/    │                  │
-│  Backoffice  │  │  Marketing   │                  │
-└──────────────┘  └──────────────┘  └──────────────┘
+Contextos de Suporte (Supporting Contexts)
+
+┌──────────────┐  ┌──────────────┐
+│   admin/     │  │  landing/    │
+│  Backoffice  │  │  Marketing   │
+└──────────────┘  └──────────────┘
 
 ┌─────────────────────────────────────────────────────┐
 │                  Contexto Genérico                   │
@@ -71,6 +72,7 @@ packages/
 ```
 
 ## Tecnologias
+| Categoria | Tecnologia |
 |---|---|
 | Monorepo | Turborepo 2 |
 | Framework | Next.js (App Router) |
