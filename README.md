@@ -46,8 +46,8 @@ Dão suporte ao contexto principal, mas possuem ciclo de vida e deploy independe
 
 | App | Responsabilidade | Porta |
 |---|---|---|
-| `auth/` | Identidade e acesso — login, registro, sessão | 3002 |
-| `admin/` | Backoffice — gestão interna e operações administrativas | 3003 |
+| `auth/` | Identidade e acesso — login, registro, sessão | 3004 |
+| `admin/` | Backoffice — gestão interna e operações administrativas | 3002 |
 | `landing/` | Marketing — apresentação do produto e conversão | 3000 |
 
 > [!WARNING]
@@ -63,13 +63,13 @@ Dão suporte ao contexto principal, mas possuem ciclo de vida e deploy independe
 > - Seu produto não precisa de autenticação → remova o app `auth/` inteiro
 > - Prefere manter tudo no mesmo lugar → implemente o fluxo de login diretamente no `app/` ou em qualquer outro app
 >
-> Em ambos os casos, o pacote `packages/auth` (Better Auth + MongoDB) pode ser usado de forma independente, sem depender do app `auth/`.
+> Em ambos os casos, o pacote `packages/auth` (Better Auth + Prisma) pode ser usado de forma independente, sem depender do app `auth/`.
 
 ### Contexto Genérico
 
 | App | Responsabilidade | Porta |
 |---|---|---|
-| `docs/` | Documentação técnica e de produto (Fuma Docs) | 3004 |
+| `docs/` | Documentação técnica e de produto (Fuma Docs) | 3003 |
 
 ### Camada Compartilhada (`packages/`)
 
@@ -101,6 +101,7 @@ packages/
 
 - [Bun](https://bun.sh/) >= 1.3
 - Node.js >= 18
+- [Docker](https://docs.docker.com/get-docker/) (necessário para gerar migrations com `bun run db:migrate:new`)
 
 ## Variáveis de ambiente
 
@@ -109,9 +110,9 @@ Crie um arquivo `.env` na raiz do monorepo:
 ```env
 # URLs das aplicações
 NEXT_PUBLIC_APP_URL=http://localhost:3001
-NEXT_PUBLIC_ADMIN_URL=http://localhost:3003
-NEXT_PUBLIC_AUTH_URL=http://localhost:3002
-NEXT_PUBLIC_DOCS_URL=http://localhost:3004
+NEXT_PUBLIC_ADMIN_URL=http://localhost:3002
+NEXT_PUBLIC_AUTH_URL=http://localhost:3004
+NEXT_PUBLIC_DOCS_URL=http://localhost:3003
 
 # Banco de dados (atualizado automaticamente por `bun run db:dev`)
 DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=disable&connection_limit=1&pgbouncer=true"
@@ -143,6 +144,7 @@ bun lint
 |---|---|
 | `bun run db:dev` | Sobe banco local (PGlite), aplica schema e abre Prisma Studio |
 | `bun run db:migrate` | Sobe banco local e aplica schema (sem abrir o Studio) |
+| `bun run db:migrate:new <nome>` | Gera arquivo de migration via container Docker temporário |
 | `bun run db:studio` | Abre o Prisma Studio para o banco atual |
 | `bun dev` | Inicia todos os apps em modo desenvolvimento |
 | `bun run build` | Build de produção (com cache do Turbo) |

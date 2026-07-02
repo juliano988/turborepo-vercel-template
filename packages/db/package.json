@@ -8,6 +8,7 @@
   },
   "scripts": {
     "migrate:dev": "bash scripts/dev-migrate.sh",
+    "migrate:new": "bash scripts/migrate-new.sh",
     "studio": "prisma studio"
   },
   "dependencies": {

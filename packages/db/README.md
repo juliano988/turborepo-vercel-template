@@ -59,11 +59,19 @@ bun run db:dev
 > O `migrate dev` exige uma segunda conexão para o shadow database — por isso falha com `P1017`.  
 > Para desenvolvimento local, `db push` é suficiente e não precisa de shadow database.
 
-### Gerar migration files para produção
+### Gerar migration files (localmente com Docker)
 
 ```bash
-# Rode contra o banco Prisma Postgres na nuvem
-DATABASE_URL="<url-prisma-postgres>" bunx prisma migrate dev --name init
+bun run db:migrate:new nome-da-feature
+```
+
+Este comando sobe um container PostgreSQL temporário, roda `prisma migrate dev` e remove o container ao final. O arquivo gerado em `prisma/migrations/` deve ser commitado no git.
+
+**Pré-requisito:** Docker instalado e acessível sem `sudo`. Para liberar o acesso:
+
+```bash
+sudo usermod -aG docker $USER
+newgrp docker   # aplica na sessão atual sem precisar relogar
 ```
 
 ### Deploy em produção / CI
