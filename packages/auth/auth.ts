@@ -31,7 +31,7 @@ function getTrustedOrigins(): string[] {
     }
   }
 
-  return [...origins];;
+  return [...origins];
 }
 
 export const auth = betterAuth({
