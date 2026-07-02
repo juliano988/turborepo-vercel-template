@@ -77,7 +77,8 @@ Infraestrutura e utilitários reutilizados por todos os contextos:
 
 ```
 packages/
-  auth/               # Lógica de autenticação (Better Auth + MongoDB)
+    auth/               # Lógica de autenticação (Better Auth + Prisma)
+    db/                 # PrismaClient singleton e schema centralizado
   env/                # Carregador de variáveis de ambiente do monorepo
   ui/                 # Componentes de UI (Ant Design, DaisyUI, Fuma Docs)
   eslint-config/      # Configurações ESLint reutilizáveis
@@ -86,14 +87,12 @@ packages/
 ```
 
 ## Tecnologias
-
-| Camada | Tecnologia |
 |---|---|
 | Monorepo | Turborepo 2 |
 | Framework | Next.js (App Router) |
 | Runtime / Package Manager | Bun |
 | Autenticação | Better Auth |
-| Banco de dados | MongoDB |
+| Banco de dados | Prisma Postgres (PGlite local / Prisma Postgres em produção) |
 | UI | Ant Design, DaisyUI, Tailwind CSS |
 | Documentação | Fuma Docs |
 | Linguagem | TypeScript |
@@ -102,7 +101,6 @@ packages/
 
 - [Bun](https://bun.sh/) >= 1.3
 - Node.js >= 18
-- MongoDB (URI de conexão)
 
 ## Variáveis de ambiente
 
@@ -115,8 +113,8 @@ NEXT_PUBLIC_ADMIN_URL=http://localhost:3003
 NEXT_PUBLIC_AUTH_URL=http://localhost:3002
 NEXT_PUBLIC_DOCS_URL=http://localhost:3004
 
-# MongoDB
-MONGODB_URI=mongodb://localhost:27017/meu-banco
+# Banco de dados (atualizado automaticamente por `bun run db:dev`)
+DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=disable&connection_limit=1&pgbouncer=true"
 
 # Better Auth
 BETTER_AUTH_SECRET=sua-chave-secreta
@@ -143,6 +141,9 @@ bun lint
 
 | Comando | Descrição |
 |---|---|
+| `bun run db:dev` | Sobe banco local (PGlite), aplica schema e abre Prisma Studio |
+| `bun run db:migrate` | Sobe banco local e aplica schema (sem abrir o Studio) |
+| `bun run db:studio` | Abre o Prisma Studio para o banco atual |
 | `bun dev` | Inicia todos os apps em modo desenvolvimento |
 | `bun run build` | Build de produção (com cache do Turbo) |
 | `bun run start` | Inicia todos os apps em modo produção |

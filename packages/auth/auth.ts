@@ -1,10 +1,6 @@
+import { prisma } from "@repo/db";
 import { betterAuth } from "better-auth";
-import { mongodbAdapter } from "better-auth/adapters/mongodb";
-import { MongoClient } from "mongodb";
-
-const mongoClient = new MongoClient(process.env.MONGODB_URI!);
-
-const db = mongoClient.db();
+import { prismaAdapter } from "better-auth/adapters/prisma";
 
 function getTrustedOrigins(): string[] {
   const urlRegex = /^https?:\/\//;
@@ -25,7 +21,7 @@ function getTrustedOrigins(): string[] {
 }
 
 export const auth = betterAuth({
-  database: mongodbAdapter(db),
+  database: prismaAdapter(prisma, { provider: "postgresql" }),
   secret: process.env.BETTER_AUTH_SECRET,
   baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   trustedOrigins: getTrustedOrigins(),
