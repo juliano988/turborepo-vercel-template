@@ -21,7 +21,7 @@ export default function RegisterPage() {
       name,
       email,
       password,
-      callbackURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL + "/admin",
+      callbackURL: window.location.origin + "/app",
     });
 
     if (err) {
@@ -30,7 +30,7 @@ export default function RegisterPage() {
       return;
     }
 
-    router.push(process.env.NEXT_PUBLIC_BETTER_AUTH_URL + "/admin");
+    router.push("/app");
   }
 
   return (
