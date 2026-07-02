@@ -192,19 +192,36 @@ O Next.js lê o `.env.local` gerado antes de avaliar o `next.config.js`, então 
 
 Em desenvolvimento local e em **Production**, o script encerra imediatamente sem gerar o `.env.local` — para produção, configure as URLs reais (domínios customizados) no Vercel Dashboard.
 
+> [!IMPORTANT]
+> **`NEXT_PUBLIC_BETTER_AUTH_URL` deve ser configurada apenas para Production no Dashboard**, não para Preview.
+> Se marcada para Preview, o valor do Dashboard sobrescreve o `.env.local` gerado pelo script,
+> fazendo o cliente de autenticação chamar a URL de produção a partir de um deploy de preview — o que causa erro de CORS.
+>
+> **Dashboard → Projeto `landing` → Environment Variables → `NEXT_PUBLIC_BETTER_AUTH_URL`:**
+> ```
+> ✅ Production   → https://seu-dominio.com
+> ❌ Preview      → (deixar vazio)
+> ❌ Development  → (deixar vazio)
+> ```
+
 #### Requisito: nomes dos projetos Vercel
 
-Para a derivação funcionar, os projetos Vercel devem ser nomeados **exatamente** como os valores nos arquivos `vercel-env.json`:
+Os valores nos arquivos `vercel-env.json` devem ser o **nome completo do projeto no Vercel** (visível em **Project → Settings → General → Project Name**), não um apelido curto.
 
-| App | Nome do projeto na Vercel |
-|---|---|
-| `apps/landing` | `landing` |
-| `apps/app` | `app` |
-| `apps/admin` | `admin` |
-| `apps/auth` | `auth` |
-| `apps/docs` | `docs` |
+Exemplo para um projeto com prefixo `meu-produto`:
 
-O nome pode ser verificado e alterado em **Vercel Dashboard → Project → Settings → General → Project Name**.
+| App | Nome do projeto na Vercel | Valor em `vercel-env.json` |
+|---|---|---|
+| `apps/landing` | `meu-produto-landing` | `"meu-produto-landing"` |
+| `apps/app` | `meu-produto-app` | `"meu-produto-app"` |
+| `apps/admin` | `meu-produto-admin` | `"meu-produto-admin"` |
+| `apps/auth` | `meu-produto-auth` | `"meu-produto-auth"` |
+| `apps/docs` | `meu-produto-docs` | `"meu-produto-docs"` |
+
+> [!TIP]
+> O nome completo aparece na URL do deploy: `[nome-do-projeto]-git-[branch]-[team].vercel.app`.
+> Se o deploy da landing for `meu-produto-landing-git-main-myteam.vercel.app`,
+> o nome do projeto é `meu-produto-landing`.
 
 ## Justificativas
 

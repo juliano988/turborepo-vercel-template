@@ -25,7 +25,7 @@ function getTrustedOrigins(): string[] {
     const match = branchUrl.match(/(-git-.+\.vercel\.app)$/);
     if (match) {
       const suffix = match[1];
-      for (const project of ['landing', 'app', 'admin', 'auth', 'docs']) {
+      for (const project of ["landing", "app", "admin", "auth", "docs"]) {
         origins.add(`https://${project}${suffix}`);
       }
     }
