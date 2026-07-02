@@ -1,12 +1,10 @@
 import { createAuthClient } from "better-auth/react";
 
-// Browser : window.location.origin (preview e production corretamente)
-// SSR     : fallback para NEXT_PUBLIC_BETTER_AUTH_URI
-const baseURL =
-  typeof window !== "undefined"
-    ? window.location.origin
-    : process.env.NEXT_PUBLIC_BETTER_AUTH_URI;
-
-export const authClient = createAuthClient({ baseURL });
+// Inlineado em build time pelo Next.js a partir do .env.local gerado pelo prebuild.
+// Preview : https://turborepo-vercel-template-landing-git-[branch]-[team].vercel.app
+// Produção: https://turborepo-vercel-template-landing.vercel.app
+export const authClient = createAuthClient({
+  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URI,
+});
 
 export const { signIn, signUp, signOut, useSession, getSession } = authClient;
