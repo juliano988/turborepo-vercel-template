@@ -105,6 +105,10 @@ DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=dis
 # Better Auth
 BETTER_AUTH_SECRET=sua-chave-secreta
 NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
+
+# Primeiro usuário (criado automaticamente no primeiro `bun dev` ou `bun start`)
+ADMIN_USER=admin@exemplo.com
+ADMIN_PASS=senha-segura
 ```
 
 ## Início rápido

@@ -9,7 +9,9 @@
     "start": "next start",
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
-    "prebuild": "bun ../../packages/scripts/vercel-env.ts"
+    "prebuild": "bun ../../packages/scripts/vercel-env.ts",
+    "predev": "bun --env-file ../../.env ../../packages/auth/seed.ts",
+    "prestart": "bun --env-file ../../.env ../../packages/auth/seed.ts"
   },
   "dependencies": {
     "@repo/env": "*",

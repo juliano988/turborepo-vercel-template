@@ -1,6 +1,7 @@
 import { prisma } from "@repo/db";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
+import { admin } from "better-auth/plugins";
 
 function getTrustedOrigins(): string[] {
   const urlRegex = /^https?:\/\//;
@@ -29,6 +30,11 @@ export const auth = betterAuth({
     enabled: true,
   },
   socialProviders: {},
+  plugins: [
+    admin({
+      defaultRole: "user",
+    }),
+  ],
 });
 
 export type Session = typeof auth.$Infer.Session;

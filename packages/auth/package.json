@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "type": "module",
   "private": true,
+  "scripts": {
+    "seed": "bun seed.ts"
+  },
   "exports": {
     ".": "./index.ts",
     "./client": "./client.ts",
