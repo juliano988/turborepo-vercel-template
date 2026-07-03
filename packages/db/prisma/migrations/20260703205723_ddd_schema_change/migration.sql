@@ -97,7 +97,7 @@ BEGIN
 END $$;
 
 -- Drop old public schema tables (child tables first to respect FK constraints)
-DROP TABLE IF EXISTS "public"."session";
-DROP TABLE IF EXISTS "public"."account";
-DROP TABLE IF EXISTS "public"."verification";
-DROP TABLE IF EXISTS "public"."user";
+DROP TABLE IF EXISTS "public"."session" CASCADE;
+DROP TABLE IF EXISTS "public"."account" CASCADE;
+DROP TABLE IF EXISTS "public"."verification" CASCADE;
+DROP TABLE IF EXISTS "public"."user" CASCADE;
