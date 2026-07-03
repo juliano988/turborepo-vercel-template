@@ -71,6 +71,28 @@ packages/
   typescript-config/  # Configurações TypeScript base
 ```
 
+## Visão rápida de cada projeto
+
+### `apps/app` (Core)
+
+Aplicação principal do produto. É onde vivem os fluxos centrais de negócio e as features que representam o domínio principal do sistema.
+
+### `apps/admin` (Backoffice)
+
+Painel administrativo para operação interna. Reúne funcionalidades de gestão, suporte e manutenção do produto sem acoplamento direto à experiência do usuário final.
+
+### `apps/landing` (Marketing)
+
+Aplicação focada em aquisição e conversão. Centraliza páginas institucionais, conteúdo comercial e fluxos de entrada como login/cadastro.
+
+### `apps/docs` (Documentação)
+
+Portal de documentação técnica e de produto (Fuma Docs). Serve para onboarding, guias de uso, referência e conteúdo para times internos e externos.
+
+### `packages/*` (Infraestrutura compartilhada)
+
+Pacotes reutilizáveis por todos os apps (auth, db, ui, env, configs). Essa camada evita duplicação, padroniza decisões técnicas e reduz custo de manutenção no monorepo.
+
 ## Tecnologias
 | Categoria | Tecnologia |
 |---|---|
