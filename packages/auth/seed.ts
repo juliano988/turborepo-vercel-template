@@ -12,7 +12,7 @@ export async function seedFirstUser(): Promise<void> {
 
   console.log(`[auth] Primeiro usuário: ${email} sendo criado`)
 
-  const count = await prisma.user.count();
+  const count = await prisma.authUser.count();
   if (count > 0) return;
 
   await auth.api.createUser({
@@ -28,5 +28,10 @@ export async function seedFirstUser(): Promise<void> {
 }
 
 if (import.meta.main) {
-  await seedFirstUser();
+  try {
+    await seedFirstUser();
+  } catch (err) {
+    console.error("[auth] Seed falhou (não crítico):", err);
+    process.exit(0);
+  }
 }

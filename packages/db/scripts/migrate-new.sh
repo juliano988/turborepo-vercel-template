@@ -28,6 +28,7 @@ cd "$DB_DIR"
 CONTAINER="prisma-migrate-$$"
 PG_PORT=5499
 DB_URL="postgresql://postgres:postgres@localhost:${PG_PORT}/prismadb"
+SHADOW_DB_URL="postgresql://postgres:postgres@localhost:${PG_PORT}/prismadb_shadow"
 
 echo "Subindo PostgreSQL temporario..."
 docker run --rm -d --name "$CONTAINER"   -e POSTGRES_PASSWORD=postgres   -e POSTGRES_USER=postgres   -e POSTGRES_DB=prismadb   -p "${PG_PORT}:5432"   postgres:latest
@@ -35,12 +36,14 @@ docker run --rm -d --name "$CONTAINER"   -e POSTGRES_PASSWORD=postgres   -e POST
 trap "docker stop $CONTAINER >/dev/null 2>&1 || true" EXIT
 
 echo "Aguardando PostgreSQL..."
-until docker exec "$CONTAINER" pg_isready -U postgres -q 2>/dev/null; do
+until docker exec "$CONTAINER" pg_isready -h localhost -U postgres -q 2>/dev/null; do
   sleep 0.5
 done
 
+docker exec "$CONTAINER" psql -h localhost -U postgres -c "CREATE DATABASE prismadb_shadow;" >/dev/null
+
 echo "Gerando migration '$MIGRATION_NAME'..."
-DATABASE_URL="$DB_URL" bunx prisma migrate dev --name "$MIGRATION_NAME"
+DATABASE_URL="$DB_URL" SHADOW_DATABASE_URL="$SHADOW_DB_URL" bunx prisma migrate dev --name "$MIGRATION_NAME"
 
 echo ""
 echo "Migration gerada em prisma/migrations/"

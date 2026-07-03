@@ -15,12 +15,15 @@
     "studio": "prisma studio"
   },
   "dependencies": {
-    "@prisma/client": "^6.0.0"
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "pg": "^8.14.1"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
     "@types/node": "^26.0.1",
-    "prisma": "^6.0.0",
+    "@types/pg": "^8.11.14",
+    "prisma": "^7.0.0",
     "typescript": "5.9.2"
   }
 }
