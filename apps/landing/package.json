@@ -11,7 +11,7 @@
     "check-types": "next typegen && tsc --noEmit",
     "prebuild": "bun ../../packages/scripts/vercel-env.ts",
     "predev": "bun --env-file ../../.env ../../packages/auth/seed.ts",
-    "prestart": "bun --env-file ../../.env ../../packages/auth/seed.ts"
+    "prestart": "../../packages/auth/seed.ts"
   },
   "dependencies": {
     "@repo/env": "*",
