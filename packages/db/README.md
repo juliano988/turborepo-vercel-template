@@ -164,14 +164,3 @@ export function Header() {
   return <button onClick={() => signOut()}>Sair — {session?.user.name}</button>;
 }
 ```
-
-## Schema do banco
-
-O Better Auth gerencia quatro tabelas automaticamente:
-
-| Tabela | Descrição |
-|---|---|
-| `user` | Dados do usuário |
-| `session` | Sessões ativas |
-| `account` | Contas vinculadas (OAuth ou e-mail/senha) |
-| `verification` | Tokens de verificação de e-mail |
