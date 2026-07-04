@@ -173,6 +173,24 @@ bun run lint
 | `bun run check-types` | Verifica tipos TypeScript em todos os pacotes |
 | `bun run clean` | Remove artefatos de build (`.turbo`, `.next`, `dist`) |
 
+## Banco de dados e migrations
+
+### Desenvolvimento
+
+Em dev, o banco roda localmente via **PGlite** (Postgres embarcado, sem Docker). O comando `bun run db:dev` sobe o banco, aplica o schema atual e abre o Prisma Studio. Não há migrations geradas automaticamente nesse fluxo — o schema é aplicado diretamente com `prisma db push`.
+
+Para **criar uma migration** (necessário antes de subir para produção), use:
+
+```bash
+bun run db:migrate:new <nome-da-migration>
+```
+
+Esse comando sobe um container Docker temporário com Postgres, gera o arquivo de migration em `packages/db/prisma/migrations/` e encerra o container. O Docker é necessário apenas nesse passo — o restante do desenvolvimento não depende dele.
+
+### Produção
+
+As migrations são aplicadas **automaticamente durante o build na Vercel**. O pacote `@repo/db` possui um script `postbuild` que executa `prisma migrate deploy` antes de qualquer app ser buildado. Como o Turborepo cacheia os outputs por conteúdo, um novo arquivo de migration invalida o cache do pacote `db`, forçando a re-execução do `postbuild` — e consequentemente o rebuild de todos os apps que dependem dele. Nenhuma configuração adicional no pipeline da Vercel é necessária.
+
 ## Deploy
 
 O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`).
