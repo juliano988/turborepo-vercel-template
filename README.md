@@ -24,16 +24,18 @@ Contextos de Suporte (Supporting Contexts)
 └──────────────┘  └──────────────┘
 
 ┌─────────────────────────────────────────────────────┐
-│                  Contexto Genérico                   │
-│   docs/       Documentação técnica e de produto      │
+│                  Contexto Genérico                  │
+│   docs/       Documentação técnica e de produto     │
 └─────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────┐
-│            Camada Compartilhada (packages/)          │
+│            Camada Compartilhada (packages/)         │
 │  auth · ui · env · eslint-config · prettier-config  │
-│  typescript-config                                   │
+│  typescript-config                                  │
 └─────────────────────────────────────────────────────┘
 ```
+
+> **Extensível por design:** o template foi pensado para crescer junto com o seu domínio. Novos contextos delimitados podem ser adicionados como novos apps em `apps/` — sejam contextos **principais**, de **suporte** ou **genéricos**. Basta criar o diretório, configurar o `package.json` e incluir a entrada correspondente no `turbo.json`. Cada contexto tem ciclo de vida e deploy independentes, compartilhando apenas a camada de `packages/`.
 
 ### Contexto Principal
 
