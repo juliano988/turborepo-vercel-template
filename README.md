@@ -63,7 +63,7 @@ Infraestrutura e utilitários reutilizados por todos os contextos:
 ```
 packages/
     auth/               # Lógica de autenticação (Better Auth + Prisma)
-    db/                 # PrismaClient singleton e schema centralizado
+    db/                 # PrismaClient singleton e schemas por bounded context
   env/                # Carregador de variáveis de ambiente do monorepo
   ui/                 # Componentes de UI (Ant Design, DaisyUI, Fuma Docs)
   eslint-config/      # Configurações ESLint reutilizáveis
@@ -100,7 +100,7 @@ Pacotes reutilizáveis por todos os apps (auth, db, ui, env, configs). Essa cama
 | Framework | Next.js (App Router) |
 | Runtime / Package Manager | Bun |
 | Autenticação | Better Auth |
-| Banco de dados | Prisma Postgres (PGlite local / Prisma Postgres em produção) |
+| Banco de dados | Prisma 7 + Prisma Postgres (PGlite local / Prisma Postgres em produção) |
 | UI | Ant Design, DaisyUI, Tailwind CSS |
 | Documentação | Fuma Docs |
 | Linguagem | TypeScript |
