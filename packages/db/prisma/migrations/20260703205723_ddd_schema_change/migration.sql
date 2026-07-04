@@ -80,7 +80,11 @@ ALTER TABLE "auth"."account" ADD CONSTRAINT "account_userId_fkey" FOREIGN KEY ("
 DO $$
 BEGIN
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'user') THEN
-    INSERT INTO "auth"."user" SELECT * FROM "public"."user" ON CONFLICT DO NOTHING;
+    INSERT INTO "auth"."user" ("id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt", "role", "banned", "banReason", "banExpires")
+    SELECT "id", "name", "email", "emailVerified", "image", "createdAt", "updatedAt", "role",
+           CASE WHEN "banned" IS NULL THEN NULL ELSE "banned"::boolean END,
+           "banReason", "banExpires"
+    FROM "public"."user" ON CONFLICT DO NOTHING;
   END IF;
 
   IF EXISTS (SELECT FROM information_schema.tables WHERE table_schema = 'public' AND table_name = 'session') THEN
