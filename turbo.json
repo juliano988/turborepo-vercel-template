@@ -31,7 +31,11 @@
       ]
     },
     "@repo/db#build": {
-      "cache": false
+      "cache": false,
+      "env": [
+        "DATABASE_URL",
+        "PRISMA_DATABASE_URL"
+      ]
     },
     "lint": {
       "dependsOn": [
