@@ -221,3 +221,11 @@ Acoplar a infraestrutura a uma plataforma de serviços autogerenciáveis (como V
 ### Next.js é um framework completo, não só front-end
 
 Next.js entrega Server Components, Server Actions, API Routes, middleware, autenticação via cookies, streaming, cache granular e muito mais — tudo na mesma stack. Com ele você é plenamente capaz de construir sistemas de grande porte usando uma única linguagem, um único framework e um único pipeline de build e deploy. Não há necessidade de uma camada de API REST separada para a maioria dos casos.
+
+### Estratégia de UI por contexto
+
+A escolha da biblioteca de UI não é uniforme — ela varia de acordo com as necessidades de cada contexto:
+
+**DaisyUI** (usado no `landing`) é uma biblioteca de componentes puramente CSS construída sobre Tailwind. Não adiciona nenhum JavaScript ao bundle, o que a torna ideal para páginas públicas onde performance de carregamento e SEO são críticos. Menos JS significa menos trabalho para o crawler, menor LCP e melhor Core Web Vitals. O Tailwind como base ainda permite customizações rápidas e consistentes sem sair do HTML.
+
+**Ant Design** (usado no `app` e `admin`) é uma biblioteca rica em componentes interativos, adequada para interfaces administrativas e dashboards onde a experiência do usuário autenticado importa mais do que métricas de SEO. O custo de bundle é aceitável nesses contextos porque as páginas são protegidas por autenticação e não são indexadas por buscadores. Além disso, o ecossistema do Ant Design — especialmente via [Ant Design Charts](https://charts.ant.design/) e a `Table` nativa com ordenação, filtros e paginação embutidos — mitiga a necessidade de adicionar libs externas para gráficos, tabelas avançadas, formulários complexos e outros componentes típicos de backoffices, reduzindo a fragmentação de dependências no projeto.
