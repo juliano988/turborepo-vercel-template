@@ -1,6 +1,5 @@
 # Turborepo Vercel Template
 
-
 Template de monorepo full-stack pronto para produção, construído com [Turborepo](https://turbo.build/repo), [Next.js](https://nextjs.org/) e [Bun](https://bun.sh/).
 
 A arquitetura segue os princípios do **Domain-Driven Design (DDD)**, onde cada aplicação representa um **contexto delimitado (Bounded Context)** com responsabilidade bem definida. Os pacotes internos em `packages/` atuam como a camada de infraestrutura e utilitários compartilhados entre os contextos.
@@ -63,16 +62,17 @@ Dão suporte ao contexto principal, mas possuem ciclo de vida e deploy independe
 
 Infraestrutura e utilitários reutilizados por todos os contextos:
 
-```
-packages/
-    auth/               # Lógica de autenticação (Better Auth + Prisma)
-    db/                 # PrismaClient singleton e schemas por bounded context
-  env/                # Carregador de variáveis de ambiente do monorepo
-  ui/                 # Componentes de UI (Ant Design, DaisyUI, Fuma Docs)
-  eslint-config/      # Configurações ESLint reutilizáveis
-  prettier-config/    # Configuração Prettier compartilhada
-  typescript-config/  # Configurações TypeScript base
-```
+| Pacote | Descrição |
+|---|---|
+| `auth/` | Lógica de autenticação (Better Auth + Prisma) |
+| `db/` | PrismaClient singleton e schemas por bounded context |
+| `env/` | Carregador de variáveis de ambiente do monorepo |
+| `ui/` | Componentes de UI (Ant Design, DaisyUI, Fuma Docs) |
+| `proxy/` | Configuração do proxy reverso entre apps |
+| `scripts/` | Scripts utilitários do monorepo (ex: sincronização de env na Vercel) |
+| `eslint-config/` | Configurações ESLint reutilizáveis |
+| `prettier-config/` | Configuração Prettier compartilhada |
+| `typescript-config/` | Configurações TypeScript base |
 
 ## Visão rápida de cada projeto
 
@@ -101,6 +101,7 @@ Portal de documentação técnica e de produto (Fuma Docs). Serve para onboardin
 Pacotes reutilizáveis por todos os apps (auth, db, ui, env, configs). Essa camada evita duplicação, padroniza decisões técnicas e reduz custo de manutenção no monorepo.
 
 ## Tecnologias
+
 | Categoria | Tecnologia |
 |---|---|
 | Monorepo | Turborepo 2 |
@@ -147,16 +148,13 @@ ADMIN_PASS=senha-segura
 bun install
 
 # Subir banco de dados
-bun db:dev
+bun run db:dev
 
 # Rodar todos os apps em modo desenvolvimento
-bun dev
-
-# Build de produção de todos os apps
-bun run build
+bun run dev
 
 # Lint em todos os pacotes
-bun lint
+bun run lint
 ```
 
 ## Scripts disponíveis
