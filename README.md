@@ -189,7 +189,15 @@ Esse comando sobe um container Docker temporário com Postgres, gera o arquivo d
 
 ### Produção
 
-As migrations são aplicadas **automaticamente durante o build na Vercel**. O pacote `@repo/db` possui um script `postbuild` que executa `prisma migrate deploy` antes de qualquer app ser buildado. Como o Turborepo cacheia os outputs por conteúdo, um novo arquivo de migration invalida o cache do pacote `db`, forçando a re-execução do `postbuild` — e consequentemente o rebuild de todos os apps que dependem dele. Nenhuma configuração adicional no pipeline da Vercel é necessária.
+Em produção, o banco utilizado é o **[Prisma Postgres](https://www.prisma.io/postgres)** — um Postgres gerenciado diretamente pela Prisma, sem necessidade de provisionar infraestrutura separada.
+
+**Configuração necessária antes do primeiro deploy:**
+
+1. No painel da Vercel, acesse o projeto e vá em **Storage → Create Database → Prisma Postgres**
+2. A `DATABASE_URL` é adicionada automaticamente como variável de ambiente no projeto
+3. Para os demais projetos do monorepo, compartilhe o banco via **Storage → Connect to Project** no painel da Vercel
+
+As migrations são então aplicadas **automaticamente durante o build na Vercel**. O pacote `@repo/db` possui um script `postbuild` que executa `prisma migrate deploy` antes de qualquer app ser buildado. Como o Turborepo cacheia os outputs por conteúdo, um novo arquivo de migration invalida o cache do pacote `db`, forçando a re-execução do `postbuild` — e consequentemente o rebuild de todos os apps que dependem dele. Nenhuma configuração adicional no pipeline da Vercel é necessária.
 
 ## Deploy
 
@@ -233,6 +241,12 @@ Se os nomes dos projetos na Vercel forem diferentes do exemplo acima, ajuste os 
 ### Infraestrutura como serviço gerenciado
 
 Acoplar a infraestrutura a uma plataforma de serviços autogerenciáveis (como Vercel, MongoDB Atlas, etc.) simplifica drasticamente o trabalho operacional. Sem servidores para provisionar, sem pipelines de infra para manter — você foca no produto. Isso reduz custo operacional, elimina overhead de gestão e acelera o time-to-market.
+
+### Prisma + Postgres como stack de banco de dados
+
+Prisma com Postgres foi escolhido por ser uma das stacks mais consolidadas do ecossistema Node.js/TypeScript — amplamente documentada, com grande adoção na comunidade e suporte de primeira classe a migrations, type safety e ORM. O tradeoff é que o setup inicial é um pouco mais complexo: requer provisionar o banco, configurar a `DATABASE_URL` e gerenciar migrations explicitamente (o que já foi resolvido nesse template).
+
+Dito isso, **o template não te prende a essa escolha**. Se o seu domínio se encaixa melhor em um banco de documentos, fique à vontade para usar [MongoDB](https://www.mongodb.com/) com [Mongoose](https://mongoosejs.com/) ou o próprio [Prisma com MongoDB](https://www.prisma.io/docs/orm/overview/databases/mongodb). O setup é consideravelmente mais simples — basta uma connection string e você já está operacional, sem migrations para gerenciar. Troque o pacote `@repo/db` pelo cliente de sua preferência e o restante do monorepo continua funcionando normalmente.
 
 ### Next.js é um framework completo, não só front-end
 
