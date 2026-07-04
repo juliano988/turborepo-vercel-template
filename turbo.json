@@ -25,8 +25,13 @@
         "BETTER_AUTH_SECRET",
         "NEXT_PUBLIC_BETTER_AUTH_URL",
         "ADMIN_USER",
-        "ADMIN_PASS"
+        "ADMIN_PASS",
+        "ADMIN_EMAIL",
+        "MONGODB_URI"
       ]
+    },
+    "@repo/db#build": {
+      "cache": false
     },
     "lint": {
       "dependsOn": [
