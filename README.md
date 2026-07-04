@@ -26,7 +26,7 @@ graph TB
 
     subgraph SHARED["packages/ · Contexto de Suporte — Camada Compartilhada"]
         direction LR
-        AUTH[auth] --- DB[db] --- UI[ui] --- ENV[env] --- CFG[configs]
+        AUTH[auth] --- DB[db] --- UI[ui] --- ENV[env] --- PROXY[proxy] --- SCRIPTS[scripts] --- CFG[configs]
     end
 
     APP --> SHARED
@@ -96,10 +96,6 @@ No template, o `landing` atua como **âncora do projeto**: é ele que hospeda as
 
 Portal de documentação técnica e de produto (Fuma Docs). Serve para onboarding, guias de uso, referência e conteúdo para times internos e externos.
 
-### `packages/*` (Infraestrutura compartilhada)
-
-Pacotes reutilizáveis por todos os apps (auth, db, ui, env, configs). Essa camada evita duplicação, padroniza decisões técnicas e reduz custo de manutenção no monorepo.
-
 ## Tecnologias
 
 | Categoria | Tecnologia |
@@ -165,11 +161,11 @@ bun run lint
 | `bun run db:migrate` | Sobe banco local e aplica schema (sem abrir o Studio) |
 | `bun run db:migrate:new <nome>` | Gera arquivo de migration via container Docker temporário |
 | `bun run db:studio` | Abre o Prisma Studio para o banco atual |
-| `bun dev` | Inicia todos os apps em modo desenvolvimento |
+| `bun run dev` | Inicia todos os apps em modo desenvolvimento |
 | `bun run build` | Build de produção (com cache do Turbo) |
 | `bun run start` | Inicia todos os apps em modo produção |
-| `bun lint` | Executa ESLint em todo o monorepo |
-| `bun format` | Formata todos os arquivos com Prettier |
+| `bun run lint` | Executa ESLint em todo o monorepo |
+| `bun run format` | Formata todos os arquivos com Prettier |
 | `bun run check-types` | Verifica tipos TypeScript em todos os pacotes |
 | `bun run clean` | Remove artefatos de build (`.turbo`, `.next`, `dist`) |
 
@@ -201,9 +197,7 @@ As migrations são então aplicadas **automaticamente durante o build na Vercel*
 
 ## Deploy
 
-O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`).
-
-As migrations do banco de dados são aplicadas automaticamente durante o build via `postbuild` no pacote `@repo/db`: quando um arquivo de migration novo é commitado, o Turborepo invalida o cache do pacote e executa `prisma migrate deploy` antes de buildar os apps que dependem dele. Nenhuma configuração adicional no Build Command da Vercel é necessária.
+O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`). O banco de dados, migrations e variáveis de ambiente são compartilhados entre os projetos — veja as seções [Banco de dados e migrations](#banco-de-dados-e-migrations) e [Variáveis de ambiente](#variáveis-de-ambiente) para os detalhes.
 
 ### Preview deploy com URLs sincronizadas entre apps
 
