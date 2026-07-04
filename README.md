@@ -88,6 +88,10 @@ Painel administrativo para operação interna. Reúne funcionalidades de gestão
 
 Aplicação focada em aquisição e conversão. Centraliza páginas institucionais, conteúdo comercial e fluxos de entrada como login/cadastro.
 
+No template, o `landing` atua como **âncora do projeto**: é ele que hospeda as rotas de autenticação (`/login`, `/register`) e o proxy reverso que roteia requisições entre os demais apps. Essa escolha é intencional — a landing costuma ser o ponto de entrada público do sistema, tornando-a o lugar natural para essas responsabilidades.
+
+> **Não precisa de landing page?** Sem problema. A lógica de autenticação (`@repo/auth`) e de proxy (`@repo/proxy`) vivem nos packages e são completamente desacopladas deste app. Basta mover as rotas de auth e a configuração de proxy para qualquer outro contexto do monorepo — como o próprio `app/` — e remover ou repurposear o `landing`.
+
 ### `apps/docs` (Documentação)
 
 Portal de documentação técnica e de produto (Fuma Docs). Serve para onboarding, guias de uso, referência e conteúdo para times internos e externos.
