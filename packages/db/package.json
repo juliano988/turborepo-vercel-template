@@ -7,7 +7,7 @@
     ".": "./index.ts"
   },
   "scripts": {
-    "build": "prisma generate && prisma migrate deploy",
+    "build": "prisma generate && ([ -z \"$DATABASE_URL\" ] || prisma migrate deploy)",
     "migrate:dev": "bash scripts/dev-migrate.sh",
     "migrate:new": "bash scripts/migrate-new.sh",
     "migrate:deploy": "prisma migrate deploy",
