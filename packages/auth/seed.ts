@@ -6,11 +6,11 @@ export async function seedFirstUser(): Promise<void> {
   const password = process.env.ADMIN_PASS;
 
   if (!email || !password) {
-    console.error("[auth] Email e/ou senha não definidos")
+    console.error("[auth] Email e/ou senha não definidos");
     return;
   }
 
-  console.log(`[auth] Primeiro usuário: ${email} sendo criado`)
+  console.log(`[auth] Primeiro usuário: ${email} sendo criado`);
 
   const count = await prisma.authUser.count();
   if (count > 0) return;
