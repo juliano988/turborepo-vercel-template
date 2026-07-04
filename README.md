@@ -1,6 +1,5 @@
 # Turborepo Vercel Template
 
-
 Template de monorepo full-stack pronto para produção, construído com [Turborepo](https://turbo.build/repo), [Next.js](https://nextjs.org/) e [Bun](https://bun.sh/).
 
 A arquitetura segue os princípios do **Domain-Driven Design (DDD)**, onde cada aplicação representa um **contexto delimitado (Bounded Context)** com responsabilidade bem definida. Os pacotes internos em `packages/` atuam como a camada de infraestrutura e utilitários compartilhados entre os contextos.
@@ -10,30 +9,33 @@ A arquitetura segue os princípios do **Domain-Driven Design (DDD)**, onde cada 
 
 ## Arquitetura DDD
 
+```mermaid
+graph TB
+    subgraph CORE["Contexto Principal"]
+        APP["app/\nCore do produto"]
+    end
+
+    subgraph SUPPORT["Contextos de Suporte"]
+        ADMIN["admin/\nBackoffice"]
+        LANDING["landing/\nMarketing"]
+    end
+
+    subgraph GENERIC["Contexto Genérico"]
+        DOCS["docs/\nDocumentação"]
+    end
+
+    subgraph SHARED["packages/ · Contexto de Suporte — Camada Compartilhada"]
+        direction LR
+        AUTH[auth] --- DB[db] --- UI[ui] --- ENV[env] --- PROXY[proxy] --- SCRIPTS[scripts] --- CFG[configs]
+    end
+
+    APP --> SHARED
+    ADMIN --> SHARED
+    LANDING --> SHARED
+    DOCS --> SHARED
 ```
-┌─────────────────────────────────────────────────────┐
-│                  Contexto Principal                  │
-│   app/        Aplicação core do produto              │
-└─────────────────────────────────────────────────────┘
 
-Contextos de Suporte (Supporting Contexts)
-
-┌──────────────┐  ┌──────────────┐
-│   admin/     │  │  landing/    │
-│  Backoffice  │  │  Marketing   │
-└──────────────┘  └──────────────┘
-
-┌─────────────────────────────────────────────────────┐
-│                  Contexto Genérico                   │
-│   docs/       Documentação técnica e de produto      │
-└─────────────────────────────────────────────────────┘
-
-┌─────────────────────────────────────────────────────┐
-│            Camada Compartilhada (packages/)          │
-│  auth · ui · env · eslint-config · prettier-config  │
-│  typescript-config                                   │
-└─────────────────────────────────────────────────────┘
-```
+> **Extensível por design:** o template foi pensado para crescer junto com o seu domínio. Novos contextos delimitados podem ser adicionados como novos apps em `apps/` — sejam contextos **principais**, de **suporte** ou **genéricos**. Basta criar o diretório, configurar o `package.json` e incluir a entrada correspondente no `turbo.json`. Cada contexto tem ciclo de vida e deploy independentes, compartilhando apenas a camada de `packages/`.
 
 ### Contexto Principal
 
@@ -60,16 +62,17 @@ Dão suporte ao contexto principal, mas possuem ciclo de vida e deploy independe
 
 Infraestrutura e utilitários reutilizados por todos os contextos:
 
-```
-packages/
-    auth/               # Lógica de autenticação (Better Auth + Prisma)
-    db/                 # PrismaClient singleton e schema centralizado
-  env/                # Carregador de variáveis de ambiente do monorepo
-  ui/                 # Componentes de UI (Ant Design, DaisyUI, Fuma Docs)
-  eslint-config/      # Configurações ESLint reutilizáveis
-  prettier-config/    # Configuração Prettier compartilhada
-  typescript-config/  # Configurações TypeScript base
-```
+| Pacote | Descrição |
+|---|---|
+| `auth/` | Lógica de autenticação (Better Auth + Prisma) |
+| `db/` | PrismaClient singleton e schemas por bounded context |
+| `env/` | Carregador de variáveis de ambiente do monorepo |
+| `ui/` | Componentes de UI (Ant Design, DaisyUI, Fuma Docs) |
+| `proxy/` | Configuração do proxy reverso entre apps |
+| `scripts/` | Scripts utilitários do monorepo (ex: sincronização de env na Vercel) |
+| `eslint-config/` | Configurações ESLint reutilizáveis |
+| `prettier-config/` | Configuração Prettier compartilhada |
+| `typescript-config/` | Configurações TypeScript base |
 
 ## Visão rápida de cada projeto
 
@@ -85,22 +88,23 @@ Painel administrativo para operação interna. Reúne funcionalidades de gestão
 
 Aplicação focada em aquisição e conversão. Centraliza páginas institucionais, conteúdo comercial e fluxos de entrada como login/cadastro.
 
+No template, o `landing` atua como **âncora do projeto**: é ele que hospeda as rotas de autenticação (`/login`, `/register`) e o proxy reverso que roteia requisições entre os demais apps. Essa escolha é intencional — a landing costuma ser o ponto de entrada público do sistema, tornando-a o lugar natural para essas responsabilidades.
+
+> **Não precisa de landing page?** Sem problema. A lógica de autenticação (`@repo/auth`) e de proxy (`@repo/proxy`) vivem nos packages e são completamente desacopladas deste app. Basta mover as rotas de auth e a configuração de proxy para qualquer outro contexto do monorepo — como o próprio `app/` — e remover ou repurposear o `landing`.
+
 ### `apps/docs` (Documentação)
 
 Portal de documentação técnica e de produto (Fuma Docs). Serve para onboarding, guias de uso, referência e conteúdo para times internos e externos.
 
-### `packages/*` (Infraestrutura compartilhada)
-
-Pacotes reutilizáveis por todos os apps (auth, db, ui, env, configs). Essa camada evita duplicação, padroniza decisões técnicas e reduz custo de manutenção no monorepo.
-
 ## Tecnologias
+
 | Categoria | Tecnologia |
 |---|---|
 | Monorepo | Turborepo 2 |
 | Framework | Next.js (App Router) |
 | Runtime / Package Manager | Bun |
 | Autenticação | Better Auth |
-| Banco de dados | Prisma Postgres (PGlite local / Prisma Postgres em produção) |
+| Banco de dados | Prisma 7 + Prisma Postgres (PGlite local / Prisma Postgres em produção) |
 | UI | Ant Design, DaisyUI, Tailwind CSS |
 | Documentação | Fuma Docs |
 | Linguagem | TypeScript |
@@ -140,16 +144,13 @@ ADMIN_PASS=senha-segura
 bun install
 
 # Subir banco de dados
-bun db:dev
+bun run db:dev
 
 # Rodar todos os apps em modo desenvolvimento
-bun dev
-
-# Build de produção de todos os apps
-bun run build
+bun run dev
 
 # Lint em todos os pacotes
-bun lint
+bun run lint
 ```
 
 ## Scripts disponíveis
@@ -160,19 +161,43 @@ bun lint
 | `bun run db:migrate` | Sobe banco local e aplica schema (sem abrir o Studio) |
 | `bun run db:migrate:new <nome>` | Gera arquivo de migration via container Docker temporário |
 | `bun run db:studio` | Abre o Prisma Studio para o banco atual |
-| `bun dev` | Inicia todos os apps em modo desenvolvimento |
+| `bun run dev` | Inicia todos os apps em modo desenvolvimento |
 | `bun run build` | Build de produção (com cache do Turbo) |
 | `bun run start` | Inicia todos os apps em modo produção |
-| `bun lint` | Executa ESLint em todo o monorepo |
-| `bun format` | Formata todos os arquivos com Prettier |
+| `bun run lint` | Executa ESLint em todo o monorepo |
+| `bun run format` | Formata todos os arquivos com Prettier |
 | `bun run check-types` | Verifica tipos TypeScript em todos os pacotes |
 | `bun run clean` | Remove artefatos de build (`.turbo`, `.next`, `dist`) |
 
+## Banco de dados e migrations
+
+### Desenvolvimento
+
+Em dev, o banco roda localmente via **PGlite** (Postgres embarcado, sem Docker). O comando `bun run db:dev` sobe o banco, aplica o schema atual e abre o Prisma Studio. Não há migrations geradas automaticamente nesse fluxo — o schema é aplicado diretamente com `prisma db push`.
+
+Para **criar uma migration** (necessário antes de subir para produção), use:
+
+```bash
+bun run db:migrate:new <nome-da-migration>
+```
+
+Esse comando sobe um container Docker temporário com Postgres, gera o arquivo de migration em `packages/db/prisma/migrations/` e encerra o container. O Docker é necessário apenas nesse passo — o restante do desenvolvimento não depende dele.
+
+### Produção
+
+Em produção, o banco utilizado é o **[Prisma Postgres](https://www.prisma.io/postgres)** — um Postgres gerenciado diretamente pela Prisma, sem necessidade de provisionar infraestrutura separada.
+
+**Configuração necessária antes do primeiro deploy:**
+
+1. No painel da Vercel, acesse o projeto e vá em **Storage → Create Database → Prisma Postgres**
+2. A `DATABASE_URL` é adicionada automaticamente como variável de ambiente no projeto
+3. Para os demais projetos do monorepo, compartilhe o banco via **Storage → Connect to Project** no painel da Vercel
+
+As migrations são então aplicadas **automaticamente durante o build na Vercel**. O pacote `@repo/db` possui um script `postbuild` que executa `prisma migrate deploy` antes de qualquer app ser buildado. Como o Turborepo cacheia os outputs por conteúdo, um novo arquivo de migration invalida o cache do pacote `db`, forçando a re-execução do `postbuild` — e consequentemente o rebuild de todos os apps que dependem dele. Nenhuma configuração adicional no pipeline da Vercel é necessária.
+
 ## Deploy
 
-O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`).
-
-As migrations do banco de dados são aplicadas automaticamente durante o build via `postbuild` no pacote `@repo/db`: quando um arquivo de migration novo é commitado, o Turborepo invalida o cache do pacote e executa `prisma migrate deploy` antes de buildar os apps que dependem dele. Nenhuma configuração adicional no Build Command da Vercel é necessária.
+O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`). O banco de dados, migrations e variáveis de ambiente são compartilhados entre os projetos — veja as seções [Banco de dados e migrations](#banco-de-dados-e-migrations) e [Variáveis de ambiente](#variáveis-de-ambiente) para os detalhes.
 
 ### Preview deploy com URLs sincronizadas entre apps
 
@@ -211,6 +236,20 @@ Se os nomes dos projetos na Vercel forem diferentes do exemplo acima, ajuste os 
 
 Acoplar a infraestrutura a uma plataforma de serviços autogerenciáveis (como Vercel, MongoDB Atlas, etc.) simplifica drasticamente o trabalho operacional. Sem servidores para provisionar, sem pipelines de infra para manter — você foca no produto. Isso reduz custo operacional, elimina overhead de gestão e acelera o time-to-market.
 
+### Prisma + Postgres como stack de banco de dados
+
+Prisma com Postgres foi escolhido por ser uma das stacks mais consolidadas do ecossistema Node.js/TypeScript — amplamente documentada, com grande adoção na comunidade e suporte de primeira classe a migrations, type safety e ORM. O tradeoff é que o setup inicial é um pouco mais complexo: requer provisionar o banco, configurar a `DATABASE_URL` e gerenciar migrations explicitamente (o que já foi resolvido nesse template).
+
+Dito isso, **o template não te prende a essa escolha**. Se o seu domínio se encaixa melhor em um banco de documentos, fique à vontade para usar [MongoDB](https://www.mongodb.com/) com [Mongoose](https://mongoosejs.com/) ou o próprio [Prisma com MongoDB](https://www.prisma.io/docs/orm/overview/databases/mongodb). O setup é consideravelmente mais simples — basta uma connection string e você já está operacional, sem migrations para gerenciar. Troque o pacote `@repo/db` pelo cliente de sua preferência e o restante do monorepo continua funcionando normalmente.
+
 ### Next.js é um framework completo, não só front-end
 
 Next.js entrega Server Components, Server Actions, API Routes, middleware, autenticação via cookies, streaming, cache granular e muito mais — tudo na mesma stack. Com ele você é plenamente capaz de construir sistemas de grande porte usando uma única linguagem, um único framework e um único pipeline de build e deploy. Não há necessidade de uma camada de API REST separada para a maioria dos casos.
+
+### Estratégia de UI por contexto
+
+A escolha da biblioteca de UI não é uniforme — ela varia de acordo com as necessidades de cada contexto:
+
+**DaisyUI** (usado no `landing`) é uma biblioteca de componentes puramente CSS construída sobre Tailwind. Não adiciona nenhum JavaScript ao bundle, o que a torna ideal para páginas públicas onde performance de carregamento e SEO são críticos. Menos JS significa menos trabalho para o crawler, menor LCP e melhor Core Web Vitals. O Tailwind como base ainda permite customizações rápidas e consistentes sem sair do HTML.
+
+**Ant Design** (usado no `app` e `admin`) é uma biblioteca rica em componentes interativos, adequada para interfaces administrativas e dashboards onde a experiência do usuário autenticado importa mais do que métricas de SEO. O custo de bundle é aceitável nesses contextos porque as páginas são protegidas por autenticação e não são indexadas por buscadores. Além disso, o ecossistema do Ant Design — especialmente via [Ant Design Charts](https://charts.ant.design/) e a `Table` nativa com ordenação, filtros e paginação embutidos — mitiga a necessidade de adicionar libs externas para gráficos, tabelas avançadas, formulários complexos e outros componentes típicos de backoffices, reduzindo a fragmentação de dependências no projeto.

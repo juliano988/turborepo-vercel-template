@@ -6,12 +6,42 @@ Pacote centralizado de banco de dados do monorepo. Gerencia o [Prisma Client](ht
 
 ```
 packages/db/
-├── index.ts             # PrismaClient singleton + re-exports de @prisma/client
+├── index.ts             # PrismaClient singleton (adapter pg) + re-exports de @prisma/client
+├── prisma.config.ts     # Configuração do Prisma 7 (schema path, datasource URL, migrations path)
 ├── package.json
 ├── tsconfig.json
 └── prisma/
-    └── schema.prisma    # Schema centralizado (tabelas de auth e futuras entidades)
+    ├── migrations/          # Arquivos SQL de migration (commitados no git)
+    └── schema/              # Schemas Prisma por bounded context
+        ├── base.prisma      # generator + datasource (schemas PostgreSQL declarados aqui)
+        └── auth.prisma      # Modelos do contexto de autenticação (auth schema no PostgreSQL)
 ```
+
+### Convenções de schema
+
+Cada bounded context tem seu próprio arquivo `.prisma` e seu próprio schema PostgreSQL:
+
+```prisma
+// Prefixo no nome do modelo evita conflitos entre contextos
+model AuthUser {
+  // ...
+  @@map("user")        // nome real da tabela no banco
+  @@schema("auth")     // schema PostgreSQL: auth.user
+}
+```
+
+O accessor no client Prisma é sempre baseado no **nome do modelo** (camelCase), não no schema:
+
+```ts
+prisma.authUser   // acessa auth.user no PostgreSQL
+prisma.authSession // acessa auth.session
+```
+
+Para adicionar um novo bounded context:
+
+1. Crie `prisma/schema/<contexto>.prisma` com os modelos e `@@schema("<contexto>")`
+2. Adicione `"<contexto>"` ao array `schemas` no `base.prisma`
+3. Rode `bun run db:migrate:new` para gerar a migration
 
 ## Exports
 
@@ -22,7 +52,8 @@ packages/db/
 ## Variáveis de ambiente
 
 ```env
-DATABASE_URL="postgres://..."   # Conexão PostgreSQL usada pelo Prisma
+DATABASE_URL="postgres://..."        # Conexão PostgreSQL usada pelo Prisma (CLI e runtime)
+SHADOW_DATABASE_URL="postgres://..." # Usada pelo prisma migrate dev (gerada automaticamente em dev)
 ```
 
 ## Setup inicial
@@ -48,11 +79,17 @@ Este comando (executado da raiz do monorepo):
 
 ### 3. Alterar o schema
 
-Edite [prisma/schema.prisma](prisma/schema.prisma) e rode novamente:
+Para modificar um bounded context existente, edite o arquivo `.prisma` correspondente em `prisma/schema/` e rode:
 
 ```bash
 bun run db:dev
 ```
+
+Para **adicionar um novo bounded context**:
+1. Crie `prisma/schema/<contexto>.prisma`
+2. Declare os modelos com `@@schema("<contexto>")` e `@@map("<tabela>")`
+3. Adicione `"<contexto>"` ao array `schemas` em `prisma/schema/base.prisma`
+4. Rode `bun run db:dev` para aplicar localmente
 
 > **Por que `db push` e não `migrate dev`?**  
 > O `prisma dev` usa PGlite internamente, que suporta apenas **1 conexão simultânea**.  
@@ -103,13 +140,15 @@ bun run db:migrate:deploy
 ```ts
 import { prisma } from "@repo/db";
 
-const users = await prisma.user.findMany();
+// Os accessors seguem o nome do modelo Prisma (camelCase), não o schema PostgreSQL
+const users = await prisma.authUser.findMany();
+const sessions = await prisma.authSession.findMany();
 ```
 
 ### Importar tipos gerados
 
 ```ts
-import type { User, Session } from "@repo/db";
+import type { AuthUser, AuthSession } from "@repo/db";
 ```
 
 ## Relação com @repo/auth
