@@ -1,0 +1,117 @@
+name: Preview DB
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, closed]
+
+env:
+  # O Prisma Console cria o branch com o mesmo nome do branch do git
+  DB_NAME: ${{ github.head_ref }}
+  PRISMA_PROJECT_ID: ${{ secrets.PRISMA_PROJECT_ID }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── PR aberto ou atualizado ────────────────────────────────────────────────
+  setup:
+    if: github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    permissions: write-all
+    timeout-minutes: 15
+    outputs:
+      db_url: ${{ steps.create_db.outputs.db_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Cria o banco de dados no Prisma Console com o nome do branch do git
+      - name: Create Prisma database
+        id: create_db
+        env:
+          PRISMA_POSTGRES_SERVICE_TOKEN: ${{ secrets.PRISMA_POSTGRES_SERVICE_TOKEN }}
+        run: |
+          RESPONSE=$(curl -sf -X POST \
+            -H "Authorization: Bearer $PRISMA_POSTGRES_SERVICE_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"name\": \"$DB_NAME\", \"region\": \"us-east-1\"}" \
+            "https://api.prisma.io/v1/projects/$PRISMA_PROJECT_ID/databases")
+          echo "$RESPONSE"
+          DB_URL=$(echo "$RESPONSE" | jq -r '.data.connectionString // empty')
+          if [[ -z "$DB_URL" ]]; then
+            echo "Erro: connectionString não encontrado na resposta acima."
+            exit 1
+          fi
+          echo "db_url=$DB_URL" >> "$GITHUB_OUTPUT"
+
+      # Roda as migrations Prisma no banco recém-criado
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --filter @repo/db
+      - name: Run Prisma migrations
+        working-directory: packages/db
+        env:
+          DATABASE_URL: ${{ steps.create_db.outputs.db_url }}
+        run: bunx prisma migrate deploy --config prisma.config.ts
+
+      # Injeta DATABASE_URL no ambiente de preview da Vercel para este PR
+      - name: Set DATABASE_URL on Vercel preview
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          DB_URL: ${{ steps.create_db.outputs.db_url }}
+        run: |
+          echo "$DB_URL" | npx vercel env add DATABASE_URL preview \
+            "pr-${{ github.event.pull_request.number }}" \
+            --token "$VERCEL_TOKEN" \
+            --scope "$VERCEL_ORG_ID"
+
+      # Comenta no PR com o status do banco
+      - name: Comment PR
+        if: success()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `🗄️ Banco de preview provisionado!\n\nNome: \`${{ env.DB_NAME }}\`\nStatus: pronto`
+            })
+
+  # ── PR fechado — limpa o banco do Prisma Console ──────────────────────────
+  cleanup:
+    if: github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Lista os bancos, encontra pelo nome e deleta via API REST
+      - name: Delete Prisma database
+        env:
+          PRISMA_POSTGRES_SERVICE_TOKEN: ${{ secrets.PRISMA_POSTGRES_SERVICE_TOKEN }}
+        run: |
+          DATABASES=$(curl -sf \
+            -H "Authorization: Bearer $PRISMA_POSTGRES_SERVICE_TOKEN" \
+            "https://api.prisma.io/v1/projects/$PRISMA_PROJECT_ID/databases")
+          DB_ID=$(echo "$DATABASES" | jq -r \
+            ".data[] | select(.name == \"$DB_NAME\") | .id // empty")
+          if [[ -z "$DB_ID" ]]; then
+            echo "Banco $DB_NAME não encontrado, nada a deletar."
+            exit 0
+          fi
+          curl -sf -X DELETE \
+            -H "Authorization: Bearer $PRISMA_POSTGRES_SERVICE_TOKEN" \
+            "https://api.prisma.io/v1/projects/$PRISMA_PROJECT_ID/databases/$DB_ID"
+          echo "Banco $DB_NAME ($DB_ID) deletado."
+
+      # Remove a env var do preview para não acumular entradas na Vercel
+      - name: Remove DATABASE_URL from Vercel preview
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+        run: |
+          npx vercel env rm DATABASE_URL preview \
+            "pr-${{ github.event.pull_request.number }}" \
+            --yes \
+            --token "$VERCEL_TOKEN" \
+            --scope "$VERCEL_ORG_ID"
