@@ -124,8 +124,9 @@ turbo run build
 
 O fluxo funciona assim:
 
-- Quando uma migration nova é adicionada, os arquivos em `prisma/migrations/` mudam → Turborepo detecta a mudança e invalida o cache do `@repo/db` → `build` e `postbuild` rodam → migration é aplicada no banco de produção.
+- Quando uma migration nova é adicionada, os arquivos em `prisma/migrations/` mudam → Turborepo detecta a mudança e invalida o cache do `@repo/db` → `build` e `postbuild` rodam → migration é aplicada no banco.
 - Se nenhum arquivo do pacote mudou, o Turbo usa o cache e não roda o build — o que é correto, pois não há migration nova para aplicar.
+- Em **preview deploys**, a integração Vercel+Neon injeta automaticamente a `DATABASE_URL` do branch Neon isolado — o `postbuild` aplica as migrations nesse banco sem nenhuma configuração extra.
 
 Para rodar manualmente (ex: primeiro setup ou emergência):
 

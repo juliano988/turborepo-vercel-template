@@ -104,7 +104,7 @@ Portal de documentação técnica e de produto (Fuma Docs). Serve para onboardin
 | Framework | Next.js (App Router) |
 | Runtime / Package Manager | Bun |
 | Autenticação | Better Auth |
-| Banco de dados | Prisma 7 + Prisma Postgres (PGlite local / Prisma Postgres em produção) |
+| Banco de dados | Prisma 7 + Neon (PGlite local / Neon em produção) |
 | UI | Ant Design, DaisyUI, Tailwind CSS |
 | Documentação | Fuma Docs |
 | Linguagem | TypeScript |
@@ -185,15 +185,17 @@ Esse comando sobe um container Docker temporário com Postgres, gera o arquivo d
 
 ### Produção
 
-Em produção, o banco utilizado é o **[Prisma Postgres](https://www.prisma.io/postgres)** — um Postgres gerenciado diretamente pela Prisma, sem necessidade de provisionar infraestrutura separada.
+Em produção, o banco utilizado é o **[Neon](https://neon.tech/)** — um Postgres serverless totalmente gerenciado, com branching nativo que habilita ambientes de preview isolados por pull request sem nenhuma configuração adicional.
 
 **Configuração necessária antes do primeiro deploy:**
 
-1. No painel da Vercel, acesse o projeto e vá em **Storage → Create Database → Prisma Postgres**
-2. A `DATABASE_URL` é adicionada automaticamente como variável de ambiente no projeto
+1. No painel da Vercel, acesse o projeto e vá em **Storage → Create Database → Neon**
+2. A `DATABASE_URL` é adicionada automaticamente como variável de ambiente nos ambientes `production` e `preview`
 3. Para os demais projetos do monorepo, compartilhe o banco via **Storage → Connect to Project** no painel da Vercel
 
 As migrations são então aplicadas **automaticamente durante o build na Vercel**. O pacote `@repo/db` possui um script `postbuild` que executa `prisma migrate deploy` antes de qualquer app ser buildado. Como o Turborepo cacheia os outputs por conteúdo, um novo arquivo de migration invalida o cache do pacote `db`, forçando a re-execução do `postbuild` — e consequentemente o rebuild de todos os apps que dependem dele. Nenhuma configuração adicional no pipeline da Vercel é necessária.
+
+O branching do Neon também funciona automaticamente para previews: cada pull request recebe um banco de dados isolado (criado e deletado pela própria integração), e a `DATABASE_URL` correta é injetada no preview deploy correspondente — sem nenhuma configuração extra.
 
 ## Deploy
 
@@ -229,6 +231,31 @@ Importante: os valores devem ser exatamente os nomes dos projetos na Vercel.
 - `production`: o script gera `https://<project>.vercel.app`.
 
 Se os nomes dos projetos na Vercel forem diferentes do exemplo acima, ajuste os 4 arquivos `vercel-env.json` para refletir seus nomes reais.
+
+## Pipeline CI/CD sugerido
+
+```mermaid
+graph LR
+    A[1. Criar branch\nde feature] --> B[2. Abrir\nPull Request]
+    B --> C[3. Preview deploy\nautomático]
+    C --> D[4. Testar\no preview]
+    D --> E[5. Merge para main\ne deletar branch]
+    E --> F[Deploy em\nprodução]
+```
+
+### Fluxo passo a passo
+
+1. **Crie uma branch de feature** a partir da `main`
+2. **Desenvolva a feature** — se houver mudanças no schema, gere a migration com `bun run db:migrate:new <nome>`
+3. **Abra um Pull Request** — automaticamente:
+   - A integração Neon cria um branch de banco de dados isolado para o PR
+   - A Vercel gera um preview deploy com a `DATABASE_URL` desse branch injetada
+   - O `postbuild` aplica as migrations no banco de preview durante o build
+4. **Teste o preview deploy** — ambiente completamente isolado, sem risco ao banco de produção
+5. **Mescle o PR para `main`** e delete a branch de feature:
+   - O deploy de produção é disparado automaticamente na Vercel
+   - As migrations são aplicadas no banco principal
+   - O branch Neon do PR é deletado automaticamente pela integração
 
 ## Justificativas
 
