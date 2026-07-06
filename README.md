@@ -192,6 +192,7 @@ Em produção, o banco utilizado é o **[Neon](https://neon.tech/)** — um Post
 1. No painel da Vercel, acesse o projeto e vá em **Storage → Create Database → Neon**
 2. A `DATABASE_URL` é adicionada automaticamente como variável de ambiente nos ambientes `production` e `preview`
 3. Para os demais projetos do monorepo, compartilhe o banco via **Storage → Connect to Project** no painel da Vercel
+4. No [console do Neon](https://console.neon.tech/), acesse o projeto criado e vá em **Integrations → GitHub** — conecte sua conta e repositório para que o Neon crie automaticamente os secrets `NEON_API_KEY` e `NEON_PROJECT_ID` no GitHub; isso habilita o branching automático do banco a cada pull request
 
 As migrations são então aplicadas **automaticamente durante o build na Vercel**. O pacote `@repo/db` possui um script `postbuild` que executa `prisma migrate deploy` antes de qualquer app ser buildado. Como o Turborepo cacheia os outputs por conteúdo, um novo arquivo de migration invalida o cache do pacote `db`, forçando a re-execução do `postbuild` — e consequentemente o rebuild de todos os apps que dependem dele. Nenhuma configuração adicional no pipeline da Vercel é necessária.
 
