@@ -25,7 +25,15 @@
         "BETTER_AUTH_SECRET",
         "NEXT_PUBLIC_BETTER_AUTH_URL",
         "ADMIN_USER",
-        "ADMIN_PASS"
+        "ADMIN_PASS",
+        "NODE_ENV",
+        "NEXT_RUNTIME",
+        "BLOB_STORE_ID",
+        "BLOB_READ_WRITE_TOKEN",
+        "QSTASH_CURRENT_SIGNING_KEY",
+        "QSTASH_NEXT_SIGNING_KEY",
+        "QSTASH_TOKEN",
+        "QSTASH_URL"
       ]
     },
     "lint": {

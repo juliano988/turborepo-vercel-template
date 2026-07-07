@@ -66,6 +66,7 @@ Infraestrutura e utilitários reutilizados por todos os contextos:
 |---|---|
 | `auth/` | Lógica de autenticação (Better Auth + Prisma) |
 | `db/` | PrismaClient singleton e schemas por bounded context |
+| `mq/` | Mensageria assíncrona entre bounded contexts (QStash) |
 | `env/` | Carregador de variáveis de ambiente do monorepo |
 | `ui/` | Componentes de UI (Ant Design, DaisyUI, Fuma Docs) |
 | `proxy/` | Configuração do proxy reverso entre apps |
@@ -105,6 +106,7 @@ Portal de documentação técnica e de produto (Fuma Docs). Serve para onboardin
 | Runtime / Package Manager | Bun |
 | Autenticação | Better Auth |
 | Banco de dados | Prisma 7 + Neon (PGlite local / Neon em produção) |
+| Mensageria | QStash (Upstash) |
 | UI | Ant Design, DaisyUI, Tailwind CSS |
 | Documentação | Fuma Docs |
 | Linguagem | TypeScript |
@@ -113,7 +115,19 @@ Portal de documentação técnica e de produto (Fuma Docs). Serve para onboardin
 
 - [Bun](https://bun.sh/) >= 1.3
 - Node.js >= 18
-- [Docker](https://docs.docker.com/get-docker/) (necessário para gerar migrations com `bun run db:migrate:new`)
+- [Docker](https://docs.docker.com/get-docker/) (necessário para gerar migrations com `bun run db:migrate:new` e para o servidor QStash local com `bun run mq:dev`)
+
+### Recursos na Vercel (produção)
+
+Antes do primeiro deploy, crie os três recursos abaixo no painel da Vercel e conecte-os a todos os projetos do monorepo via **Storage → Connect to Project**:
+
+| Recurso | Tipo | Uso |
+|---|---|---|
+| **Neon Postgres** | Neon — Free | Banco de dados principal |
+| **Vercel Blob** | Blob Store | Armazenamento de arquivos |
+| **Upstash QStash** | Upstash QStash/Workflow — Free | Mensageria entre contextos |
+
+Cada recurso injeta automaticamente suas variáveis de ambiente nos projetos conectados (`DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, `QSTASH_TOKEN`, etc.) — sem configuração manual.
 
 ## Variáveis de ambiente
 
@@ -135,6 +149,13 @@ NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
 # Primeiro usuário (criado automaticamente no primeiro `bun dev` ou `bun start`)
 ADMIN_USER=admin@exemplo.com
 ADMIN_PASS=senha-segura
+
+# QStash — servidor de dev local (bun run mq:dev)
+# Em produção, substituir pelas chaves reais da Upstash
+QSTASH_URL=http://localhost:8080
+QSTASH_TOKEN=eyJVc2VySUQiOiJkZWZhdWx0VXNlciIsIlBhc3N3b3JkIjoiZGVmYXVsdFBhc3N3b3JkIn0=
+QSTASH_CURRENT_SIGNING_KEY=sig_7kYjw48mhY7kAjqNGcy6cr29RJ6r
+QSTASH_NEXT_SIGNING_KEY=sig_5ZB6DVzB1wjE8S6rZ7eenA8Pdnhs
 ```
 
 ## Início rápido
@@ -145,6 +166,9 @@ bun install
 
 # Subir banco de dados
 bun run db:dev
+
+# Subir servidor de fila (QStash local) — em outro terminal
+bun run mq:dev
 
 # Rodar todos os apps em modo desenvolvimento
 bun run dev
@@ -161,6 +185,7 @@ bun run lint
 | `bun run db:migrate` | Sobe banco local e aplica schema (sem abrir o Studio) |
 | `bun run db:migrate:new <nome>` | Gera arquivo de migration via container Docker temporário |
 | `bun run db:studio` | Abre o Prisma Studio para o banco atual |
+| `bun run mq:dev` | Sobe o servidor QStash local via Docker (porta 8080) |
 | `bun run dev` | Inicia todos os apps em modo desenvolvimento |
 | `bun run build` | Build de produção (com cache do Turbo) |
 | `bun run start` | Inicia todos os apps em modo produção |
@@ -168,6 +193,113 @@ bun run lint
 | `bun run format` | Formata todos os arquivos com Prettier |
 | `bun run check-types` | Verifica tipos TypeScript em todos os pacotes |
 | `bun run clean` | Remove artefatos de build (`.turbo`, `.next`, `dist`) |
+
+## Eventos entre bounded contexts (QStash)
+
+A comunicação assíncrona entre contextos é feita via **QStash Topics** — um modelo pub/sub onde o publisher conhece apenas o nome do tópico, nunca os subscribers.
+
+### Subindo o servidor de dev
+
+Requer [Docker](https://docs.docker.com/get-docker/):
+
+```bash
+bun run mq:dev
+```
+
+Sobe um servidor QStash local em `http://localhost:8080`. Use as credenciais de dev no `.env` (veja a seção [Variáveis de ambiente](#variáveis-de-ambiente)).
+
+### Criando um evento
+
+Eventos pertencem ao **bounded context do publisher** — seja um pacote ou um app. A convenção é:
+
+```
+<context>/events/<nome.do.evento>/
+  constants/index.ts   ← nome do tópico
+  types/index.ts       ← shape do payload
+  index.ts             ← função de publicação + re-exports
+```
+
+Se o publisher for um **pacote** (`packages/<context>/`), re-exporte os tipos pelo `index.ts` do pacote para que outros contextos possam importá-los via `@repo/<context>`.
+
+Se o publisher for um **app** (`apps/<app>/`), os tipos ficam dentro do próprio app. Outros apps que precisem do contrato do evento devem importar do pacote ou o contrato deve ser movido para um pacote compartilhado.
+
+**1. Defina a constante do tópico** (`constants/index.ts`):
+
+```ts
+export const MEU_EVENTO = "meu.evento" as const;
+```
+
+**2. Defina o payload** (`types/index.ts`):
+
+```ts
+export type MeuEventoPayload = {
+  id: string;
+  // ...
+};
+```
+
+**3. Implemente a função de publicação** (`index.ts`):
+
+```ts
+import { publish } from "@repo/mq";
+import type { MeuEventoPayload } from "./types";
+
+export { MEU_EVENTO } from "./constants";
+export type { MeuEventoPayload } from "./types";
+
+export default async function createMeuEvento(payload: MeuEventoPayload) {
+  try {
+    await publish("meu.evento", payload);
+  } catch (err) {
+    console.error("[context] falha ao publicar meu.evento:", err);
+  }
+}
+```
+
+**4. Re-exporte pelo `index.ts` do pacote:**
+
+```ts
+// packages/<context>/index.ts
+export { MEU_EVENTO } from "./events/meu.evento";
+export type { MeuEventoPayload } from "./events/meu.evento";
+```
+
+### Consumindo um evento
+
+O subscriber se auto-registra no tópico via `instrumentation.ts` e expõe uma rota que o QStash chama:
+
+**1. Registre o subscriber** (`apps/<app>/instrumentation.ts`):
+
+```ts
+import { registerSubscriber } from "@repo/mq";
+import { MEU_EVENTO } from "@repo/<context>";
+
+export async function register() {
+  if (process.env.NEXT_RUNTIME !== "nodejs") return;
+  await registerSubscriber(
+    MEU_EVENTO,
+    `${process.env.NEXT_PUBLIC_APP_URL}/api/events/meu_evento`
+  );
+}
+```
+
+**2. Implemente o handler** (`apps/<app>/app/api/events/meu_evento/route.ts`):
+
+```ts
+import { verifySignatureAppRouter } from "@repo/mq";
+import type { MeuEventoPayload } from "@repo/<context>";
+
+async function handler(req: Request) {
+  const payload = (await req.json()) as MeuEventoPayload;
+  // ... processar o evento
+  return Response.json({ ok: true });
+}
+
+const isDev = process.env.NODE_ENV === "development";
+export const POST = isDev ? handler : verifySignatureAppRouter(handler);
+```
+
+> Em dev, a verificação de assinatura é desabilitada pois o servidor local usa chaves fixas. Em produção, `verifySignatureAppRouter` valida a assinatura do QStash automaticamente.
 
 ## Banco de dados e migrations
 
