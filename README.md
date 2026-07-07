@@ -332,7 +332,7 @@ O branching do Neon também funciona automaticamente para previews: cada pull re
 
 ## Deploy
 
-O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`). O banco de dados, migrations e variáveis de ambiente são compartilhados entre os projetos — veja as seções [Banco de dados e migrations](#banco-de-dados-e-migrations) e [Variáveis de ambiente](#variáveis-de-ambiente) para os detalhes.
+O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app dentro de `apps/` pode ser implantado como um projeto Vercel independente, apontando para o mesmo repositório e definindo o diretório raiz correspondente (ex: `apps/landing`). O banco de dados, migrations e variáveis de ambiente são compartilhados entre os projetos — veja as seções [Banco de dados e migrations](#banco-de-dados-e-migrations) e [Variáveis de ambiente](#variáveis-de-ambiente) para os detalhes..
 
 ### Preview deploy com URLs sincronizadas entre apps
 

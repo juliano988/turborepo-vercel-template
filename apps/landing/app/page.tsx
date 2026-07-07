@@ -16,7 +16,7 @@ export default function Page() {
           </h1>
           <p className="mx-auto max-w-md text-lg opacity-60">
             Aqui vai o conteúdo de marketing. Otimizado para SEO, rápido por
-            padrão..
+            padrão.
           </p>
           <div className="flex justify-center gap-4 pt-4">
             <a
