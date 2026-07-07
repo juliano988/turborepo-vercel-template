@@ -58,6 +58,7 @@
         "@repo/auth": "*",
         "@repo/db": "*",
         "@repo/env": "*",
+        "@repo/mq": "*",
         "@repo/proxy": "*",
         "@repo/storage": "*",
         "@repo/ui": "*",
