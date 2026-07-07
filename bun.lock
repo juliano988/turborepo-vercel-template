@@ -59,6 +59,7 @@
         "@repo/db": "*",
         "@repo/env": "*",
         "@repo/proxy": "*",
+        "@repo/storage": "*",
         "@repo/ui": "*",
         "antd": "^5.25.4",
         "next": "16.2.0",

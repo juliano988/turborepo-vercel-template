@@ -32,7 +32,7 @@ export class File {
       name: FileName.from(props.name),
       size: FileSize.from(props.sizeBytes),
       mimeType: MimeType.from(props.mimeType),
-      ownerId: props.ownerId,
+      ownerId: UserId.from(props.ownerId),
       blobUrl: BlobUrl.from(props.blobUrl),
       uploadedAt: new Date(),
     });

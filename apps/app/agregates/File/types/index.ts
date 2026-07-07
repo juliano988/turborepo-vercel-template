@@ -19,6 +19,6 @@ export type CreateFileProps = {
   name: string;
   sizeBytes: number;
   mimeType: string;
-  ownerId: UserId;
+  ownerId: string;
   blobUrl: string;
 };
