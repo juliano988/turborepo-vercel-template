@@ -16,11 +16,11 @@ export default function Layout({
   return (
     <html lang="pt-BR">
       <body>
-        {/* <AntdRegistry>
+        <AntdRegistry>
           <ThemeProviderAntd>
             <AuthGuard>{children}</AuthGuard>
           </ThemeProviderAntd>
-        </AntdRegistry> */}
+        </AntdRegistry>
       </body>
     </html>
   );
