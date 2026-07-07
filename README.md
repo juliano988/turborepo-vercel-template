@@ -338,7 +338,7 @@ O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app de
 
 Cada app executa `prebuild: bun ../../scripts/vercel-env.ts` antes do build na Vercel.
 
-Esse script gera `.env.local` automaticamente em `preview` e `production` a partir de um arquivo `vercel-env.json` no diretorio do app.
+Esse script gera `.env` automaticamente em `preview` e `production` a partir de um arquivo `vercel-env.json` no diretorio do app.
 
 Arquivos esperados:
 
