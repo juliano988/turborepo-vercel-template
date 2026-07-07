@@ -6,7 +6,7 @@ import { FileName } from "../../agregates/File/vo/FileName";
 import { FileSize } from "../../agregates/File/vo/FileSize";
 import { MimeType } from "../../agregates/File/vo/MimeType";
 import { UserId } from "../../agregates/User/vo/UserId";
-import type { FileRepository } from "./interfaces";
+import type { FileRepository } from "../../agregates/File/repository";
 
 export class PrismaFileRepository implements FileRepository {
   async save(file: File): Promise<void> {

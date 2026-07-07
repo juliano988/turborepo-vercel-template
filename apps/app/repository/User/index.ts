@@ -1,7 +1,7 @@
 import { prisma } from "@repo/db";
 import { User } from "../../agregates/User";
 import { UserId } from "../../agregates/User/vo/UserId";
-import type { UserRepository } from "./interfaces";
+import type { UserRepository } from "../../agregates/User/repository";
 
 export class PrismaUserRepository implements UserRepository {
   async findById(id: UserId): Promise<User | null> {

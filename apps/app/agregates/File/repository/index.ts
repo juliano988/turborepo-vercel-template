@@ -1,5 +1,5 @@
-import { File } from "../../../agregates/File";
-import { FileId } from "../../../agregates/File/vo/FileId";
+import { File } from "..";
+import { FileId } from "../vo/FileId";
 
 export interface FileRepository {
   save(file: File): Promise<void>;

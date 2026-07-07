@@ -1,6 +1,6 @@
 import { upload } from "@repo/storage";
 import { File } from "../../agregates/File";
-import type { FileRepository } from "../../repository/File/interfaces";
+import type { FileRepository } from "../../agregates/File/repository";
 import { UploadFileInput, UploadFileOutput } from "./types";
 
 export class UploadFileService {
