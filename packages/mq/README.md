@@ -39,7 +39,7 @@ await publish("meu.evento", { id: "123" });
 
 ### `registerSubscriber(topic, url)`
 
-Registra uma URL como subscriber de um tópico. Deve ser chamado no bootstrap da aplicação via `instrumentation.ts`.
+Registra uma URL como subscriber de um tópico de forma **idempotente**: verifica se o endpoint já está registrado antes de chamar a API. Pode ser chamado a cada boot da aplicação sem gerar duplicatas.
 
 ```ts
 import { registerSubscriber } from "@repo/mq";

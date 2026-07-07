@@ -18,13 +18,16 @@ export async function publish<T>(topic: string, payload: T): Promise<void> {
 }
 
 /**
- * Registra uma URL como subscriber de um tópico do QStash.
+ * Registra uma URL como subscriber de um tópico do QStash (idempotente).
+ * Verifica se o endpoint já está registrado antes de adicionar.
  * Deve ser chamado no bootstrap da aplicação (ex: `instrumentation.ts`).
- * Em desenvolvimento, o QStash não consegue alcançar localhost — use apenas em produção.
  */
 export async function registerSubscriber(
   topic: string,
   url: string
 ): Promise<void> {
+  const topics = await mq.topics.list();
+  const existing = topics.find((t) => t.name === topic);
+  if (existing?.endpoints?.some((e) => e.url === url)) return;
   await mq.topics.addEndpoints({ name: topic, endpoints: [{ url }] });
 }
