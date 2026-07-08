@@ -2,7 +2,7 @@ import { BLOB_URL_PROTOCOLS } from "./constants";
 import type { BlobUrlValue } from "./types";
 
 export class BlobUrl {
-  private constructor(public readonly value: BlobUrlValue) {}
+  private constructor(private readonly value: BlobUrlValue) {}
 
   static from(raw: string): BlobUrl {
     if (!raw || raw.trim().length === 0) {

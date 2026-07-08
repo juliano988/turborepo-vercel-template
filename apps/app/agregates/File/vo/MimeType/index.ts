@@ -2,7 +2,7 @@ import { ALLOWED_MIME_TYPES } from "./constants";
 import type { MimeTypeValue } from "./types";
 
 export class MimeType {
-  private constructor(public readonly value: MimeTypeValue) {}
+  private constructor(private readonly value: MimeTypeValue) {}
 
   static from(raw: string): MimeType {
     if (!raw || raw.trim().length === 0) {

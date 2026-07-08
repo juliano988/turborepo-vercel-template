@@ -12,23 +12,23 @@ export class PrismaFileRepository implements FileRepository {
   async save(file: File): Promise<void> {
     const data = {
       name: file.name.full,
-      sizeBytes: file.size.bytes,
-      mimeType: file.mimeType.value,
-      ownerId: file.ownerId.value,
-      blobUrl: file.blobUrl.value,
+      sizeBytes: file.size.toBytes(),
+      mimeType: file.mimeType.toString(),
+      ownerId: file.ownerId.toString(),
+      blobUrl: file.blobUrl.toString(),
       uploadedAt: file.uploadedAt,
     };
 
     await prisma.file.upsert({
-      where: { id: file.id.value },
-      create: { id: file.id.value, ...data },
+      where: { id: file.id.toString() },
+      create: { id: file.id.toString(), ...data },
       update: data,
     });
   }
 
   async findById(id: FileId): Promise<File | null> {
     const record = await prisma.file.findUnique({
-      where: { id: id.value },
+      where: { id: id.toString() },
     });
 
     return record ? PrismaFileRepository.toDomain(record) : null;
@@ -42,7 +42,7 @@ export class PrismaFileRepository implements FileRepository {
     const records = await prisma.file.findMany({
       where: {
         id: {
-          in: ids.map((id) => id.value),
+          in: ids.map((id) => id.toString()),
         },
       },
     });
@@ -52,7 +52,7 @@ export class PrismaFileRepository implements FileRepository {
 
   async findByOwner(ownerId: UserId): Promise<File[]> {
     const records = await prisma.file.findMany({
-      where: { ownerId: ownerId.value },
+      where: { ownerId: ownerId.toString() },
       orderBy: { uploadedAt: "desc" },
     });
 
@@ -61,7 +61,7 @@ export class PrismaFileRepository implements FileRepository {
 
   async remove(id: FileId): Promise<void> {
     await prisma.file.delete({
-      where: { id: id.value },
+      where: { id: id.toString() },
     });
   }
 
@@ -73,7 +73,7 @@ export class PrismaFileRepository implements FileRepository {
     await prisma.file.deleteMany({
       where: {
         id: {
-          in: ids.map((id) => id.value),
+          in: ids.map((id) => id.toString()),
         },
       },
     });

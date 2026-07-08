@@ -2,7 +2,7 @@ import { UUID_REGEX } from "./constants";
 import type { FileIdValue } from "./types";
 
 export class FileId {
-  private constructor(public readonly value: FileIdValue) {}
+  private constructor(private readonly value: FileIdValue) {}
 
   static create(): FileId {
     return new FileId(crypto.randomUUID());

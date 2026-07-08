@@ -2,7 +2,7 @@ import { MAX_BYTES, MIN_BYTES } from "./constants";
 import { FileSizeUnit } from "./types";
 
 export class FileSize {
-  private constructor(public readonly bytes: number) {}
+  private constructor(private readonly bytes: number) {}
 
   static from(bytes: number): FileSize {
     if (!Number.isFinite(bytes) || bytes < 0) {
@@ -38,6 +38,10 @@ export class FileSize {
 
   equals(other: FileSize): boolean {
     return this.bytes === other.bytes;
+  }
+
+  toBytes(): number {
+    return this.bytes;
   }
 
   toString(): string {

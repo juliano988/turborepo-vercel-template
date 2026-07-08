@@ -49,12 +49,12 @@ export class File {
 
   toJSON() {
     return {
-      id: this.id.value,
+      id: this.id.toString(),
       name: this.name.full,
-      size: this.size.bytes,
-      mimeType: this.mimeType.value,
-      ownerId: this.ownerId.value,
-      blobUrl: this.blobUrl.value,
+      size: this.size.toBytes(),
+      mimeType: this.mimeType.toString(),
+      ownerId: this.ownerId.toString(),
+      blobUrl: this.blobUrl.toString(),
       uploadedAt: this.uploadedAt.toISOString(),
     };
   }

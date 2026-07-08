@@ -1,7 +1,7 @@
 import type { UserIdValue } from "./types";
 
 export class UserId {
-  private constructor(public readonly value: UserIdValue) {}
+  private constructor(private readonly value: UserIdValue) {}
 
   static create(): UserId {
     return new UserId(crypto.randomUUID());

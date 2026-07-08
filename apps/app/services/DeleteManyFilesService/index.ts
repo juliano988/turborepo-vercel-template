@@ -20,22 +20,23 @@ export class DeleteManyFilesService {
     }
 
     const files = await this.fileRepository.findByIds(parsedFileIds);
-    const filesById = new Map(files.map((file) => [file.id.value, file]));
+    const filesById = new Map(files.map((file) => [file.id.toString(), file]));
     const filesToDelete: FileId[] = [];
     const deletedFileIds: string[] = [];
     const blobUrlsToDelete: string[] = [];
 
     for (const parsedFileId of parsedFileIds) {
-      const file = filesById.get(parsedFileId.value);
+      const parsedFileIdValue = parsedFileId.toString();
+      const file = filesById.get(parsedFileIdValue);
 
       if (!file || !file.isOwnedBy(input.ownerId)) {
-        skippedFileIds.push(parsedFileId.value);
+        skippedFileIds.push(parsedFileIdValue);
         continue;
       }
 
-      blobUrlsToDelete.push(file.blobUrl.value);
+      blobUrlsToDelete.push(file.blobUrl.toString());
       filesToDelete.push(file.id);
-      deletedFileIds.push(file.id.value);
+      deletedFileIds.push(file.id.toString());
     }
 
     if (blobUrlsToDelete.length > 0) {

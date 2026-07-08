@@ -6,7 +6,7 @@ import type { UserRepository } from "../../agregates/User/repository";
 export class PrismaUserRepository implements UserRepository {
   async findById(id: UserId): Promise<User | null> {
     const record = await prisma.user.findUnique({
-      where: { id: id.value },
+      where: { id: id.toString() },
     });
 
     return record ? PrismaUserRepository.toDomain(record) : null;
