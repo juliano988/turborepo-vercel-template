@@ -1,6 +1,6 @@
 import { prisma } from "@repo/db";
 import { File } from "../../agregates/File";
-import type { FileRepository } from "../../agregates/File/repository";
+import type { iFileRepository } from "../../agregates/File/repository";
 import { BlobUrl } from "../../agregates/File/vo/BlobUrl";
 import { FileId } from "../../agregates/File/vo/FileId";
 import { FileName } from "../../agregates/File/vo/FileName";
@@ -8,7 +8,7 @@ import { FileSize } from "../../agregates/File/vo/FileSize";
 import { MimeType } from "../../agregates/File/vo/MimeType";
 import { UserId } from "../../agregates/User/vo/UserId";
 
-export class PrismaFileRepository implements FileRepository {
+export class FileRepository implements iFileRepository {
   async save(file: File): Promise<void> {
     const data = {
       name: file.name.full,
@@ -31,7 +31,7 @@ export class PrismaFileRepository implements FileRepository {
       where: { id: id.toString() },
     });
 
-    return record ? PrismaFileRepository.toDomain(record) : null;
+    return record ? FileRepository.toDomain(record) : null;
   }
 
   async findByIds(ids: FileId[]): Promise<File[]> {
@@ -47,7 +47,7 @@ export class PrismaFileRepository implements FileRepository {
       },
     });
 
-    return records.map(PrismaFileRepository.toDomain);
+    return records.map(FileRepository.toDomain);
   }
 
   async findByOwner(ownerId: UserId): Promise<File[]> {
@@ -56,7 +56,7 @@ export class PrismaFileRepository implements FileRepository {
       orderBy: { uploadedAt: "desc" },
     });
 
-    return records.map(PrismaFileRepository.toDomain);
+    return records.map(FileRepository.toDomain);
   }
 
   async remove(id: FileId): Promise<void> {

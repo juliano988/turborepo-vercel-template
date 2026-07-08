@@ -1,10 +1,10 @@
 import { upload } from "@repo/storage";
 import { File } from "../../agregates/File";
-import type { FileRepository } from "../../agregates/File/repository";
+import type { iFileRepository } from "../../agregates/File/repository";
 import { UploadFileInput, UploadFileOutput } from "./types";
 
 export class UploadFileService {
-  constructor(private readonly fileRepository: FileRepository) {}
+  constructor(private readonly fileRepository: iFileRepository) {}
 
   async execute(input: UploadFileInput): Promise<UploadFileOutput> {
     const blob = await upload(input.filename, input.body, {

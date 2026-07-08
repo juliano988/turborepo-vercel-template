@@ -2,7 +2,7 @@ import { File } from "..";
 import { UserId } from "../../User/vo/UserId";
 import { FileId } from "../vo/FileId";
 
-export interface FileRepository {
+export interface iFileRepository {
   save(file: File): Promise<void>;
   findById(id: FileId): Promise<File | null>;
   findByIds(ids: FileId[]): Promise<File[]>;

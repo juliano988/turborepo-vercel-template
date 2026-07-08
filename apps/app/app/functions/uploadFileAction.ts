@@ -1,6 +1,6 @@
 "use server";
 
-import { PrismaFileRepository } from "../../repository/File";
+import { FileRepository } from "../../repository/File";
 import { UploadFileService } from "../../services/UploadFileService";
 import { requireSession } from "./requireSession";
 
@@ -12,7 +12,7 @@ export async function uploadFileAction(formData: FormData) {
     throw new Error("Nenhum arquivo enviado");
   }
 
-  const repository = new PrismaFileRepository();
+  const repository = new FileRepository();
   const service = new UploadFileService(repository);
 
   return service.execute({

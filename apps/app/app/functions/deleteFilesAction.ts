@@ -1,7 +1,7 @@
 "use server";
 
 import { UserId } from "../../agregates/User/vo/UserId";
-import { PrismaFileRepository } from "../../repository/File";
+import { FileRepository } from "../../repository/File";
 import { DeleteManyFilesService } from "../../services/DeleteManyFilesService";
 import { requireSession } from "./requireSession";
 
@@ -15,7 +15,7 @@ export async function deleteFilesAction(fileIds: string[]) {
     };
   }
 
-  const repository = new PrismaFileRepository();
+  const repository = new FileRepository();
   const service = new DeleteManyFilesService(repository);
 
   return service.execute({

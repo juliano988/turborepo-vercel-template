@@ -1,10 +1,10 @@
 import { remove } from "@repo/storage";
-import type { FileRepository } from "../../agregates/File/repository";
+import type { iFileRepository } from "../../agregates/File/repository";
 import { FileId } from "../../agregates/File/vo/FileId";
 import { DeleteManyFilesInput, DeleteManyFilesOutput } from "./types";
 
 export class DeleteManyFilesService {
-  constructor(private readonly fileRepository: FileRepository) {}
+  constructor(private readonly fileRepository: iFileRepository) {}
 
   async execute(input: DeleteManyFilesInput): Promise<DeleteManyFilesOutput> {
     const uniqueFileIds = Array.from(new Set(input.fileIds));
