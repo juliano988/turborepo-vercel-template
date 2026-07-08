@@ -1,12 +1,12 @@
 import { prisma } from "@repo/db";
 import { File } from "../../agregates/File";
+import type { FileRepository } from "../../agregates/File/repository";
 import { BlobUrl } from "../../agregates/File/vo/BlobUrl";
 import { FileId } from "../../agregates/File/vo/FileId";
 import { FileName } from "../../agregates/File/vo/FileName";
 import { FileSize } from "../../agregates/File/vo/FileSize";
 import { MimeType } from "../../agregates/File/vo/MimeType";
 import { UserId } from "../../agregates/User/vo/UserId";
-import type { FileRepository } from "../../agregates/File/repository";
 
 export class PrismaFileRepository implements FileRepository {
   async save(file: File): Promise<void> {
@@ -34,6 +34,22 @@ export class PrismaFileRepository implements FileRepository {
     return record ? PrismaFileRepository.toDomain(record) : null;
   }
 
+  async findByIds(ids: FileId[]): Promise<File[]> {
+    if (ids.length === 0) {
+      return [];
+    }
+
+    const records = await prisma.file.findMany({
+      where: {
+        id: {
+          in: ids.map((id) => id.value),
+        },
+      },
+    });
+
+    return records.map(PrismaFileRepository.toDomain);
+  }
+
   async findByOwner(ownerId: UserId): Promise<File[]> {
     const records = await prisma.file.findMany({
       where: { ownerId: ownerId.value },
@@ -46,6 +62,20 @@ export class PrismaFileRepository implements FileRepository {
   async remove(id: FileId): Promise<void> {
     await prisma.file.delete({
       where: { id: id.value },
+    });
+  }
+
+  async removeMany(ids: FileId[]): Promise<void> {
+    if (ids.length === 0) {
+      return;
+    }
+
+    await prisma.file.deleteMany({
+      where: {
+        id: {
+          in: ids.map((id) => id.value),
+        },
+      },
     });
   }
 
