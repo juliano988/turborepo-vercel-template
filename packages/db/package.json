@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "prisma generate",
-    "postbuild": "prisma migrate deploy",
+    "postbuild": "if [ \"$VERCEL\" = '1' ]; then prisma migrate deploy; fi",
     "migrate:dev": "bash scripts/dev-migrate.sh",
     "migrate:new": "bash scripts/migrate-new.sh",
     "migrate:deploy": "prisma migrate deploy",

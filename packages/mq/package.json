@@ -1,0 +1,20 @@
+{
+  "name": "@repo/mq",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./index.ts"
+  },
+  "dependencies": {
+    "@upstash/qstash": "^2.11.1"
+  },
+  "scripts": {
+    "dev": "docker compose up; docker compose rm -f"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/node": "^22.15.3",
+    "typescript": "5.9.2"
+  }
+}

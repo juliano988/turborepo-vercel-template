@@ -1,0 +1,8 @@
+services:
+  qstash:
+    image: public.ecr.aws/upstash/qstash:latest
+    command: qstash dev
+    network_mode: host
+    env_file:
+      - path: ../../.env
+        required: false

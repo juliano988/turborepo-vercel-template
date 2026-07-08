@@ -1,0 +1,21 @@
+model User {
+  id    String @id
+  files File[]
+
+  @@map("user")
+  @@schema("app")
+}
+
+model File {
+  id         String   @id
+  name       String
+  sizeBytes  Int
+  mimeType   String
+  ownerId    String
+  blobUrl    String
+  uploadedAt DateTime
+  owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@map("file")
+  @@schema("app")
+}

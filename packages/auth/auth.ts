@@ -2,6 +2,7 @@ import { prisma } from "@repo/db";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { admin } from "better-auth/plugins";
+import createUserEvent from "./events/user.created";
 
 function getTrustedOrigins(): string[] {
   const urlRegex = /^https?:\/\//;
@@ -32,6 +33,22 @@ export const auth = betterAuth({
   trustedOrigins: getTrustedOrigins(),
   emailAndPassword: {
     enabled: true,
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        after: async (user) => {
+          await createUserEvent({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            image: user.image ?? null,
+            createdAt: user.createdAt,
+          });
+        },
+      },
+    },
   },
   socialProviders: {},
   plugins: [

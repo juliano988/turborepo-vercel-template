@@ -1,0 +1,28 @@
+export const ALLOWED_EXTENSIONS = [
+  "jpg",
+  "jpeg",
+  "png",
+  "gif",
+  "webp",
+  "svg",
+  "pdf",
+  "doc",
+  "docx",
+  "xls",
+  "xlsx",
+  "ppt",
+  "pptx",
+  "txt",
+  "md",
+  "csv",
+  "zip",
+  "rar",
+  "7z",
+  "tar",
+  "gz",
+  "mp4",
+  "mp3",
+  "wav",
+] as const;
+
+export const MAX_NAME_LENGTH = 255;

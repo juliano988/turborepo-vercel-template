@@ -1,6 +1,6 @@
 #!/usr/bin/env bun
 /**
- * Gera .env.local derivando URLs de apps do monorepo a partir de VERCEL_BRANCH_URL.
+ * Gera .env derivando URLs de apps do monorepo a partir de VERCEL_BRANCH_URL.
  * Executado como "prebuild" em todos os deploys da Vercel (preview e production).
  * Em desenvolvimento local, encerra sem fazer nada.
  *
@@ -56,8 +56,8 @@ if (VERCEL_ENV === "production") {
   const lines = Object.entries(mappings).map(
     ([varName, projectName]) => `${varName}=https://${projectName}.vercel.app`,
   );
-  writeFileSync(".env.local", lines.join("\n") + "\n");
-  console.log("URLs de producao escritas em .env.local:");
+  writeFileSync(".env", lines.join("\n") + "\n");
+  console.log("URLs de producao escritas em .env:");
   lines.forEach((l: string) => console.log(" ", l));
   process.exit(0);
 }
@@ -85,6 +85,6 @@ const lines = Object.entries(mappings).map(
   ([varName, projectName]) => `${varName}=https://${projectName}${suffix}`,
 );
 
-writeFileSync(".env.local", lines.join("\n") + "\n");
-console.log("URLs derivadas de VERCEL_BRANCH_URL e escritas em .env.local:");
+writeFileSync(".env", lines.join("\n") + "\n");
+console.log("URLs derivadas de VERCEL_BRANCH_URL e escritas em .env:");
 lines.forEach((l: string) => console.log(" ", l));

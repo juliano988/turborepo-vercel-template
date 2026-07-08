@@ -13,8 +13,11 @@
   },
   "dependencies": {
     "@repo/auth": "*",
+    "@repo/db": "*",
     "@repo/env": "*",
+    "@repo/mq": "*",
     "@repo/proxy": "*",
+    "@repo/storage": "*",
     "@ant-design/nextjs-registry": "^1.0.2",
     "@repo/ui": "*",
     "antd": "^5.25.4",

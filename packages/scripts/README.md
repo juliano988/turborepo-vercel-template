@@ -4,7 +4,7 @@ Scripts de automação para o pipeline de build do monorepo na Vercel.
 
 ## `vercel-env.ts`
 
-Gera o arquivo `.env.local` com as URLs corretas de cada app, derivando-as automaticamente de `VERCEL_BRANCH_URL`. Deve ser executado como script `prebuild` em cada app na Vercel.
+Gera o arquivo `.env` com as URLs corretas de cada app, derivando-as automaticamente de `VERCEL_BRANCH_URL`. Deve ser executado como script `prebuild` em cada app na Vercel.
 
 ### Comportamento por ambiente
 
