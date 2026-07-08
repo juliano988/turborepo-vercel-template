@@ -44,7 +44,10 @@ Registra uma URL como subscriber de um tópico de forma **idempotente**: verific
 ```ts
 import { registerSubscriber } from "@repo/mq";
 
-await registerSubscriber("meu.evento", "https://meu-app.vercel.app/api/events/meu_evento");
+await registerSubscriber(
+  "meu.evento",
+  "https://meu-app.vercel.app/api/events/meu_evento"
+);
 ```
 
 ### `verifySignatureAppRouter`
@@ -61,9 +64,9 @@ export const POST = verifySignatureAppRouter(async (req) => {
 
 ## Variáveis de ambiente
 
-| Variável | Descrição |
-|---|---|
-| `QSTASH_URL` | URL do servidor QStash (`http://localhost:8080` em dev) |
-| `QSTASH_TOKEN` | Token de autenticação |
-| `QSTASH_CURRENT_SIGNING_KEY` | Chave para verificação de assinatura |
-| `QSTASH_NEXT_SIGNING_KEY` | Chave de rotação para verificação de assinatura |
+| Variável                     | Descrição                                               |
+| ---------------------------- | ------------------------------------------------------- |
+| `QSTASH_URL`                 | URL do servidor QStash (`http://localhost:8080` em dev) |
+| `QSTASH_TOKEN`               | Token de autenticação                                   |
+| `QSTASH_CURRENT_SIGNING_KEY` | Chave para verificação de assinatura                    |
+| `QSTASH_NEXT_SIGNING_KEY`    | Chave de rotação para verificação de assinatura         |

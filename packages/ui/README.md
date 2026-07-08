@@ -6,16 +6,16 @@ Biblioteca de componentes e utilitários de tema compartilhados entre os apps do
 
 ```ts
 import {
-  ThemeProviderAntd,      // Provider de tema para apps Ant Design
-  ThemeProviderFumaDocs,  // Provider de tema para apps FumaDocs/DaisyUI
-  ThemeToggleAntd,        // Botão de alternância de tema (Ant Design)
-  ThemeToggleDaisyUI,     // Botão de alternância de tema (DaisyUI)
-  ThemeContextAntd,       // Context do tema Ant Design
-  useThemeAntd,           // Hook para consumir o ThemeContextAntd
-  readThemePreference,    // Lê preferência salva no cookie
-  writeThemePreference,   // Salva preferência no cookie
-  lightTokens,            // Design tokens Ant Design — tema claro
-  darkTokens,             // Design tokens Ant Design — tema escuro
+  ThemeProviderAntd, // Provider de tema para apps Ant Design
+  ThemeProviderFumaDocs, // Provider de tema para apps FumaDocs/DaisyUI
+  ThemeToggleAntd, // Botão de alternância de tema (Ant Design)
+  ThemeToggleDaisyUI, // Botão de alternância de tema (DaisyUI)
+  ThemeContextAntd, // Context do tema Ant Design
+  useThemeAntd, // Hook para consumir o ThemeContextAntd
+  readThemePreference, // Lê preferência salva no cookie
+  writeThemePreference, // Salva preferência no cookie
+  lightTokens, // Design tokens Ant Design — tema claro
+  darkTokens, // Design tokens Ant Design — tema escuro
 } from "@repo/ui";
 ```
 
@@ -34,12 +34,13 @@ Provider para apps que usam **Ant Design**. Gerencia estado `isDark`, aplica tok
 ### `ThemeProviderFumaDocs`
 
 Provider para apps que usam **FumaDocs + DaisyUI**. Usa `next-themes` internamente e sincroniza:
+
 - Classe `dark` no `<html>` (Tailwind / FumaDocs)
 - Atributo `data-theme` (DaisyUI)
 - Cookie de preferência compartilhado entre subdomínios
 
-| Prop           | Tipo     | Padrão    | Descrição                                     |
-| -------------- | -------- | --------- | --------------------------------------------- |
+| Prop           | Tipo     | Padrão    | Descrição                                             |
+| -------------- | -------- | --------- | ----------------------------------------------------- |
 | `defaultTheme` | `string` | `"light"` | Tema inicial lido do cookie no servidor (evita flash) |
 
 ```tsx
@@ -76,8 +77,8 @@ interface ThemeContextValue {
 
 ## Constantes
 
-| Constante             | Valor                              |
-| --------------------- | ---------------------------------- |
-| `THEME_COOKIE_KEY`    | `"theme-preference"`               |
-| `THEME_COOKIE_MAX_AGE`| `31536000` (1 ano em segundos)     |
-| `FONT_FAMILY`         | Stack sans-serif padrão do sistema |
+| Constante              | Valor                              |
+| ---------------------- | ---------------------------------- |
+| `THEME_COOKIE_KEY`     | `"theme-preference"`               |
+| `THEME_COOKIE_MAX_AGE` | `31536000` (1 ano em segundos)     |
+| `FONT_FAMILY`          | Stack sans-serif padrão do sistema |

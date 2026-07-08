@@ -19,11 +19,11 @@ packages/auth/
 
 ## Exports
 
-| Caminho | Conteúdo |
-|---|---|
-| `@repo/auth` | `auth`, tipos `Session` e `User`, `toNextJsHandler`, `seedFirstUser` |
-| `@repo/auth/client` | `authClient`, `signIn`, `signUp`, `signOut`, `useSession`, `getSession` |
-| `@repo/auth/components` | `AuthGuard`, `Unauthorized` |
+| Caminho                 | Conteúdo                                                                |
+| ----------------------- | ----------------------------------------------------------------------- |
+| `@repo/auth`            | `auth`, tipos `Session` e `User`, `toNextJsHandler`, `seedFirstUser`    |
+| `@repo/auth/client`     | `authClient`, `signIn`, `signUp`, `signOut`, `useSession`, `getSession` |
+| `@repo/auth/components` | `AuthGuard`, `Unauthorized`                                             |
 
 ## Variáveis de ambiente
 
@@ -41,6 +41,7 @@ O `apps/landing` executa `seed.ts` automaticamente nos scripts `predev` e `prest
 Se o banco estiver vazio e `ADMIN_USER`/`ADMIN_PASS` estiverem definidos, um usuário com `role: "admin"` é criado.
 
 Casos de saída antecipada (sem criar usuário):
+
 - `ADMIN_USER` ou `ADMIN_PASS` não definidos
 - Já existe pelo menos um usuário no banco
 
@@ -103,9 +104,9 @@ export function Header() {
 
 As tabelas abaixo são definidas no schema de `@repo/db`:
 
-| Tabela | Descrição |
-|---|---|
-| `user` | Dados do usuário (`role`, `banned`, `banReason`, `banExpires` adicionados pelo plugin admin) |
-| `session` | Sessões ativas (`impersonatedBy` adicionado pelo plugin admin) |
-| `account` | Contas vinculadas (OAuth ou e-mail/senha) |
-| `verification` | Tokens de verificação de e-mail |
+| Tabela         | Descrição                                                                                    |
+| -------------- | -------------------------------------------------------------------------------------------- |
+| `user`         | Dados do usuário (`role`, `banned`, `banReason`, `banExpires` adicionados pelo plugin admin) |
+| `session`      | Sessões ativas (`impersonatedBy` adicionado pelo plugin admin)                               |
+| `account`      | Contas vinculadas (OAuth ou e-mail/senha)                                                    |
+| `verification` | Tokens de verificação de e-mail                                                              |

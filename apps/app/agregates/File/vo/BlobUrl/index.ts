@@ -17,9 +17,7 @@ export class BlobUrl {
     }
 
     if (!(BLOB_URL_PROTOCOLS as readonly string[]).includes(parsed.protocol)) {
-      throw new Error(
-        `BlobUrl deve usar protocolo HTTPS`
-      );
+      throw new Error(`BlobUrl deve usar protocolo HTTPS`);
     }
 
     return new BlobUrl(parsed.toString());

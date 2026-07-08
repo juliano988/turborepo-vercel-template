@@ -8,11 +8,11 @@ Gera o arquivo `.env` com as URLs corretas de cada app, derivando-as automaticam
 
 ### Comportamento por ambiente
 
-| `VERCEL_ENV`  | Comportamento                                                                              |
-| ------------- | ------------------------------------------------------------------------------------------ |
-| `development` | Encerra sem fazer nada (usa o `.env` local)                                                |
+| `VERCEL_ENV`  | Comportamento                                                                                |
+| ------------- | -------------------------------------------------------------------------------------------- |
+| `development` | Encerra sem fazer nada (usa o `.env` local)                                                  |
 | `preview`     | Deriva as URLs do sufixo de `VERCEL_BRANCH_URL` (`[project]-git-[branch]-[team].vercel.app`) |
-| `production`  | Gera URLs fixas no padrão `[project].vercel.app`                                          |
+| `production`  | Gera URLs fixas no padrão `[project].vercel.app`                                             |
 
 ### Uso
 
@@ -40,9 +40,9 @@ bun ../../packages/scripts/vercel-env.ts NEXT_PUBLIC_APP_URL=turborepo-vercel-te
 
 ### Variáveis de ambiente usadas
 
-| Variável           | Origem  | Descrição                                             |
-| ------------------ | ------- | ----------------------------------------------------- |
-| `VERCEL_ENV`       | Vercel  | `"production"`, `"preview"` ou `"development"`        |
-| `VERCEL_BRANCH_URL`| Vercel  | URL da branch atual no formato `[project]-git-[branch]-[team].vercel.app` |
+| Variável            | Origem | Descrição                                                                 |
+| ------------------- | ------ | ------------------------------------------------------------------------- |
+| `VERCEL_ENV`        | Vercel | `"production"`, `"preview"` ou `"development"`                            |
+| `VERCEL_BRANCH_URL` | Vercel | URL da branch atual no formato `[project]-git-[branch]-[team].vercel.app` |
 
 > Os nomes dos projetos Vercel e as variáveis de ambiente correspondentes são definidos centralmente em [`@repo/proxy`](../proxy/README.md).

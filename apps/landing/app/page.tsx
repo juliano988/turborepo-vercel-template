@@ -19,28 +19,16 @@ export default function Page() {
             padrão.
           </p>
           <div className="flex justify-center gap-4 pt-4">
-            <a
-              href="/app"
-              className="btn btn-primary"
-            >
+            <a href="/app" className="btn btn-primary">
               Abrir App
             </a>
-            <a
-              href="/admin"
-              className="btn btn-outline"
-            >
+            <a href="/admin" className="btn btn-outline">
               Ver BackOffice
             </a>
-            <a
-              href="/docs"
-              className="btn btn-outline"
-            >
+            <a href="/docs" className="btn btn-outline">
               Ver Docs
             </a>
-            <a
-              href="/login"
-              className="btn btn-outline"
-            >
+            <a href="/login" className="btn btn-outline">
               Entrar
             </a>
           </div>

@@ -36,8 +36,8 @@ model AuthUser {
 O accessor no client Prisma é sempre baseado no **nome do modelo** (camelCase), não no schema:
 
 ```ts
-prisma.authUser   // acessa auth.user no PostgreSQL
-prisma.authSession // acessa auth.session
+prisma.authUser; // acessa auth.user no PostgreSQL
+prisma.authSession; // acessa auth.session
 ```
 
 Para adicionar um novo bounded context:
@@ -48,8 +48,8 @@ Para adicionar um novo bounded context:
 
 ## Exports
 
-| Caminho | Conteúdo |
-|---|---|
+| Caminho    | Conteúdo                                                                  |
+| ---------- | ------------------------------------------------------------------------- |
 | `@repo/db` | `prisma` (singleton do PrismaClient) + todos os tipos gerados pelo Prisma |
 
 ## Variáveis de ambiente
@@ -74,6 +74,7 @@ bun run db:dev
 ```
 
 Este comando (executado da raiz do monorepo):
+
 1. Para qualquer instância anterior do banco (dados preservados)
 2. Sobe um servidor PostgreSQL local via `prisma dev` (PGlite)
 3. Atualiza o `DATABASE_URL` no `.env` com a URL correta
@@ -89,6 +90,7 @@ bun run db:dev
 ```
 
 Para **adicionar um novo bounded context**:
+
 1. Crie `prisma/schema/<contexto>.prisma`
 2. Declare os modelos com `@@schema("<contexto>")` e `@@map("<tabela>")`
 3. Adicione `"<contexto>"` ao array `schemas` em `prisma/schema/base.prisma`

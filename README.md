@@ -42,41 +42,41 @@ graph TB
 
 ### Contexto Principal
 
-| App | Responsabilidade | Porta |
-|---|---|---|
-| `app/` | Núcleo do produto — funcionalidades centrais do negócio | 3001 |
+| App    | Responsabilidade                                        | Porta |
+| ------ | ------------------------------------------------------- | ----- |
+| `app/` | Núcleo do produto — funcionalidades centrais do negócio | 3001  |
 
 ### Contextos de Suporte
 
 Dão suporte ao contexto principal, mas possuem ciclo de vida e deploy independentes:
 
-| App | Responsabilidade | Porta |
-|---|---|---|
-| `admin/` | Backoffice — gestão interna e operações administrativas | 3002 |
-| `landing/` | Marketing — apresentação do produto e conversão | 3000 |
+| App        | Responsabilidade                                        | Porta |
+| ---------- | ------------------------------------------------------- | ----- |
+| `admin/`   | Backoffice — gestão interna e operações administrativas | 3002  |
+| `landing/` | Marketing — apresentação do produto e conversão         | 3000  |
 
 ### Contexto Genérico
 
-| App | Responsabilidade | Porta |
-|---|---|---|
-| `docs/` | Documentação técnica e de produto (Fuma Docs) | 3003 |
+| App     | Responsabilidade                              | Porta |
+| ------- | --------------------------------------------- | ----- |
+| `docs/` | Documentação técnica e de produto (Fuma Docs) | 3003  |
 
 ### Camada Compartilhada (`packages/`)
 
 Infraestrutura e utilitários reutilizados por todos os contextos:
 
-| Pacote | Descrição |
-|---|---|
-| `auth/` | Lógica de autenticação (Better Auth + Prisma) |
-| `db/` | PrismaClient singleton e schemas por bounded context |
-| `mq/` | Mensageria assíncrona entre bounded contexts (QStash) |
-| `env/` | Carregador de variáveis de ambiente do monorepo |
-| `ui/` | Componentes de UI (Ant Design, DaisyUI, Fuma Docs) |
-| `proxy/` | Configuração do proxy reverso entre apps |
-| `scripts/` | Scripts utilitários do monorepo (ex: sincronização de env na Vercel) |
-| `eslint-config/` | Configurações ESLint reutilizáveis |
-| `prettier-config/` | Configuração Prettier compartilhada |
-| `typescript-config/` | Configurações TypeScript base |
+| Pacote               | Descrição                                                            |
+| -------------------- | -------------------------------------------------------------------- |
+| `auth/`              | Lógica de autenticação (Better Auth + Prisma)                        |
+| `db/`                | PrismaClient singleton e schemas por bounded context                 |
+| `mq/`                | Mensageria assíncrona entre bounded contexts (QStash)                |
+| `env/`               | Carregador de variáveis de ambiente do monorepo                      |
+| `ui/`                | Componentes de UI (Ant Design, DaisyUI, Fuma Docs)                   |
+| `proxy/`             | Configuração do proxy reverso entre apps                             |
+| `scripts/`           | Scripts utilitários do monorepo (ex: sincronização de env na Vercel) |
+| `eslint-config/`     | Configurações ESLint reutilizáveis                                   |
+| `prettier-config/`   | Configuração Prettier compartilhada                                  |
+| `typescript-config/` | Configurações TypeScript base                                        |
 
 ## Visão rápida de cada projeto
 
@@ -102,17 +102,17 @@ Portal de documentação técnica e de produto (Fuma Docs). Serve para onboardin
 
 ## Tecnologias
 
-| Categoria | Tecnologia |
-|---|---|
-| Monorepo | Turborepo 2 |
-| Framework | Next.js (App Router) |
-| Runtime / Package Manager | Bun |
-| Autenticação | Better Auth |
-| Banco de dados | Prisma 7 + Neon (PGlite local / Neon em produção) |
-| Mensageria | QStash (Upstash) |
-| UI | Ant Design, DaisyUI, Tailwind CSS |
-| Documentação | Fuma Docs |
-| Linguagem | TypeScript |
+| Categoria                 | Tecnologia                                        |
+| ------------------------- | ------------------------------------------------- |
+| Monorepo                  | Turborepo 2                                       |
+| Framework                 | Next.js (App Router)                              |
+| Runtime / Package Manager | Bun                                               |
+| Autenticação              | Better Auth                                       |
+| Banco de dados            | Prisma 7 + Neon (PGlite local / Neon em produção) |
+| Mensageria                | QStash (Upstash)                                  |
+| UI                        | Ant Design, DaisyUI, Tailwind CSS                 |
+| Documentação              | Fuma Docs                                         |
+| Linguagem                 | TypeScript                                        |
 
 ## Pré-requisitos
 
@@ -124,10 +124,10 @@ Portal de documentação técnica e de produto (Fuma Docs). Serve para onboardin
 
 Antes do primeiro deploy, crie os três recursos abaixo no painel da Vercel e conecte-os a todos os projetos do monorepo via **Storage → Connect to Project**:
 
-| Recurso | Tipo | Uso |
-|---|---|---|
-| **Neon Postgres** | Neon — Free | Banco de dados principal |
-| **Vercel Blob** | Blob Store | Armazenamento de arquivos |
+| Recurso            | Tipo                           | Uso                        |
+| ------------------ | ------------------------------ | -------------------------- |
+| **Neon Postgres**  | Neon — Free                    | Banco de dados principal   |
+| **Vercel Blob**    | Blob Store                     | Armazenamento de arquivos  |
 | **Upstash QStash** | Upstash QStash/Workflow — Free | Mensageria entre contextos |
 
 Cada recurso injeta automaticamente suas variáveis de ambiente nos projetos conectados (`DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, `QSTASH_TOKEN`, etc.) — sem configuração manual.
@@ -182,20 +182,20 @@ bun run lint
 
 ## Scripts disponíveis
 
-| Comando | Descrição |
-|---|---|
-| `bun run db:dev` | Sobe banco local (PGlite), aplica schema e abre Prisma Studio |
-| `bun run db:migrate` | Sobe banco local e aplica schema (sem abrir o Studio) |
-| `bun run db:migrate:new <nome>` | Gera arquivo de migration via container Docker temporário |
-| `bun run db:studio` | Abre o Prisma Studio para o banco atual |
-| `bun run mq:dev` | Sobe o servidor QStash local via Docker (porta 8080) |
-| `bun run dev` | Inicia todos os apps em modo desenvolvimento |
-| `bun run build` | Build de produção (com cache do Turbo) |
-| `bun run start` | Inicia todos os apps em modo produção |
-| `bun run lint` | Executa ESLint em todo o monorepo |
-| `bun run format` | Formata todos os arquivos com Prettier |
-| `bun run check-types` | Verifica tipos TypeScript em todos os pacotes |
-| `bun run clean` | Remove artefatos de build (`.turbo`, `.next`, `dist`) |
+| Comando                         | Descrição                                                     |
+| ------------------------------- | ------------------------------------------------------------- |
+| `bun run db:dev`                | Sobe banco local (PGlite), aplica schema e abre Prisma Studio |
+| `bun run db:migrate`            | Sobe banco local e aplica schema (sem abrir o Studio)         |
+| `bun run db:migrate:new <nome>` | Gera arquivo de migration via container Docker temporário     |
+| `bun run db:studio`             | Abre o Prisma Studio para o banco atual                       |
+| `bun run mq:dev`                | Sobe o servidor QStash local via Docker (porta 8080)          |
+| `bun run dev`                   | Inicia todos os apps em modo desenvolvimento                  |
+| `bun run build`                 | Build de produção (com cache do Turbo)                        |
+| `bun run start`                 | Inicia todos os apps em modo produção                         |
+| `bun run lint`                  | Executa ESLint em todo o monorepo                             |
+| `bun run format`                | Formata todos os arquivos com Prettier                        |
+| `bun run check-types`           | Verifica tipos TypeScript em todos os pacotes                 |
+| `bun run clean`                 | Remove artefatos de build (`.turbo`, `.next`, `dist`)         |
 
 ## Eventos entre bounded contexts (QStash)
 

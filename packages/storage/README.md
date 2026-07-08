@@ -19,13 +19,13 @@ Faz upload de um arquivo. Por padrão usa `access: "private"` e sufixo aleatóri
 import { upload } from "@repo/storage";
 
 const blob = await upload("foto.jpg", file, {
-  folder: "users/123",   // opcional — prefixo de pasta
-  access: "private",     // "public" | "private" (padrão: "private")
-  multipart: true,       // recomendado para arquivos grandes
+  folder: "users/123", // opcional — prefixo de pasta
+  access: "private", // "public" | "private" (padrão: "private")
+  multipart: true, // recomendado para arquivos grandes
 });
 
-console.log(blob.url);          // URL do blob
-console.log(blob.downloadUrl);  // URL com Content-Disposition: attachment
+console.log(blob.url); // URL do blob
+console.log(blob.downloadUrl); // URL com Content-Disposition: attachment
 ```
 
 ---

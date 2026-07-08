@@ -5,7 +5,8 @@ export function getFileIcon(type: string) {
   if (type === "application/pdf") return <FileText size={20} />;
   if (type.includes("zip") || type.includes("rar") || type.includes("7z"))
     return <FileArchive size={20} />;
-  if (type.includes("word") || type.includes("doc")) return <FileText size={20} />;
+  if (type.includes("word") || type.includes("doc"))
+    return <FileText size={20} />;
   if (type.includes("excel") || type.includes("sheet") || type.includes("csv"))
     return <FileText size={20} />;
   if (type.startsWith("text/")) return <FileText size={20} />;

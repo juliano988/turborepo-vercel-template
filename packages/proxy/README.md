@@ -4,12 +4,12 @@ Fonte única de verdade para roteamento do monorepo. Centraliza a configuração
 
 ## Apps registrados
 
-| App       | `basePath` | Env var                       | Projeto Vercel                          |
-| --------- | ---------- | ----------------------------- | --------------------------------------- |
-| `landing` | `/`        | `NEXT_PUBLIC_BETTER_AUTH_URL` | `turborepo-vercel-template-landing`     |
-| `app`     | `/app`     | `NEXT_PUBLIC_APP_URL`         | `turborepo-vercel-template-app`         |
-| `admin`   | `/admin`   | `NEXT_PUBLIC_ADMIN_URL`       | `turborepo-vercel-template-admin`       |
-| `docs`    | `/docs`    | `NEXT_PUBLIC_DOCS_URL`        | `turborepo-vercel-template-docs`        |
+| App       | `basePath` | Env var                       | Projeto Vercel                      |
+| --------- | ---------- | ----------------------------- | ----------------------------------- |
+| `landing` | `/`        | `NEXT_PUBLIC_BETTER_AUTH_URL` | `turborepo-vercel-template-landing` |
+| `app`     | `/app`     | `NEXT_PUBLIC_APP_URL`         | `turborepo-vercel-template-app`     |
+| `admin`   | `/admin`   | `NEXT_PUBLIC_ADMIN_URL`       | `turborepo-vercel-template-admin`   |
+| `docs`    | `/docs`    | `NEXT_PUBLIC_DOCS_URL`        | `turborepo-vercel-template-docs`    |
 
 ## API
 
@@ -19,8 +19,8 @@ Injeta o `basePath` correto na config do Next.js de um sub-app.
 
 ```ts
 // apps/app/next.config.js
-import { withBasePath } from '@repo/proxy';
-export default withBasePath('app');
+import { withBasePath } from "@repo/proxy";
+export default withBasePath("app");
 ```
 
 ### `getProxyRewrites()`
@@ -29,8 +29,8 @@ Gera as regras de rewrite para o app `landing` redirecionar requisições para c
 
 ```ts
 // apps/landing/next.config.js
-import { withEnv } from '@repo/env';
-import { getProxyRewrites } from '@repo/proxy';
+import { withEnv } from "@repo/env";
+import { getProxyRewrites } from "@repo/proxy";
 export default withEnv({
   async rewrites() {
     return getProxyRewrites();
@@ -43,7 +43,7 @@ export default withEnv({
 Objeto com a configuração completa de todos os apps. Use para referenciar `basePath`, `envVar` ou `vercelProject` sem hardcode.
 
 ```ts
-import { apps } from '@repo/proxy';
+import { apps } from "@repo/proxy";
 console.log(apps.admin.basePath); // '/admin'
 ```
 
