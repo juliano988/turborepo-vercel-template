@@ -8,7 +8,12 @@ import {
   readThemePreference,
   writeThemePreference,
 } from "../../modules/themeStorage";
-import { darkTokens, lightTokens } from "../../modules/tokens";
+import {
+  darkScrollbarTokens,
+  darkTokens,
+  lightScrollbarTokens,
+  lightTokens,
+} from "../../modules/tokens";
 
 export default function ThemeProviderAntd({
   children,
@@ -49,17 +54,49 @@ export default function ThemeProviderAntd({
     });
   };
 
+  const activeTokens = isDark ? darkTokens : lightTokens;
+  const activeScrollbarTokens = isDark
+    ? darkScrollbarTokens
+    : lightScrollbarTokens;
+
   return (
     <ThemeContextAntd.Provider value={{ isDark, toggle }}>
       <ConfigProvider
         theme={{
           algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
           token: {
-            ...(isDark ? darkTokens : lightTokens),
+            ...activeTokens,
             fontFamily: FONT_FAMILY,
           },
         }}
       >
+        <style>{`
+          * {
+            scrollbar-gutter: stable;
+            scrollbar-width: thin;
+            scrollbar-color: ${activeScrollbarTokens.thumb} ${activeScrollbarTokens.track};
+          }
+
+          *::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+          }
+
+          *::-webkit-scrollbar-track {
+            background: ${activeScrollbarTokens.track};
+            border-radius: 999px;
+          }
+
+          *::-webkit-scrollbar-thumb {
+            background: ${activeScrollbarTokens.thumb};
+            border-radius: 999px;
+            border: 2px solid ${activeScrollbarTokens.track};
+          }
+
+          *::-webkit-scrollbar-thumb:hover {
+            background: ${activeScrollbarTokens.thumbHover};
+          }
+        `}</style>
         {children}
       </ConfigProvider>
     </ThemeContextAntd.Provider>
