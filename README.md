@@ -7,6 +7,9 @@ A arquitetura segue os princípios do **Domain-Driven Design (DDD)**, onde cada 
 > [!CAUTION]
 > Se você acredita que Next.js é "só pra front-end" e/ou que a única forma de entregar sistemas é através de API REST, **esse template não é pra você.**
 
+> [!NOTE]
+> Se ainda assim quiser manter um app dedicado exclusivamente a uma API — usando Express.js, Nest.js ou similar — fique à vontade para criar mais um contexto aqui (ex: `apps/api`). O Turborepo suporta isso sem nenhuma fricção. Mas avalie com cuidado: na maioria dos casos, isso é over-engineering. As API Routes e Server Actions do Next.js já cobrem o que um serviço de API separado faria, sem o custo operacional de mais um processo, mais um deploy e mais uma camada de rede entre o front e o back.
+
 ## Arquitetura DDD
 
 ```mermaid
