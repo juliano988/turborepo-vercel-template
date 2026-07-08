@@ -77,7 +77,9 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
 
   const copyLink = (uid: string) => {
     const file = files.find((f) => f.uid === uid);
-    if (!file) return;
+    if (!file) {
+      return;
+    }
     // blobUrl não está no StoredFile — link gerado via API futuramente
     messageApi.info("Link copiado (em breve)");
   };

@@ -54,4 +54,9 @@ export const nextJsConfig = [
       "react/react-in-jsx-scope": "off",
     },
   },
+  {
+    rules: {
+      curly: ["warn", "all"],
+    },
+  },
 ];

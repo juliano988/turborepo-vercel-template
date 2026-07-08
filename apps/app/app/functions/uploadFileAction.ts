@@ -8,7 +8,9 @@ export async function uploadFileAction(formData: FormData) {
   const session = await requireSession();
 
   const file = formData.get("file") as globalThis.File | null;
-  if (!file) throw new Error("Nenhum arquivo enviado");
+  if (!file) {
+    throw new Error("Nenhum arquivo enviado");
+  }
 
   const repository = new PrismaFileRepository();
   const service = new UploadFileService(repository);
