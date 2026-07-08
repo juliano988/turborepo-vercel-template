@@ -45,6 +45,7 @@ export const auth = betterAuth({
             emailVerified: user.emailVerified,
             image: user.image ?? null,
             createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
           });
         },
       },

@@ -1,8 +1,3 @@
-export type UserCreatedPayload = {
-  id: string;
-  name: string;
-  email: string;
-  emailVerified: boolean;
-  image: string | null;
-  createdAt: Date;
-};
+import { BaseUser } from "better-auth";
+
+export type UserCreatedPayload = BaseUser;
