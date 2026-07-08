@@ -34,9 +34,9 @@ export class PrismaFileRepository implements FileRepository {
     return record ? PrismaFileRepository.toDomain(record) : null;
   }
 
-  async findByOwner(ownerId: string): Promise<File[]> {
+  async findByOwner(ownerId: UserId): Promise<File[]> {
     const records = await prisma.file.findMany({
-      where: { ownerId },
+      where: { ownerId: ownerId.value },
       orderBy: { uploadedAt: "desc" },
     });
 
