@@ -1,6 +1,6 @@
-import { verifySignatureAppRouter } from "@repo/mq";
-import { prisma } from "@repo/db";
 import type { UserCreatedPayload } from "@repo/auth";
+import { prisma } from "@repo/db";
+import { verifySignatureAppRouter } from "@repo/mq";
 
 async function handler(req: Request) {
   const { id } = (await req.json()) as UserCreatedPayload;
