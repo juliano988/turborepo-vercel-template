@@ -402,6 +402,10 @@ Prisma com Postgres foi escolhido por ser uma das stacks mais consolidadas do ec
 
 Dito isso, **o template não te prende a essa escolha**. Se o seu domínio se encaixa melhor em um banco de documentos, fique à vontade para usar [MongoDB](https://www.mongodb.com/) com [Mongoose](https://mongoosejs.com/) ou o próprio [Prisma com MongoDB](https://www.prisma.io/docs/orm/overview/databases/mongodb). O setup é consideravelmente mais simples — basta uma connection string e você já está operacional, sem migrations para gerenciar. Troque o pacote `@repo/db` pelo cliente de sua preferência e o restante do monorepo continua funcionando normalmente.
 
+### Um banco por bounded context seria over-engineering
+
+Criar um banco de dados separado para cada bounded context traz isolamento total, mas a um custo desproporcional para a maioria dos projetos: queries entre contextos exigem chamadas de rede, transações distribuídas se tornam complexas, e a infraestrutura se multiplica (conexões, backups, custos). Separar por **schema PostgreSQL** é o meio-termo certo — cada contexto tem seu próprio namespace isolado (`auth.user`, `storage.file`, etc.), sem nenhum dessas desvantagens. Essa é a estratégia adotada no pacote `@repo/db`.
+
 ### Next.js é um framework completo, não só front-end
 
 Next.js entrega Server Components, Server Actions, API Routes, middleware, autenticação via cookies, streaming, cache granular e muito mais — tudo na mesma stack. Com ele você é plenamente capaz de construir sistemas de grande porte usando uma única linguagem, um único framework e um único pipeline de build e deploy. Não há necessidade de uma camada de API REST separada para a maioria dos casos.

@@ -19,6 +19,9 @@ packages/db/
 
 ### Convenções de schema
 
+> **Por que schemas PostgreSQL e não bancos separados?**  
+> Criar um banco de dados por bounded context seria over-engineering para a maioria dos cenários — aumenta a complexidade operacional, dificulta queries entre contextos e encarece a infraestrutura. Separar por **schema PostgreSQL** é um bom meio-termo: mantém o isolamento lógico entre contextos sem abrir mão da simplicidade de um único banco.
+
 Cada bounded context tem seu próprio arquivo `.prisma` e seu próprio schema PostgreSQL:
 
 ```prisma
