@@ -93,7 +93,6 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
       style={{
         minHeight: "100dvh",
         background: token.colorBgLayout,
-        padding: "24px 16px",
       }}
     >
       {contextHolder}
@@ -106,6 +105,7 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
+          paddingTop: 40,
           marginBottom: 40,
         }}
       >

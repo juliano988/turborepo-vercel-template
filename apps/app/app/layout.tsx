@@ -15,7 +15,7 @@ export default function Layout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>
+      <body style={{ margin: 0 }}>
         <AntdRegistry>
           <ThemeProviderAntd>
             <AuthGuard>{children}</AuthGuard>
