@@ -31,4 +31,5 @@ export const ALLOWED_MIME_TYPES = [
   // Áudio
   "audio/mpeg",
   "audio/wav",
+  "audio/ogg",
 ] as const;

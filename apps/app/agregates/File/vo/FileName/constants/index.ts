@@ -23,6 +23,7 @@ export const ALLOWED_EXTENSIONS = [
   "mp4",
   "mp3",
   "wav",
+  "ogg",
 ] as const;
 
 export const MAX_NAME_LENGTH = 255;
