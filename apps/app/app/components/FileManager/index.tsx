@@ -114,7 +114,12 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
 
       <FileManagerHeader />
 
-      <div style={{ maxWidth: 720, margin: "0 auto" }}>
+      <div
+        style={{
+          maxWidth: 720,
+          margin: "0 auto",
+        }}
+      >
         <UploadZone
           isDragging={isDragging}
           onDragEnter={() => setIsDragging(true)}
@@ -128,9 +133,7 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
             maxHeight: 400,
             overflowY: "auto",
             paddingRight: 4,
-            border: `1px solid ${token.colorBorder}`,
-            borderRadius: token.borderRadius,
-            background: token.colorBgContainer,
+            backgroundColor: "transparent",
           }}
         >
           <UploadingList files={uploadingFiles} isPending={isPending} />
