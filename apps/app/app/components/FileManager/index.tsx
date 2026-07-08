@@ -2,6 +2,7 @@
 
 import { message, theme } from "antd";
 import { useState, useTransition } from "react";
+import { deleteFilesAction } from "../../functions/deleteFilesAction";
 import { uploadFileAction } from "../../functions/uploadFileAction";
 import { DoneList } from "./components/DoneList";
 import { EmptyState } from "./components/EmptyState";
@@ -60,8 +61,38 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
     return false;
   };
 
-  const removeFile = (uid: string) => {
-    setFiles((prev) => prev.filter((f) => f.uid !== uid));
+  const handleRemoveFile = (uid: string) => {
+    const file = files.find((item) => item.uid === uid);
+    if (!file) {
+      return;
+    }
+
+    if (file.status !== "done") {
+      setFiles((prev) => prev.filter((f) => f.uid !== uid));
+      return;
+    }
+
+    startTransition(async () => {
+      try {
+        const result = await deleteFilesAction([uid]);
+
+        if (result.deletedFileIds.length === 0) {
+          throw new Error("Arquivo não encontrado ou sem permissão");
+        }
+
+        setFiles((prev) =>
+          prev.filter((f) => !result.deletedFileIds.includes(f.uid))
+        );
+
+        if (result.skippedFileIds.length > 0) {
+          messageApi.warning("Alguns arquivos não puderam ser removidos");
+        }
+      } catch (err) {
+        messageApi.error(
+          `Falha ao remover arquivo: ${err instanceof Error ? err.message : "Erro desconhecido"}`
+        );
+      }
+    });
   };
 
   const copyLink = (uid: string) => {
@@ -92,15 +123,17 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
           onBeforeUpload={handleBeforeUpload}
         />
 
-        <UploadingList files={uploadingFiles} isPending={isPending} />
+        <div style={{ maxHeight: 400, overflowY: "scroll" }}>
+          <UploadingList files={uploadingFiles} isPending={isPending} />
 
-        <ErrorList files={errorFiles} onRemove={removeFile} />
+          <ErrorList files={errorFiles} onRemove={handleRemoveFile} />
 
-        <DoneList
-          files={doneFiles}
-          onRemove={removeFile}
-          onCopyLink={copyLink}
-        />
+          <DoneList
+            files={doneFiles}
+            onRemove={handleRemoveFile}
+            onCopyLink={copyLink}
+          />
+        </div>
 
         {files.length === 0 && <EmptyState />}
       </div>
