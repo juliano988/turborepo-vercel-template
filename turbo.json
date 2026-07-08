@@ -16,6 +16,8 @@
         "!.next/dev/**"
       ],
       "env": [
+        "VERCEL_ENV",
+        "VERCEL_BRANCH_URL",
         "NEXT_PUBLIC_APP_URL",
         "NEXT_PUBLIC_ADMIN_URL",
         "NEXT_PUBLIC_DOCS_URL",
