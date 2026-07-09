@@ -10,7 +10,9 @@ export async function uploadFileAction(formData: FormData) {
 
   const files: globalThis.File[] = formData
     .getAll("file")
-    .filter((value): value is globalThis.File => value instanceof globalThis.File);
+    .filter(
+      (value): value is globalThis.File => value instanceof globalThis.File
+    );
 
   if (files.length === 0) {
     throw new Error("Nenhum arquivo enviado");

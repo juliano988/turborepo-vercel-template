@@ -76,7 +76,9 @@ export async function getSessionFromHeaders(headers: Headers) {
  *
  * @throws Error quando não há sessão válida.
  */
-export async function requireSessionFromHeaders(headers: Headers): Promise<Session> {
+export async function requireSessionFromHeaders(
+  headers: Headers
+): Promise<Session> {
   const session = await getSessionFromHeaders(headers);
 
   if (!session) {
