@@ -61,3 +61,17 @@ export const auth = betterAuth({
 
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
+
+export async function getSessionFromHeaders(headers: Headers) {
+  return auth.api.getSession({ headers });
+}
+
+export async function requireSessionFromHeaders(headers: Headers): Promise<Session> {
+  const session = await getSessionFromHeaders(headers);
+
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  return session;
+}
