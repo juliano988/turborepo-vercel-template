@@ -62,10 +62,20 @@ export const auth = betterAuth({
 export type Session = typeof auth.$Infer.Session;
 export type User = typeof auth.$Infer.Session.user;
 
+/**
+ * Obtém a sessão atual a partir dos cabeçalhos da requisição.
+ *
+ * Retorna `null` quando não existe sessão válida.
+ */
 export async function getSessionFromHeaders(headers: Headers) {
   return auth.api.getSession({ headers });
 }
 
+/**
+ * Obtém a sessão atual e exige autenticação.
+ *
+ * @throws Error quando não há sessão válida.
+ */
 export async function requireSessionFromHeaders(headers: Headers): Promise<Session> {
   const session = await getSessionFromHeaders(headers);
 
