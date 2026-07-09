@@ -4,6 +4,7 @@ import { FileId } from "../vo/FileId";
 
 export interface iFileRepository {
   save(file: File): Promise<void>;
+  saveMany(files: File[]): Promise<void>;
   findById(id: FileId): Promise<File | null>;
   findByIds(ids: FileId[]): Promise<File[]>;
   findByOwner(ownerId: UserId): Promise<File[]>;

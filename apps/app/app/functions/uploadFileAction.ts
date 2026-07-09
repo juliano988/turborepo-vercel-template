@@ -1,25 +1,32 @@
 "use server";
 
 import { FileRepository } from "../../repository/File";
-import { UploadFileService } from "../../services/UploadFileService";
+import { UploadManyFilesService } from "../../services/UploadManyFilesService";
+import type { UploadManyFilesOutput } from "../../services/UploadManyFilesService/types";
 import { requireSession } from "./requireSession";
 
 export async function uploadFileAction(formData: FormData) {
   const session = await requireSession();
 
-  const file = formData.get("file") as globalThis.File | null;
-  if (!file) {
+  const files: globalThis.File[] = formData
+    .getAll("file")
+    .filter((value): value is globalThis.File => value instanceof globalThis.File);
+
+  if (files.length === 0) {
     throw new Error("Nenhum arquivo enviado");
   }
 
   const repository = new FileRepository();
-  const service = new UploadFileService(repository);
+  const service = new UploadManyFilesService(repository);
 
-  return service.execute({
-    filename: file.name,
-    body: file,
-    mimeType: file.type || "application/octet-stream",
-    sizeBytes: file.size,
+  const result: UploadManyFilesOutput = await service.execute({
+    files: files.map((file) => ({
+      filename: file.name,
+      body: file,
+      mimeType: file.type || "application/octet-stream",
+      sizeBytes: file.size,
+    })),
     ownerId: session.user.id,
   });
+  return result;
 }

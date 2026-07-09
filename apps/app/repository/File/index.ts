@@ -26,6 +26,31 @@ export class FileRepository implements iFileRepository {
     });
   }
 
+  async saveMany(files: File[]): Promise<void> {
+    if (files.length === 0) {
+      return;
+    }
+
+    await prisma.$transaction(
+      files.map((file) => {
+        const data = {
+          name: file.name.full,
+          sizeBytes: file.size.toBytes(),
+          mimeType: file.mimeType.toString(),
+          ownerId: file.ownerId.toString(),
+          blobUrl: file.blobUrl.toString(),
+          uploadedAt: file.uploadedAt,
+        };
+
+        return prisma.file.upsert({
+          where: { id: file.id.toString() },
+          create: { id: file.id.toString(), ...data },
+          update: data,
+        });
+      })
+    );
+  }
+
   async findById(id: FileId): Promise<File | null> {
     const record = await prisma.file.findUnique({
       where: { id: id.toString() },

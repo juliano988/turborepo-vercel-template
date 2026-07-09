@@ -42,9 +42,15 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
         const formData = new FormData();
         formData.append("file", file);
         const result = await uploadFileAction(formData);
+        const uploadedFile = result.uploadedFiles.at(0);
+        const firstFailure = result.failedFiles.at(0);
+
+        if (firstFailure || !uploadedFile) {
+          throw new Error(firstFailure?.error || "Falha ao enviar arquivo");
+        }
 
         setFiles((prev) =>
-          prev.map((f) => (f.uid === uid ? fromServer(result) : f))
+          prev.map((f) => (f.uid === uid ? fromServer(uploadedFile) : f))
         );
       } catch (err) {
         setFiles((prev) =>

@@ -4,3 +4,4 @@ export * from "./list";
 export * from "./metadata";
 export * from "./serve";
 export * from "./upload";
+export * from "./uploadMany";
