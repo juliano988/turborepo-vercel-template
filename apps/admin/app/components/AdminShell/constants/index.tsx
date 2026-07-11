@@ -1,29 +1,24 @@
-import {
-  DashboardOutlined,
-  FileOutlined,
-  SettingOutlined,
-  UserOutlined
-} from "@ant-design/icons";
+import { File, LayoutDashboard, Settings, User } from "@repo/ui";
 
 export const menuRoutes = [
   {
     path: "/",
     name: "Dashboard",
-    icon: <DashboardOutlined />,
+    icon: <LayoutDashboard />,
   },
   {
     path: "/usuarios",
     name: "Usuarios",
-    icon: <UserOutlined />,
+    icon: <User />,
   },
   {
     path: "/conteudo",
     name: "Conteudo",
-    icon: <FileOutlined />,
+    icon: <File />,
   },
   {
     path: "/configuracoes",
     name: "Configuracoes",
-    icon: <SettingOutlined />,
+    icon: <Settings />,
   },
 ];
