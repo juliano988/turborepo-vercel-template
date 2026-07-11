@@ -2,12 +2,13 @@
 
 import { signOut, useSession } from "@repo/auth/client";
 import { LogOut, Moon, Sun, useThemeAntd } from "@repo/ui";
-import { Avatar, Dropdown, Flex, Switch, Typography } from "antd";
+import { Avatar, Dropdown, Flex, Grid, Switch, Typography } from "antd";
 import { useRouter } from "next/navigation";
 
 export default function UserFooter() {
   const { data: session } = useSession();
   const { isDark, toggle } = useThemeAntd();
+  const screens = Grid.useBreakpoint();
   const router = useRouter();
 
   const name = session?.user?.name ?? "Usuário";
@@ -26,7 +27,7 @@ export default function UserFooter() {
   return (
     <Dropdown
       trigger={["click"]}
-      placement="rightBottom"
+      placement={screens.md ? "rightBottom" : "topRight"}
       menu={{
         items: [
           {
