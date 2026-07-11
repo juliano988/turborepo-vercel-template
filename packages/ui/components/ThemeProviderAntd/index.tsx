@@ -72,9 +72,13 @@ export default function ThemeProviderAntd({
       >
         <style>{`
           * {
-            scrollbar-gutter: stable;
             scrollbar-width: thin;
             scrollbar-color: ${activeScrollbarTokens.thumb} ${activeScrollbarTokens.track};
+          }
+
+          .ant-layout-sider,
+          .ant-layout-sider * {
+            scrollbar-gutter: auto;
           }
 
           *::-webkit-scrollbar {
