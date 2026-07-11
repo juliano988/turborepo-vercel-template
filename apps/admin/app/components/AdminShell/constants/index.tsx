@@ -7,7 +7,7 @@ export const menuRoutes = [
     icon: <LayoutDashboard />,
   },
   {
-    path: "/usuarios",
+    path: "/users",
     name: "Usuarios",
     icon: <User />,
   },
