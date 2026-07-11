@@ -20,7 +20,7 @@ export default function UserFooter() {
     .toUpperCase();
 
   const handleLogout = async () => {
-    await signOut({ fetchOptions: { onSuccess: () => router.push("/login") } });
+    await signOut({ fetchOptions: { onSuccess: () => router.push("/") } });
   };
 
   return (
