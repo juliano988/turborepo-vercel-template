@@ -33,6 +33,7 @@ echo "Aplicando schema com db push..."
 if ! DATABASE_URL="$PUSH_URL" bunx prisma db push; then
   echo "db push falhou, tentando com --force-reset..."
   DATABASE_URL="$PUSH_URL" bunx prisma db push --force-reset
+  echo "⚠️  Banco de dados foi limpo e recriado do zero (--force-reset)."
 fi
 
 echo ""
