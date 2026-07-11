@@ -18,4 +18,6 @@ const isDev = process.env.NODE_ENV === "development";
 
 type RouteHandler = (req: Request) => Promise<Response>;
 
-export const POST: RouteHandler = isDev ? handler : verifySignatureAppRouter(handler);
+export const POST: RouteHandler = isDev
+  ? handler
+  : verifySignatureAppRouter(handler);
