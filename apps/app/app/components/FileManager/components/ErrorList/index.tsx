@@ -29,7 +29,7 @@ export function ErrorList({ files, onRemove }: ErrorListProps) {
         {ERROR_LIST_LABELS.section} ({files.length})
       </Text>
       <Space
-        direction="vertical"
+        orientation="vertical"
         style={{ width: "100%" }}
         size={ERROR_LIST_SIZES.listSpacing}
       >

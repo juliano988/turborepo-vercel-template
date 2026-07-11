@@ -44,7 +44,7 @@ export function DoneList({ files, onRemove, onCopyLink }: DoneListProps) {
           {formatBytes(files.reduce((acc, f) => acc + f.size, 0))} total
         </Text>
       </div>
-      <Space direction="vertical" style={{ width: "100%" }} size={6}>
+      <Space orientation="vertical" style={{ width: "100%" }} size={6}>
         {files.map((file) => (
           <div
             key={file.uid}

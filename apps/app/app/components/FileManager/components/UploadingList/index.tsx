@@ -29,7 +29,7 @@ export function UploadingList({ files, isPending }: UploadingListProps) {
         {UPLOADING_LIST_LABELS.section} ({files.length})
       </Text>
       <Space
-        direction="vertical"
+        orientation="vertical"
         style={{ width: "100%" }}
         size={UPLOADING_LIST_SIZES.listSpacing}
       >
