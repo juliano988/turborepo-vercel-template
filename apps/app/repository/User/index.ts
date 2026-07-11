@@ -1,11 +1,11 @@
 import { prisma } from "@repo/db";
 import { User } from "../../agregates/User";
-import { UserId } from "../../agregates/User/vo/UserId";
 import type { iUserRepository } from "../../agregates/User/repository";
+import { UserId } from "../../agregates/User/vo/UserId";
 
 export class UserRepository implements iUserRepository {
   async findById(id: UserId): Promise<User | null> {
-    const record = await prisma.user.findUnique({
+    const record = await prisma.appUser.findUnique({
       where: { id: id.toString() },
     });
 
