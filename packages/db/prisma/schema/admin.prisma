@@ -1,13 +1,13 @@
 model AdminUser {
-  id            String    @id
+  id            String      @id
   name          String
-  email         String    @unique
+  email         String      @unique
   emailVerified Boolean
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
-  role          String?
-  banned        Boolean?
+  role          String      @default("user")
+  banned        Boolean     @default(false)
   banReason     String?
   banExpires    DateTime?
   files         AdminFile[]
@@ -17,14 +17,14 @@ model AdminUser {
 }
 
 model AdminFile {
-  id         String   @id
+  id         String    @id
   name       String
   sizeBytes  Int
   mimeType   String
   ownerId    String
   blobUrl    String
   uploadedAt DateTime
-  owner      AdminUser     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner      AdminUser @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@map("file")
   @@schema("admin")

@@ -30,7 +30,10 @@ SHADOW_DATABASE_URL="postgres://postgres:postgres@localhost:51218/template1?sslm
 EOF
 
 echo "Aplicando schema com db push..."
-DATABASE_URL="$PUSH_URL" bunx prisma db push
+if ! DATABASE_URL="$PUSH_URL" bunx prisma db push; then
+  echo "db push falhou, tentando com --force-reset..."
+  DATABASE_URL="$PUSH_URL" bunx prisma db push --force-reset
+fi
 
 echo ""
 echo "Schema aplicado com sucesso!"

@@ -6,8 +6,8 @@ model AuthUser {
   image         String?
   createdAt     DateTime
   updatedAt     DateTime
-  role          String?
-  banned        Boolean?
+  role          String        @default("user")
+  banned        Boolean       @default(false)
   banReason     String?
   banExpires    DateTime?
   sessions      AuthSession[]
