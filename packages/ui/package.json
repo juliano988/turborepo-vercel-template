@@ -7,8 +7,8 @@
     ".": "./index.ts"
   },
   "peerDependencies": {
-    "antd": ">=5",
-    "daisyui": ">=5",
+    "antd": ">=6.5.0",
+    "daisyui": ">=5.6.16",
     "next-themes": ">=0.4",
     "react": "^19.2.7"
   },
@@ -16,11 +16,11 @@
     "@repo/typescript-config": "*",
     "@types/culori": "^4.0.1",
     "@types/react": "^19.2.17",
-    "antd": "^5.25.4",
-    "daisyui": "^5.6.3"
+    "antd": "^6.5.0",
+    "daisyui": "^5.6.16"
   },
   "dependencies": {
     "culori": "^4.0.2",
-    "lucide-react": "^1.22.0"
+    "lucide-react": "^1.24.0"
   }
 }
