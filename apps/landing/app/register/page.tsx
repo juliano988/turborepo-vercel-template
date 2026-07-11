@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { authClient } from "@repo/auth/client";
+import { useRouter } from "next/navigation";
+import { SyntheticEvent, useState } from "react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
     setError("");
     setLoading(true);

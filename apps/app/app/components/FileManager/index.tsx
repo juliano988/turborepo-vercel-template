@@ -50,12 +50,14 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
         }
 
         setFiles((prev) =>
-          prev.map((f) => (f.uid === uid ? fromServer(uploadedFile) : f))
+          prev.map((file) =>
+            file.uid === uid ? fromServer(uploadedFile) : file
+          )
         );
       } catch (err) {
         setFiles((prev) =>
-          prev.map((f) =>
-            f.uid === uid ? { ...f, status: "error" as const } : f
+          prev.map((file) =>
+            file.uid === uid ? { ...file, status: "error" as const } : file
           )
         );
         messageApi.error(
@@ -74,7 +76,7 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
     }
 
     if (file.status !== "done") {
-      setFiles((prev) => prev.filter((f) => f.uid !== uid));
+      setFiles((prev) => prev.filter((file) => file.uid !== uid));
       return;
     }
 
@@ -87,7 +89,7 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
         }
 
         setFiles((prev) =>
-          prev.filter((f) => !result.deletedFileIds.includes(f.uid))
+          prev.filter((file) => !result.deletedFileIds.includes(file.uid))
         );
 
         if (result.skippedFileIds.length > 0) {
@@ -102,7 +104,7 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
   };
 
   const copyLink = (uid: string) => {
-    const file = files.find((f) => f.uid === uid);
+    const file = files.find((file) => file.uid === uid);
     if (!file) {
       return;
     }
@@ -110,9 +112,9 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
     messageApi.info("Link copiado (em breve)");
   };
 
-  const doneFiles = files.filter((f) => f.status === "done");
-  const uploadingFiles = files.filter((f) => f.status === "uploading");
-  const errorFiles = files.filter((f) => f.status === "error");
+  const doneFiles = files.filter((file) => file.status === "done");
+  const uploadingFiles = files.filter((file) => file.status === "uploading");
+  const errorFiles = files.filter((file) => file.status === "error");
 
   return (
     <div style={{ minHeight: "100dvh", background: token.colorBgLayout }}>

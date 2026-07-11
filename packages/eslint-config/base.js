@@ -20,6 +20,7 @@ export const config = [
     rules: {
       "turbo/no-undeclared-env-vars": "warn",
       "curly": ["warn", "all"],
+      "id-length": ["warn", { min: 2, exceptions: ["_", "i", "j", "k", "e"] }],
     },
   },
   {

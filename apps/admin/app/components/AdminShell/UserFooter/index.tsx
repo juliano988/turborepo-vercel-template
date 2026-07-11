@@ -15,7 +15,7 @@ export default function UserFooter() {
   const email = session?.user?.email ?? "";
   const initials = name
     .split(" ")
-    .map((n) => n[0])
+    .map((name) => name[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
@@ -54,7 +54,7 @@ export default function UserFooter() {
                 <Switch
                   size="small"
                   checked={isDark}
-                  onClick={(_, e) => e.stopPropagation()}
+                  onClick={(_, event) => event.stopPropagation()}
                   onChange={toggle}
                 />
               </Flex>

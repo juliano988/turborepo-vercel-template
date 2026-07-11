@@ -41,7 +41,7 @@ export function DoneList({ files, onRemove, onCopyLink }: DoneListProps) {
           {DONE_LIST_LABELS.section} ({files.length})
         </Text>
         <Text type="secondary" style={{ fontSize: 12 }}>
-          {formatBytes(files.reduce((acc, f) => acc + f.size, 0))} total
+          {formatBytes(files.reduce((acc, file) => acc + file.size, 0))} total
         </Text>
       </div>
       <Space orientation="vertical" style={{ width: "100%" }} size={6}>
