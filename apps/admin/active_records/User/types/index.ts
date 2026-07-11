@@ -1,4 +1,4 @@
-import { User } from "@repo/auth";
+import { User } from "..";
 
 export type UserProps = {
   id: string;

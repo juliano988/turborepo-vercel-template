@@ -15,7 +15,7 @@ async function handler(req: Request) {
       emailVerified,
       createdAt,
       updatedAt,
-      role,
+      role: role ?? undefined,
     },
     update: {},
   });
