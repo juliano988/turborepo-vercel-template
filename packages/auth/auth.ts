@@ -46,6 +46,7 @@ export const auth = betterAuth({
             image: user.image ?? null,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
+            role: typeof user.role === "string" ? user.role : null,
           });
         },
       },

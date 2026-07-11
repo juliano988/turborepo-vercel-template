@@ -1,0 +1,31 @@
+model AdminUser {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  role          String?
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?
+  files         AdminFile[]
+
+  @@map("user")
+  @@schema("admin")
+}
+
+model AdminFile {
+  id         String   @id
+  name       String
+  sizeBytes  Int
+  mimeType   String
+  ownerId    String
+  blobUrl    String
+  uploadedAt DateTime
+  owner      AdminUser     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@map("file")
+  @@schema("admin")
+}

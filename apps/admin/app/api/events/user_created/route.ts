@@ -3,11 +3,20 @@ import { prisma } from "@repo/db";
 import { verifySignatureAppRouter } from "@repo/mq";
 
 async function handler(req: Request) {
-  const { id } = (await req.json()) as UserCreatedPayload;
+  const { id, name, email, emailVerified, createdAt, updatedAt, role } =
+    (await req.json()) as UserCreatedPayload;
 
-  await prisma.appUser.upsert({
+  await prisma.adminUser.upsert({
     where: { id },
-    create: { id },
+    create: {
+      id,
+      name,
+      email,
+      emailVerified,
+      createdAt,
+      updatedAt,
+      role,
+    },
     update: {},
   });
 

@@ -4,6 +4,8 @@ import { auth } from "./auth";
 export async function seedFirstUser(): Promise<void> {
   console.debug("[auth:seed] Iniciando seedFirstUser");
 
+  await new Promise((resolve) => setTimeout(resolve, 5_000));
+
   const email = process.env.ADMIN_USER;
   const password = process.env.ADMIN_PASS;
 

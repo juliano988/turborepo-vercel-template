@@ -19,7 +19,7 @@ export class FileRepository implements iFileRepository {
       uploadedAt: file.uploadedAt,
     };
 
-    await prisma.file.upsert({
+    await prisma.appFile.upsert({
       where: { id: file.id.toString() },
       create: { id: file.id.toString(), ...data },
       update: data,
@@ -42,7 +42,7 @@ export class FileRepository implements iFileRepository {
           uploadedAt: file.uploadedAt,
         };
 
-        return prisma.file.upsert({
+        return prisma.appFile.upsert({
           where: { id: file.id.toString() },
           create: { id: file.id.toString(), ...data },
           update: data,
@@ -52,7 +52,7 @@ export class FileRepository implements iFileRepository {
   }
 
   async findById(id: FileId): Promise<File | null> {
-    const record = await prisma.file.findUnique({
+    const record = await prisma.appFile.findUnique({
       where: { id: id.toString() },
     });
 
@@ -64,7 +64,7 @@ export class FileRepository implements iFileRepository {
       return [];
     }
 
-    const records = await prisma.file.findMany({
+    const records = await prisma.appFile.findMany({
       where: {
         id: {
           in: ids.map((id) => id.toString()),
@@ -76,7 +76,7 @@ export class FileRepository implements iFileRepository {
   }
 
   async findByOwner(ownerId: UserId): Promise<File[]> {
-    const records = await prisma.file.findMany({
+    const records = await prisma.appFile.findMany({
       where: { ownerId: ownerId.toString() },
       orderBy: { uploadedAt: "desc" },
     });
@@ -85,7 +85,7 @@ export class FileRepository implements iFileRepository {
   }
 
   async remove(id: FileId): Promise<void> {
-    await prisma.file.delete({
+    await prisma.appFile.delete({
       where: { id: id.toString() },
     });
   }
@@ -95,7 +95,7 @@ export class FileRepository implements iFileRepository {
       return;
     }
 
-    await prisma.file.deleteMany({
+    await prisma.appFile.deleteMany({
       where: {
         id: {
           in: ids.map((id) => id.toString()),

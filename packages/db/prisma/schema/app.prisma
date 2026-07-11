@@ -1,12 +1,12 @@
-model User {
+model AppUser {
   id    String @id
-  files File[]
+  files AppFile[]
 
   @@map("user")
   @@schema("app")
 }
 
-model File {
+model AppFile {
   id         String   @id
   name       String
   sizeBytes  Int
@@ -14,7 +14,7 @@ model File {
   ownerId    String
   blobUrl    String
   uploadedAt DateTime
-  owner      User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner      AppUser     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@map("file")
   @@schema("app")
