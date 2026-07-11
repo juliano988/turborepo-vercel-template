@@ -1,5 +1,6 @@
 "use server";
 
+import createFileAddedEvent from "../../events/file.added";
 import { FileRepository } from "../../repository/File";
 import { UploadManyFilesService } from "../../services/UploadManyFilesService";
 import type { UploadManyFilesOutput } from "../../services/UploadManyFilesService/types";
@@ -30,5 +31,8 @@ export async function uploadFileAction(formData: FormData) {
     })),
     ownerId: session.user.id,
   });
+
+  await Promise.allSettled(result.uploadedFiles.map(createFileAddedEvent));
+
   return result;
 }

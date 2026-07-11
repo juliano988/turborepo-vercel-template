@@ -10,4 +10,9 @@ export async function register() {
     USER_CREATED,
     `${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/api/events/user_created`
   );
+
+  await registerSubscriber(
+    "file.added",
+    `${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/api/events/file_added`
+  );
 }
