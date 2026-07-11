@@ -12,8 +12,8 @@ export const menuRoutes = [
     icon: <User />,
   },
   {
-    path: "/conteudo",
-    name: "Conteudo",
+    path: "/files",
+    name: "Arquivos",
     icon: <File />,
   },
   {
