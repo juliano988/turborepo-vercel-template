@@ -16,7 +16,6 @@
       "name": "admin",
       "version": "0.1.0",
       "dependencies": {
-        "@ant-design/icons": "^6.3.2",
         "@ant-design/nextjs-registry": "^1.0.2",
         "@ant-design/pro-components": "^3.1.14-2",
         "@repo/auth": "*",

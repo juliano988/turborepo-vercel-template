@@ -12,7 +12,6 @@
     "prebuild": "bun ../../packages/scripts/vercel-env.ts"
   },
   "dependencies": {
-    "@ant-design/icons": "^6.3.2",
     "@ant-design/nextjs-registry": "^1.0.2",
     "@ant-design/pro-components": "^3.1.14-2",
     "@repo/auth": "*",

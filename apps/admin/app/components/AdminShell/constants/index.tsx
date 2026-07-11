@@ -1,8 +1,8 @@
 import {
   DashboardOutlined,
-  FileTextOutlined,
+  FileOutlined,
   SettingOutlined,
-  UserOutlined,
+  UserOutlined
 } from "@ant-design/icons";
 
 export const menuRoutes = [
@@ -19,7 +19,7 @@ export const menuRoutes = [
   {
     path: "/conteudo",
     name: "Conteudo",
-    icon: <FileTextOutlined />,
+    icon: <FileOutlined />,
   },
   {
     path: "/configuracoes",

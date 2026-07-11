@@ -48,7 +48,7 @@ export default function UserFooter() {
               <Flex justify="space-between" align="center" gap={8}>
                 <Flex align="center" gap={8}>
                   {isDark ? <Moon size={14} /> : <Sun size={14} />}
-                  <span>Tema escuro</span>
+                  {isDark ? <span>Tema escuro</span> : <span>Tema claro</span>}
                 </Flex>
                 <Switch
                   size="small"
