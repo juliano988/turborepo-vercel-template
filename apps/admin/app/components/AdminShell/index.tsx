@@ -3,6 +3,7 @@
 import { ProLayout } from "@ant-design/pro-components";
 import { usePathname } from "next/navigation";
 import { menuRoutes } from "./constants";
+import UserFooter from "./UserFooter";
 
 export default function AdminShell({
   children,
@@ -21,9 +22,9 @@ export default function AdminShell({
         path: "/",
         routes: menuRoutes,
       }}
-      menuFooterRender={false}
+      menuFooterRender={() => <UserFooter />}
     >
-      <div style={{ minHeight: "100dvh" }}>{children}</div>
+      {children}
     </ProLayout>
   );
 }
