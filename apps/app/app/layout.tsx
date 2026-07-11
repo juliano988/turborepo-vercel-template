@@ -1,5 +1,5 @@
 import { AntdRegistry } from "@ant-design/nextjs-registry";
-import { ThemeProviderAntd } from "@repo/ui";
+import { AntdLocaleProvider, ThemeProviderAntd } from "@repo/ui";
 import type { Metadata } from "next";
 import { AuthGuard } from "../../../packages/auth/components";
 
@@ -18,7 +18,9 @@ export default function Layout({
       <body style={{ margin: 0 }}>
         <AntdRegistry>
           <ThemeProviderAntd>
-            <AuthGuard>{children}</AuthGuard>
+            <AntdLocaleProvider>
+              <AuthGuard>{children}</AuthGuard>
+            </AntdLocaleProvider>
           </ThemeProviderAntd>
         </AntdRegistry>
       </body>

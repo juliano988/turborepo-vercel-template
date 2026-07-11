@@ -3,7 +3,7 @@
 import { ConfigProvider } from "antd";
 import ptBR from "antd/locale/pt_BR";
 
-export default function AdminLocaleProvider({
+export default function AntdLocaleProvider({
   children,
 }: {
   children: React.ReactNode;
