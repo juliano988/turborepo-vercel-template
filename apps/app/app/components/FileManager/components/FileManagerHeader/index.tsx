@@ -1,5 +1,7 @@
+import { signOut, useSession } from "@repo/auth/client";
 import { CloudUpload, ThemeToggleAntd } from "@repo/ui";
-import { Space, theme, Typography } from "antd";
+import { Button, Space, theme, Typography } from "antd";
+import { useRouter } from "next/navigation";
 import {
   FILE_MANAGER_HEADER_LABELS,
   FILE_MANAGER_HEADER_SIZES,
@@ -11,6 +13,14 @@ const { Text } = Typography;
 export function FileManagerHeader(props: FileManagerHeaderProps) {
   void props;
   const { token } = theme.useToken();
+  const { data: session } = useSession();
+  const router = useRouter();
+  const name = session?.user?.name ?? "Usuário";
+  const email = session?.user?.email ?? "";
+
+  const handleLogout = async () => {
+    await signOut({ fetchOptions: { onSuccess: () => router.push("/") } });
+  };
 
   return (
     <div
@@ -63,7 +73,22 @@ export function FileManagerHeader(props: FileManagerHeaderProps) {
           </Text>
         </div>
       </Space>
-      <ThemeToggleAntd />
+      <Space align="center" size={8}>
+        <div style={{ textAlign: "right" }}>
+          <Text strong style={{ display: "block", lineHeight: 1.2 }}>
+            {name}
+          </Text>
+          {email ? (
+            <Text type="secondary" style={{ fontSize: 12, lineHeight: 1.2 }}>
+              {email}
+            </Text>
+          ) : null}
+        </div>
+        <ThemeToggleAntd />
+        <Button type="default" danger onClick={handleLogout}>
+          Sair
+        </Button>
+      </Space>
     </div>
   );
 }
