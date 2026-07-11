@@ -16,7 +16,6 @@ export default function AdminShell({
   return (
     <ProLayout
       title="Admin"
-      logo={false}
       location={{ pathname }}
       route={{ routes: menuRoutes }}
       menuFooterRender={() => <UserFooter />}
