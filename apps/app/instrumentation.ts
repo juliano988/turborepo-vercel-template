@@ -1,5 +1,5 @@
+import { USER_CREATED } from "@repo/events";
 import { registerSubscriber } from "@repo/mq";
-import { USER_CREATED } from "@repo/auth";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") {

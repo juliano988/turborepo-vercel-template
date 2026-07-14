@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@repo/db": "*",
+    "@repo/events": "*",
     "@repo/mq": "*",
     "better-auth": "^1.2.7"
   },

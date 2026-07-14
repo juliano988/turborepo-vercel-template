@@ -1,15 +1,6 @@
 import { prisma } from "@repo/db";
+import type { FileAddedPayload } from "@repo/events";
 import { verifySignatureAppRouter } from "@repo/mq";
-
-type FileAddedPayload = {
-  id: string;
-  name: string;
-  size: number;
-  mimeType: string;
-  ownerId: string;
-  blobUrl: string;
-  uploadedAt: string;
-};
 
 async function handler(req: Request) {
   const payload = (await req.json()) as FileAddedPayload;

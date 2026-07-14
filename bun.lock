@@ -22,6 +22,7 @@
         "@repo/db": "*",
         "@repo/env": "*",
         "@repo/eslint-config": "*",
+        "@repo/events": "*",
         "@repo/mq": "*",
         "@repo/proxy": "*",
         "@repo/typescript-config": "*",
@@ -61,6 +62,7 @@
         "@repo/auth": "*",
         "@repo/db": "*",
         "@repo/env": "*",
+        "@repo/events": "*",
         "@repo/mq": "*",
         "@repo/proxy": "*",
         "@repo/storage": "*",
@@ -155,6 +157,7 @@
       "version": "0.0.0",
       "dependencies": {
         "@repo/db": "*",
+        "@repo/events": "*",
         "@repo/mq": "*",
         "better-auth": "^1.2.7",
       },
@@ -213,6 +216,14 @@
         "globals": "^16.5.0",
         "typescript": "^5.9.2",
         "typescript-eslint": "^8.50.0",
+      },
+    },
+    "packages/events": {
+      "name": "@repo/events",
+      "version": "0.0.0",
+      "devDependencies": {
+        "@repo/typescript-config": "*",
+        "typescript": "5.9.2",
       },
     },
     "packages/mq": {
@@ -812,6 +823,8 @@
     "@repo/env": ["@repo/env@workspace:packages/env"],
 
     "@repo/eslint-config": ["@repo/eslint-config@workspace:packages/eslint-config"],
+
+    "@repo/events": ["@repo/events@workspace:packages/events"],
 
     "@repo/mq": ["@repo/mq@workspace:packages/mq"],
 

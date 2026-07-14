@@ -1,9 +1,8 @@
+import { FILE_ADDED, type FileAddedPayload } from "@repo/events";
 import { publish } from "@repo/mq";
-import { FILE_ADDED } from "./constants";
-import type { FileAddedPayload } from "./types";
 
-export { FILE_ADDED } from "./constants";
-export type { FileAddedPayload } from "./types";
+export { FILE_ADDED };
+export type { FileAddedPayload };
 
 export default async function createFileAddedEvent(
   payload: FileAddedPayload

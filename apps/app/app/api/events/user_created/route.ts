@@ -1,5 +1,5 @@
-import type { UserCreatedPayload } from "@repo/auth";
 import { prisma } from "@repo/db";
+import type { UserCreatedPayload } from "@repo/events";
 import { verifySignatureAppRouter } from "@repo/mq";
 
 async function handler(req: Request) {
