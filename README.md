@@ -362,10 +362,10 @@ Formato:
 
 ```json
 {
-  "NEXT_PUBLIC_APP_URL": "turborepo-vercel-template-app",
-  "NEXT_PUBLIC_ADMIN_URL": "turborepo-vercel-template-admin",
-  "NEXT_PUBLIC_DOCS_URL": "turborepo-vercel-template-docs",
-  "NEXT_PUBLIC_BETTER_AUTH_URL": "turborepo-vercel-template-landing"
+  "NEXT_PUBLIC_APP_URL": "trvt-app",
+  "NEXT_PUBLIC_ADMIN_URL": "trvt-admin",
+  "NEXT_PUBLIC_DOCS_URL": "trvt-docs",
+  "NEXT_PUBLIC_BETTER_AUTH_URL": "trvt-landing"
 }
 ```
 

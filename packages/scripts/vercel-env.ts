@@ -8,7 +8,7 @@
  *   bun ../../scripts/vercel-env.ts
  *
  * Uso (com argumentos explicitos para override):
- *   bun ../../scripts/vercel-env.ts NEXT_PUBLIC_APP_URL=turborepo-vercel-template-app
+ *   bun ../../scripts/vercel-env.ts NEXT_PUBLIC_APP_URL=trvt-app
  *
  * Variaveis de sistema usadas (injetadas automaticamente pela Vercel):
  *   VERCEL_ENV        - "production" | "preview" | "development"

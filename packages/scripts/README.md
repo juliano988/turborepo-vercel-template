@@ -25,7 +25,7 @@ bun ../../packages/scripts/vercel-env.ts
 **Com argumentos** — sobrescreve os mapeamentos (formato `VAR=projeto-vercel`):
 
 ```sh
-bun ../../packages/scripts/vercel-env.ts NEXT_PUBLIC_APP_URL=turborepo-vercel-template-app
+bun ../../packages/scripts/vercel-env.ts NEXT_PUBLIC_APP_URL=trvt-app
 ```
 
 ### Configuração no `package.json` de cada app
