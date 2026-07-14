@@ -1,1 +1,1 @@
-internacionalização
+Implementar internacionalização
