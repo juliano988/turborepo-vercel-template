@@ -17,6 +17,7 @@
     "@repo/auth": "*",
     "@repo/env": "*",
     "@repo/db": "*",
+    "@repo/events": "*",
     "@repo/mq": "*",
     "@repo/eslint-config": "*",
     "@repo/proxy": "*",

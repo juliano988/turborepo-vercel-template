@@ -1,3 +1,5 @@
+export const FILE_ADDED = "file.added" as const;
+
 export type FileAddedPayload = {
   id: string;
   name: string;

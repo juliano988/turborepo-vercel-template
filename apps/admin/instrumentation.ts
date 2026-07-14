@@ -1,5 +1,5 @@
 import { registerSubscriber } from "@repo/mq";
-import { USER_CREATED } from "@repo/auth";
+import { FILE_ADDED, USER_CREATED } from "@repo/events";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") {
@@ -12,7 +12,7 @@ export async function register() {
   );
 
   await registerSubscriber(
-    "file.added",
+    FILE_ADDED,
     `${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/api/events/file_added`
   );
 }

@@ -15,6 +15,7 @@
     "@repo/auth": "*",
     "@repo/db": "*",
     "@repo/env": "*",
+    "@repo/events": "*",
     "@repo/mq": "*",
     "@repo/proxy": "*",
     "@repo/storage": "*",

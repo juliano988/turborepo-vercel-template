@@ -6,10 +6,10 @@ Fonte única de verdade para roteamento do monorepo. Centraliza a configuração
 
 | App       | `basePath` | Env var                       | Projeto Vercel                      |
 | --------- | ---------- | ----------------------------- | ----------------------------------- |
-| `landing` | `/`        | `NEXT_PUBLIC_BETTER_AUTH_URL` | `turborepo-vercel-template-landing` |
-| `app`     | `/app`     | `NEXT_PUBLIC_APP_URL`         | `turborepo-vercel-template-app`     |
-| `admin`   | `/admin`   | `NEXT_PUBLIC_ADMIN_URL`       | `turborepo-vercel-template-admin`   |
-| `docs`    | `/docs`    | `NEXT_PUBLIC_DOCS_URL`        | `turborepo-vercel-template-docs`    |
+| `landing` | `/`        | `NEXT_PUBLIC_BETTER_AUTH_URL` | `trvt-landing` |
+| `app`     | `/app`     | `NEXT_PUBLIC_APP_URL`         | `trvt-app`     |
+| `admin`   | `/admin`   | `NEXT_PUBLIC_ADMIN_URL`       | `trvt-admin`   |
+| `docs`    | `/docs`    | `NEXT_PUBLIC_DOCS_URL`        | `trvt-docs`    |
 
 ## API
 

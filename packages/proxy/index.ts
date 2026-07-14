@@ -10,22 +10,22 @@ export const apps = {
   landing: {
     basePath: "/",
     envVar: "NEXT_PUBLIC_BETTER_AUTH_URL",
-    vercelProject: "turborepo-vercel-template-landing",
+    vercelProject: "trvt-landing",
   },
   app: {
     basePath: "/app",
     envVar: "NEXT_PUBLIC_APP_URL",
-    vercelProject: "turborepo-vercel-template-app",
+    vercelProject: "trvt-app",
   },
   admin: {
     basePath: "/admin",
     envVar: "NEXT_PUBLIC_ADMIN_URL",
-    vercelProject: "turborepo-vercel-template-admin",
+    vercelProject: "trvt-admin",
   },
   docs: {
     basePath: "/docs",
     envVar: "NEXT_PUBLIC_DOCS_URL",
-    vercelProject: "turborepo-vercel-template-docs",
+    vercelProject: "trvt-docs",
   },
 } as const;
 

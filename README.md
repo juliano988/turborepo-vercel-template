@@ -70,6 +70,7 @@ Infraestrutura e utilitários reutilizados por todos os contextos:
 | `auth/`              | Lógica de autenticação (Better Auth + Prisma)                        |
 | `db/`                | PrismaClient singleton e schemas por bounded context                 |
 | `mq/`                | Mensageria assíncrona entre bounded contexts (QStash)                |
+| `events/`            | Contratos compartilhados de eventos entre bounded contexts           |
 | `env/`               | Carregador de variáveis de ambiente do monorepo                      |
 | `ui/`                | Componentes de UI (Ant Design, DaisyUI, Fuma Docs)                   |
 | `proxy/`             | Configuração do proxy reverso entre apps                             |
@@ -213,58 +214,65 @@ Sobe um servidor QStash local em `http://localhost:8080`. Use as credenciais de 
 
 ### Criando um evento
 
-Eventos pertencem ao **bounded context do publisher** — seja um pacote ou um app. A convenção é:
+Os contratos de eventos ficam centralizados em `@repo/events` para evitar acoplamento direto entre contextos.
+
+Convenção da package:
 
 ```
-<context>/events/<nome.do.evento>/
-  constants/index.ts   ← nome do tópico
-  types/index.ts       ← shape do payload
-  index.ts             ← função de publicação + re-exports
+packages/events/
+  events/
+    user.created.ts
+    file.added.ts
+  index.ts
 ```
 
-Se o publisher for um **pacote** (`packages/<context>/`), re-exporte os tipos pelo `index.ts` do pacote para que outros contextos possam importá-los via `@repo/<context>`.
+Cada arquivo em `packages/events/events/*.ts` deve conter:
 
-Se o publisher for um **app** (`apps/<app>/`), os tipos ficam dentro do próprio app. Outros apps que precisem do contrato do evento devem importar do pacote ou o contrato deve ser movido para um pacote compartilhado.
+- constante do tópico (`as const`)
+- tipo do payload do evento
 
-**1. Defina a constante do tópico** (`constants/index.ts`):
+Exemplo (`packages/events/events/meu.evento.ts`):
 
 ```ts
 export const MEU_EVENTO = "meu.evento" as const;
-```
 
-**2. Defina o payload** (`types/index.ts`):
-
-```ts
 export type MeuEventoPayload = {
   id: string;
   // ...
 };
 ```
 
-**3. Implemente a função de publicação** (`index.ts`):
+No agregador (`packages/events/index.ts`), re-exporte os eventos e mantenha o mapa tipado:
+
+```ts
+import { MEU_EVENTO } from "./events/meu.evento";
+import type { MeuEventoPayload } from "./events/meu.evento";
+
+export { MEU_EVENTO };
+export type { MeuEventoPayload };
+
+export type EventPayloadMap = {
+  [MEU_EVENTO]: MeuEventoPayload;
+};
+
+export type EventName = keyof EventPayloadMap;
+```
+
+### Publicando um evento
+
+No contexto publisher (app ou package), importe contrato e constante de `@repo/events`:
 
 ```ts
 import { publish } from "@repo/mq";
-import type { MeuEventoPayload } from "./types";
-
-export { MEU_EVENTO } from "./constants";
-export type { MeuEventoPayload } from "./types";
+import { MEU_EVENTO, type MeuEventoPayload } from "@repo/events";
 
 export default async function createMeuEvento(payload: MeuEventoPayload) {
   try {
-    await publish("meu.evento", payload);
+    await publish(MEU_EVENTO, payload);
   } catch (err) {
     console.error("[context] falha ao publicar meu.evento:", err);
   }
 }
-```
-
-**4. Re-exporte pelo `index.ts` do pacote:**
-
-```ts
-// packages/<context>/index.ts
-export { MEU_EVENTO } from "./events/meu.evento";
-export type { MeuEventoPayload } from "./events/meu.evento";
 ```
 
 ### Consumindo um evento
@@ -275,7 +283,7 @@ O subscriber se auto-registra no tópico via `instrumentation.ts` e expõe uma r
 
 ```ts
 import { registerSubscriber } from "@repo/mq";
-import { MEU_EVENTO } from "@repo/<context>";
+import { MEU_EVENTO } from "@repo/events";
 
 export async function register() {
   if (process.env.NEXT_RUNTIME !== "nodejs") return;
@@ -290,7 +298,7 @@ export async function register() {
 
 ```ts
 import { verifySignatureAppRouter } from "@repo/mq";
-import type { MeuEventoPayload } from "@repo/<context>";
+import type { MeuEventoPayload } from "@repo/events";
 
 async function handler(req: Request) {
   const payload = (await req.json()) as MeuEventoPayload;
@@ -354,10 +362,10 @@ Formato:
 
 ```json
 {
-  "NEXT_PUBLIC_APP_URL": "turborepo-vercel-template-app",
-  "NEXT_PUBLIC_ADMIN_URL": "turborepo-vercel-template-admin",
-  "NEXT_PUBLIC_DOCS_URL": "turborepo-vercel-template-docs",
-  "NEXT_PUBLIC_BETTER_AUTH_URL": "turborepo-vercel-template-landing"
+  "NEXT_PUBLIC_APP_URL": "trvt-app",
+  "NEXT_PUBLIC_ADMIN_URL": "trvt-admin",
+  "NEXT_PUBLIC_DOCS_URL": "trvt-docs",
+  "NEXT_PUBLIC_BETTER_AUTH_URL": "trvt-landing"
 }
 ```
 
