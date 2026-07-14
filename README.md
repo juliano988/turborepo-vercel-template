@@ -133,12 +133,16 @@ Antes do primeiro deploy, crie os três recursos abaixo no painel da Vercel e co
 
 Cada recurso injeta automaticamente suas variáveis de ambiente nos projetos conectados (`DATABASE_URL`, `BLOB_READ_WRITE_TOKEN`, `QSTASH_TOKEN`, etc.) — sem configuração manual.
 
+> [!IMPORTANT]
+> **Não adicione** `NEXT_PUBLIC_BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_ADMIN_URL` ou `NEXT_PUBLIC_DOCS_URL` no painel da Vercel. Essas variáveis são geradas automaticamente pelo script `vercel-env.ts` em cada build. Variáveis do portal sobrescrevem o valor gerado e resultarão em URLs incorretas (`DEPLOYMENT_NOT_FOUND`).
+
 ## Variáveis de ambiente
 
 Crie um arquivo `.env` na raiz do monorepo:
 
 ```env
-# URLs das aplicações
+# URLs das aplicações (apenas para desenvolvimento local)
+# Em produção e preview, geradas automaticamente pelo script vercel-env.ts — não definir no painel da Vercel.
 NEXT_PUBLIC_APP_URL=http://localhost:3001
 NEXT_PUBLIC_ADMIN_URL=http://localhost:3002
 NEXT_PUBLIC_DOCS_URL=http://localhost:3003
@@ -148,7 +152,7 @@ DATABASE_URL="postgres://postgres:postgres@localhost:51214/template1?sslmode=dis
 
 # Better Auth
 BETTER_AUTH_SECRET=sua-chave-secreta
-NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000
+NEXT_PUBLIC_BETTER_AUTH_URL=http://localhost:3000  # apenas local — não definir no painel da Vercel
 
 # Primeiro usuário (criado automaticamente no primeiro `bun dev` ou `bun start`)
 ADMIN_USER=admin@exemplo.com
@@ -347,34 +351,28 @@ O projeto é otimizado para deploy na [Vercel](https://vercel.com/). Cada app de
 
 ### Preview deploy com URLs sincronizadas entre apps
 
-Cada app executa `prebuild: bun ../../scripts/vercel-env.ts` antes do build na Vercel.
+Cada app executa `prebuild: bun ../../scripts/vercel-env.ts` antes do build na Vercel. O script gera um `.env` com as URLs corretas de cada app — sem nenhuma configuração manual por ambiente.
 
-Esse script gera `.env` automaticamente em `preview` e `production` a partir de um arquivo `vercel-env.json` no diretorio do app.
+Os nomes dos projetos Vercel são definidos centralmente em `packages/proxy/index.ts`:
 
-Arquivos esperados:
-
-- `apps/landing/vercel-env.json`
-- `apps/app/vercel-env.json`
-- `apps/admin/vercel-env.json`
-- `apps/docs/vercel-env.json`
-
-Formato:
-
-```json
-{
-  "NEXT_PUBLIC_APP_URL": "trvt-app",
-  "NEXT_PUBLIC_ADMIN_URL": "trvt-admin",
-  "NEXT_PUBLIC_DOCS_URL": "trvt-docs",
-  "NEXT_PUBLIC_BETTER_AUTH_URL": "trvt-landing"
-}
+```ts
+export const apps = {
+  landing: { vercelProject: "trvt-landing", envVar: "NEXT_PUBLIC_BETTER_AUTH_URL", ... },
+  app:     { vercelProject: "trvt-app",     envVar: "NEXT_PUBLIC_APP_URL", ... },
+  admin:   { vercelProject: "trvt-admin",   envVar: "NEXT_PUBLIC_ADMIN_URL", ... },
+  docs:    { vercelProject: "trvt-docs",    envVar: "NEXT_PUBLIC_DOCS_URL", ... },
+};
 ```
 
-Importante: os valores devem ser exatamente os nomes dos projetos na Vercel.
+Se os nomes dos seus projetos na Vercel forem diferentes, ajuste os campos `vercelProject` nesse arquivo.
 
-- `preview`: o script usa `VERCEL_BRANCH_URL` para gerar URLs por branch (ex: `project-git-feature-team.vercel.app`).
-- `production`: o script gera `https://<project>.vercel.app`.
+O script deriva as URLs de acordo com o ambiente:
 
-Se os nomes dos projetos na Vercel forem diferentes do exemplo acima, ajuste os 4 arquivos `vercel-env.json` para refletir seus nomes reais.
+- **`preview`**: usa `VERCEL_BRANCH_URL` para montar URLs por branch (ex: `trvt-app-git-minha-feature-meutime.vercel.app`).
+- **`production`**: usa `VERCEL_PROJECT_PRODUCTION_URL` para extrair o sufixo de conta/time (ex: `-juliano988s-projects.vercel.app`) e aplicá-lo a todos os projetos. Isso garante funcionamento tanto em contas pessoais (`projeto-usuario-projects.vercel.app`) quanto em contas de time.
+
+> [!IMPORTANT]
+> **Não defina** `NEXT_PUBLIC_BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_ADMIN_URL` ou `NEXT_PUBLIC_DOCS_URL` no painel da Vercel. Variáveis do portal têm precedência sobre o `.env` gerado pelo script e resultarão em URLs incorretas.
 
 ## Pipeline CI/CD sugerido
 

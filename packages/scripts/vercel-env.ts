@@ -61,11 +61,43 @@ if (args.length === 0) {
   );
 }
 
-// Producao: URL fixa no padrao project-name.vercel.app
+// Producao: deriva sufixo de VERCEL_PROJECT_PRODUCTION_URL (ex: -juliano988s-projects.vercel.app)
+// para suportar contas pessoais (projeto-usuario-projects.vercel.app) e de time.
+// Fallback para project-name.vercel.app se a variavel nao estiver disponivel.
 if (VERCEL_ENV === "production") {
-  const lines = Object.entries(mappings).map(
-    ([varName, projectName]) => `${varName}=https://${projectName}.vercel.app`
-  );
+  const productionHostname = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+
+  let lines: string[];
+
+  if (productionHostname && productionHostname.endsWith(".vercel.app")) {
+    // Encontra qual projeto corresponde a esta URL de producao
+    const currentProject = Object.values(mappings).find(
+      (name) =>
+        productionHostname.startsWith(name + "-") ||
+        productionHostname === name + ".vercel.app"
+    );
+
+    if (currentProject) {
+      // Ex: "trvt-landing-juliano988s-projects.vercel.app" com projeto "trvt-landing"
+      //  -> sufixo = "-juliano988s-projects.vercel.app"
+      const teamSuffix = productionHostname.slice(currentProject.length);
+      lines = Object.entries(mappings).map(
+        ([varName, projectName]) =>
+          `${varName}=https://${projectName}${teamSuffix}`
+      );
+    } else {
+      lines = Object.entries(mappings).map(
+        ([varName, projectName]) =>
+          `${varName}=https://${projectName}.vercel.app`
+      );
+    }
+  } else {
+    lines = Object.entries(mappings).map(
+      ([varName, projectName]) =>
+        `${varName}=https://${projectName}.vercel.app`
+    );
+  }
+
   writeFileSync(".env", lines.join("\n") + "\n");
   console.log("URLs de producao escritas em .env:");
   lines.forEach((l: string) => console.log(" ", l));
