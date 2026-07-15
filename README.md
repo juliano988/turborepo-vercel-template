@@ -135,7 +135,12 @@ Cada recurso injeta automaticamente suas variáveis de ambiente nos projetos con
 > [!IMPORTANT]
 > **Não adicione** `NEXT_PUBLIC_BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_ADMIN_URL` ou `NEXT_PUBLIC_DOCS_URL` no painel da Vercel. Essas variáveis são geradas automaticamente pelo script `vercel-env.ts` em cada build. Variáveis do portal sobrescrevem o valor gerado e resultarão em URLs incorretas (`DEPLOYMENT_NOT_FOUND`).
 > [!IMPORTANT]
-> Para o QStash funcionar nos preview deploys, salve `VERCEL_AUTOMATION_BYPASS_SECRET` em **cada projeto Vercel** (`trvt-landing`, `trvt-app`, `trvt-admin` e `trvt-docs`) usando o mesmo valor do app principal (landing por padrão). No painel de cada projeto, abra **Settings → Deployment Protection → Protection Bypass for Automation** e adicione o segredo. Esse valor é enviado pelo `@repo/mq` no header `x-vercel-protection-bypass` ao instanciar o client, então não precisa ser definido localmente.
+> Para o QStash funcionar nos preview deploys protegidos, **gere uma única chave** e replique **exatamente o mesmo valor** em todos os projetos Vercel do monorepo (`trvt-landing`, `trvt-app`, `trvt-admin` e `trvt-docs`) em dois lugares:
+>
+> 1. **Settings → Deployment Protection → Protection Bypass for Automation**
+> 2. **Environment Variables** com o nome `VERCEL_AUTOMATION_BYPASS_SECRET`
+>
+> O valor configurado em Deployment Protection e na variável de ambiente deve ser idêntico em todos os apps. O `@repo/mq` envia esse valor no header `x-vercel-protection-bypass` para que o QStash consiga chamar rotas protegidas nos previews.
 
 ## Variáveis de ambiente
 
@@ -167,9 +172,11 @@ QSTASH_CURRENT_SIGNING_KEY=sig_7kYjw48mhY7kAjqNGcy6cr29RJ6r
 QSTASH_NEXT_SIGNING_KEY=sig_5ZB6DVzB1wjE8S6rZ7eenA8Pdnhs
 
 # Vercel protection bypass para preview deploys
-# Em produção/preview, configure o mesmo segredo do app principal
-# (landing/app) em cada projeto da Vercel.
-# Localmente, esse valor não é necessário.
+# Gere uma chave uma única vez e replique exatamente o mesmo valor
+# em todos os projetos Vercel, tanto em Deployment Protection quanto
+# na variável de ambiente VERCEL_AUTOMATION_BYPASS_SECRET.
+# Localmente, esse valor só é necessário se você quiser simular chamadas
+# para previews protegidos.
 VERCEL_AUTOMATION_BYPASS_SECRET=seu-segredo-de-protection-bypass
 ```
 
@@ -370,7 +377,7 @@ O script deriva as URLs de acordo com o ambiente:
 > [!IMPORTANT]
 > **Não defina** `NEXT_PUBLIC_BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_ADMIN_URL` ou `NEXT_PUBLIC_DOCS_URL` no painel da Vercel. Variáveis do portal têm precedência sobre o `.env` gerado pelo script e resultarão em URLs incorretas.
 > [!NOTE]
-> Se os preview deploys estiverem protegidos, adicione o mesmo `VERCEL_AUTOMATION_BYPASS_SECRET` do app principal (landing por padrão) em cada projeto Vercel do monorepo. O `@repo/mq` usa esse segredo para chamar os handlers protegidos por preview.
+> Se os preview deploys estiverem protegidos, gere uma única chave e replique exatamente o mesmo valor em todos os projetos Vercel do monorepo, tanto em **Settings → Deployment Protection → Protection Bypass for Automation** quanto na variável de ambiente `VERCEL_AUTOMATION_BYPASS_SECRET`. O `@repo/mq` usa esse segredo para chamar os handlers protegidos por preview.
 
 ## Pipeline CI/CD sugerido
 
