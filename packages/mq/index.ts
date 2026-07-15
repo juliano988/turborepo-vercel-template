@@ -11,6 +11,23 @@ export const mq = new Client({
 });
 
 /**
+ * Monta o header de bypass da Vercel quando configurado.
+ *
+ * Esse header permite que chamadas do QStash atinjam rotas protegidas por
+ * Deployment Protection em ambientes de preview.
+ *
+ * @returns Um objeto de headers quando o segredo existir; `undefined` caso contrário.
+ */
+function getBypassHeader(): Record<string, string> | undefined {
+  const secret = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
+  if (!secret) return undefined;
+
+  return {
+    "x-vercel-protection-bypass": secret,
+  };
+}
+
+/**
  * Garante que um tópico tenha todos os subscribers informados.
  *
  * O método é idempotente: apenas endpoints ausentes são adicionados.
@@ -45,6 +62,10 @@ async function ensureTopicSubscribers(
  * Ainda assim, foi adotada para evitar bugs de tópico inexistente em
  * cenários de build/bootstrap.
  *
+ * Quando `VERCEL_AUTOMATION_BYPASS_SECRET` está definido, o publish também
+ * envia automaticamente o header `x-vercel-protection-bypass` para permitir
+ * entrega em preview deploys protegidos da Vercel.
+ *
  * @param topic Nome do tópico no QStash.
  * @param payload Payload serializável do evento.
  * @param subscribers Lista de URLs subscribers obrigatórios para o tópico.
@@ -62,5 +83,9 @@ export async function publish<T>(
   }
 
   await ensureTopicSubscribers(topic, subscribers);
-  await mq.publishJSON({ topic, body: payload });
+  await mq.publishJSON({
+    topic,
+    body: payload,
+    headers: getBypassHeader(),
+  });
 }
