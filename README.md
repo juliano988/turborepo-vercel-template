@@ -6,7 +6,6 @@ A arquitetura segue os princípios do **Domain-Driven Design (DDD)**, onde cada 
 
 > [!CAUTION]
 > Se você acredita que Next.js é "só pra front-end" e/ou que a única forma de entregar sistemas é através de API REST, **esse template não é pra você.**
-
 > [!NOTE]
 > Se ainda assim quiser manter um app dedicado exclusivamente a uma API — usando Express.js, Nest.js ou similar — fique à vontade para criar mais um contexto aqui (ex: `apps/api`). O Turborepo suporta isso sem nenhuma fricção. Mas avalie com cuidado: na maioria dos casos, isso é over-engineering. As API Routes e Server Actions do Next.js já cobrem o que um serviço de API separado faria, sem o custo operacional de mais um processo, mais um deploy e mais uma camada de rede entre o front e o back.
 
@@ -204,7 +203,7 @@ bun run lint
 
 ## Eventos entre bounded contexts (QStash)
 
-A comunicação assíncrona entre contextos é feita via **QStash Topics** — um modelo pub/sub onde o publisher conhece apenas o nome do tópico, nunca os subscribers.
+A comunicação assíncrona entre contextos é feita via **QStash Topics**. Neste template, por decisão pragmática, o publisher informa explicitamente os subscribers no `publish` para garantir o registro dos endpoints antes do envio e evitar falhas de tópico inexistente.
 
 ### Subindo o servidor de dev
 
@@ -222,7 +221,7 @@ Os contratos de eventos ficam centralizados em `@repo/events` para evitar acopla
 
 Convenção da package:
 
-```
+```txt
 packages/events/
   events/
     user.created.ts
@@ -272,7 +271,9 @@ import { MEU_EVENTO, type MeuEventoPayload } from "@repo/events";
 
 export default async function createMeuEvento(payload: MeuEventoPayload) {
   try {
-    await publish(MEU_EVENTO, payload);
+    await publish(MEU_EVENTO, payload, [
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/events/meu_evento`,
+    ]);
   } catch (err) {
     console.error("[context] falha ao publicar meu.evento:", err);
   }
@@ -281,24 +282,10 @@ export default async function createMeuEvento(payload: MeuEventoPayload) {
 
 ### Consumindo um evento
 
-O subscriber se auto-registra no tópico via `instrumentation.ts` e expõe uma rota que o QStash chama:
+O subscriber expõe uma rota que o QStash chama. O endpoint deve estar na lista
+de subscribers informada no `publish`.
 
-**1. Registre o subscriber** (`apps/<app>/instrumentation.ts`):
-
-```ts
-import { registerSubscriber } from "@repo/mq";
-import { MEU_EVENTO } from "@repo/events";
-
-export async function register() {
-  if (process.env.NEXT_RUNTIME !== "nodejs") return;
-  await registerSubscriber(
-    MEU_EVENTO,
-    `${process.env.NEXT_PUBLIC_APP_URL}/api/events/meu_evento`
-  );
-}
-```
-
-**2. Implemente o handler** (`apps/<app>/app/api/events/meu_evento/route.ts`):
+**1. Implemente o handler** (`apps/<app>/app/api/events/meu_evento/route.ts`):
 
 ```ts
 import { verifySignatureAppRouter } from "@repo/mq";

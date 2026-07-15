@@ -8,7 +8,9 @@ export default async function createFileAddedEvent(
   payload: FileAddedPayload
 ): Promise<void> {
   try {
-    await publish(FILE_ADDED, payload);
+    await publish(FILE_ADDED, payload, [
+      `${process.env.NEXT_PUBLIC_ADMIN_URL}/admin/api/events/file_added`,
+    ]);
   } catch (err) {
     console.error("[app] falha ao publicar file.added:", err);
   }

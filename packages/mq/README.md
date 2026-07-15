@@ -4,7 +4,7 @@ Infraestrutura de mensageria assíncrona entre bounded contexts via [QStash](htt
 
 ## O que faz
 
-Expõe funções para publicar eventos em tópicos QStash e registrar subscribers. É um pacote de infraestrutura pura — não conhece nenhum evento ou domínio específico.
+Expõe funções para publicar eventos em tópicos QStash e validar assinatura de webhooks do QStash. É um pacote de infraestrutura pura — não conhece nenhum evento ou domínio específico.
 
 ## Servidor de desenvolvimento
 
@@ -27,27 +27,26 @@ O servidor é in-memory — todos os dados são resetados ao reiniciar o contain
 
 ## API
 
-### `publish<T>(topic, payload)`
+### `publish<T>(topic, payload, subscribers)`
 
-Publica um payload num tópico QStash. O publisher não conhece os subscribers.
+Publica um payload num tópico QStash.
+
+O publisher deve informar explicitamente os subscribers para o tópico, e o
+método garante o registro dos endpoints antes de publicar.
+
+> [!WARNING]
+> Essa decisão não é a ideal sob a ótica de DDD, porque aumenta o acoplamento
+> do publisher com detalhes de infraestrutura e com quem consome o evento.
+> Ainda assim, foi adotada como solução pragmática para reduzir falhas
+> operacionais, evitando bugs de tópico inexistente em ambientes de
+> build/bootstrap.
 
 ```ts
 import { publish } from "@repo/mq";
 
-await publish("meu.evento", { id: "123" });
-```
-
-### `registerSubscriber(topic, url)`
-
-Registra uma URL como subscriber de um tópico de forma **idempotente**: verifica se o endpoint já está registrado antes de chamar a API. Pode ser chamado a cada boot da aplicação sem gerar duplicatas.
-
-```ts
-import { registerSubscriber } from "@repo/mq";
-
-await registerSubscriber(
-  "meu.evento",
-  "https://meu-app.vercel.app/api/events/meu_evento"
-);
+await publish("meu.evento", { id: "123" }, [
+  "https://minha-app.com/api/events/meu_evento",
+]);
 ```
 
 ### `verifySignatureAppRouter`
