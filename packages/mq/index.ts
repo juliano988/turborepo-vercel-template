@@ -4,8 +4,10 @@ export type { PublishRequest } from "@upstash/qstash";
 export { verifySignatureAppRouter } from "@upstash/qstash/nextjs";
 
 export const mq = new Client({
-  baseUrl: process.env.QSTASH_URL!,
   token: process.env.QSTASH_TOKEN!,
+  headers: {
+    "x-vercel-protection-bypass": process.env.VERCEL_AUTOMATION_BYPASS_SECRET!,
+  },
 });
 
 /**
