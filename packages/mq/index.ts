@@ -56,7 +56,9 @@ export async function publish<T>(
   subscribers: string[]
 ): Promise<void> {
   if (subscribers.length === 0) {
-    throw new Error(`publish exige ao menos um subscriber para o tópico '${topic}'`);
+    throw new Error(
+      `publish exige ao menos um subscriber para o tópico '${topic}'`
+    );
   }
 
   await ensureTopicSubscribers(topic, subscribers);
