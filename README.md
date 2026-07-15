@@ -134,6 +134,8 @@ Cada recurso injeta automaticamente suas variáveis de ambiente nos projetos con
 
 > [!IMPORTANT]
 > **Não adicione** `NEXT_PUBLIC_BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_ADMIN_URL` ou `NEXT_PUBLIC_DOCS_URL` no painel da Vercel. Essas variáveis são geradas automaticamente pelo script `vercel-env.ts` em cada build. Variáveis do portal sobrescrevem o valor gerado e resultarão em URLs incorretas (`DEPLOYMENT_NOT_FOUND`).
+> [!IMPORTANT]
+> Para o QStash funcionar nos preview deploys, crie também `VERCEL_AUTOMATION_BYPASS_SECRET` em **cada projeto Vercel** (`trvt-landing`, `trvt-app`, `trvt-admin` e `trvt-docs`). No painel de cada projeto, abra **Settings → Deployment Protection → Protection Bypass for Automation** e adicione um segredo. Esse valor é enviado pelo `@repo/mq` no header `x-vercel-protection-bypass` ao instanciar o client, então não precisa ser definido localmente.
 
 ## Variáveis de ambiente
 
@@ -163,6 +165,11 @@ QSTASH_URL=http://localhost:8080
 QSTASH_TOKEN=eyJVc2VySUQiOiJkZWZhdWx0VXNlciIsIlBhc3N3b3JkIjoiZGVmYXVsdFBhc3N3b3JkIn0=
 QSTASH_CURRENT_SIGNING_KEY=sig_7kYjw48mhY7kAjqNGcy6cr29RJ6r
 QSTASH_NEXT_SIGNING_KEY=sig_5ZB6DVzB1wjE8S6rZ7eenA8Pdnhs
+
+# Vercel protection bypass para preview deploys
+# Em produção/preview, configure o mesmo segredo em cada projeto da Vercel.
+# Localmente, esse valor não é necessário.
+VERCEL_AUTOMATION_BYPASS_SECRET=seu-segredo-de-protection-bypass
 ```
 
 ## Início rápido
@@ -360,6 +367,8 @@ O script deriva as URLs de acordo com o ambiente:
 
 > [!IMPORTANT]
 > **Não defina** `NEXT_PUBLIC_BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_ADMIN_URL` ou `NEXT_PUBLIC_DOCS_URL` no painel da Vercel. Variáveis do portal têm precedência sobre o `.env` gerado pelo script e resultarão em URLs incorretas.
+> [!NOTE]
+> Se os preview deploys estiverem protegidos, adicione o mesmo `VERCEL_AUTOMATION_BYPASS_SECRET` em cada projeto Vercel do monorepo. O `@repo/mq` usa esse segredo para chamar os handlers protegidos por preview.
 
 ## Pipeline CI/CD sugerido
 
