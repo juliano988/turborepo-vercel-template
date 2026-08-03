@@ -1,18 +1,22 @@
-import { Link2, Trash2 } from "@repo/ui";
+import { DownloadIcon, Trash2 } from "@repo/ui";
 import { Button, Space, theme, Tooltip, Typography } from "antd";
+import { formatBytes } from "../../modules/formatBytes";
+import { getFileColor } from "../../modules/getFileColor";
+import { getFileIcon } from "../../modules/getFileIcon";
 import {
   DONE_LIST_LABELS,
   DONE_LIST_SIZES,
   DONE_LIST_TIME_FORMAT,
 } from "./constants";
-import { formatBytes } from "../../modules/formatBytes";
-import { getFileColor } from "../../modules/getFileColor";
-import { getFileIcon } from "../../modules/getFileIcon";
 import type { DoneListProps } from "./types";
 
 const { Text } = Typography;
 
-export function DoneList({ files, onRemove, onCopyLink }: DoneListProps) {
+export function DoneList({
+  files,
+  onRemove,
+  onDownloadFile: onDownloadFile,
+}: DoneListProps) {
   const { token } = theme.useToken();
 
   if (files.length === 0) {
@@ -102,9 +106,9 @@ export function DoneList({ files, onRemove, onCopyLink }: DoneListProps) {
                 <Button
                   type="text"
                   size="small"
-                  icon={<Link2 size={DONE_LIST_SIZES.actionIcon} />}
+                  icon={<DownloadIcon size={DONE_LIST_SIZES.actionIcon} />}
                   style={{ color: token.colorTextSecondary }}
-                  onClick={() => onCopyLink(file.uid)}
+                  onClick={() => onDownloadFile(file.uid)}
                 />
               </Tooltip>
               <Tooltip title={DONE_LIST_LABELS.remove}>

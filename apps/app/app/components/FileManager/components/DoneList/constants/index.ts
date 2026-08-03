@@ -1,5 +1,5 @@
 export const DONE_LIST_LABELS = {
-  copyLink: "Copiar link",
+  copyLink: "Baixar arquivo",
   remove: "Remover",
   section: "Arquivos",
 } as const;

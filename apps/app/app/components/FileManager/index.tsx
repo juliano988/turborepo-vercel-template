@@ -3,6 +3,7 @@
 import { message, theme } from "antd";
 import { useState, useTransition } from "react";
 import { deleteFilesAction } from "../../functions/deleteFilesAction";
+import { downloadFileByNameAction } from "../../functions/downloadFileByNameAction";
 import { uploadFileAction } from "../../functions/uploadFileAction";
 import { DoneList } from "./components/DoneList";
 import { EmptyState } from "./components/EmptyState";
@@ -103,13 +104,27 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
     });
   };
 
-  const copyLink = (uid: string) => {
-    const file = files.find((file) => file.uid === uid);
+  const downloadFile = (uid: string) => {
+    const file = files.find((item) => item.uid === uid);
     if (!file) {
       return;
     }
-    // blobUrl não está no StoredFile — link gerado via API futuramente
-    messageApi.info("Link copiado (em breve)");
+
+    startTransition(async () => {
+      try {
+        const result = await downloadFileByNameAction(file.name);
+
+        if (!result.downloadUrl) {
+          throw new Error("Arquivo não encontrado");
+        }
+
+        window.open(result.downloadUrl, "_blank", "noopener,noreferrer");
+      } catch (err) {
+        messageApi.error(
+          `Falha ao baixar "${file.name}": ${err instanceof Error ? err.message : "Erro desconhecido"}`
+        );
+      }
+    });
   };
 
   const doneFiles = files.filter((file) => file.status === "done");
@@ -151,7 +166,7 @@ export function FileManager({ initialFiles }: { initialFiles: ServerFile[] }) {
           <DoneList
             files={doneFiles}
             onRemove={handleRemoveFile}
-            onCopyLink={copyLink}
+            onDownloadFile={downloadFile}
           />
         </div>
 

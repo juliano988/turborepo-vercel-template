@@ -84,6 +84,17 @@ export class FileRepository implements iFileRepository {
     return records.map(FileRepository.toDomain);
   }
 
+  async findByNameAndOwner(name: FileName, ownerId: UserId): Promise<File | null> {
+    const record = await prisma.appFile.findFirst({
+      where: {
+        name: name.full,
+        ownerId: ownerId.toString(),
+      },
+    });
+
+    return record ? FileRepository.toDomain(record) : null;
+  }
+
   async remove(id: FileId): Promise<void> {
     await prisma.appFile.delete({
       where: { id: id.toString() },
