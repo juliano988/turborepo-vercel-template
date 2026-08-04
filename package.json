@@ -6,7 +6,7 @@
     "start": "turbo run start",
     "dev": "turbo run dev",
     "test:unit": "turbo run test",
-    "test:integration": "bun run --filter app test:integration:preview",
+    "test:integration": "bun run --filter app test:integration:preview && bun run --filter admin test:integration:preview",
     "test": "bun run test:unit && bun run test:integration",
     "test:coverage": "turbo run test:coverage",
     "lint": "turbo run lint",

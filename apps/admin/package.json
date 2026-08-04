@@ -6,7 +6,13 @@
   "scripts": {
     "dev": "next dev --port 3002",
     "build": "next build",
+    "postbuild": "bun run test:integration:preview",
     "start": "next start",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:integration": "bun run --filter @repo/db build && vitest run --config vitest.integration.config.ts",
+    "test:integration:preview": "if [ \"$VERCEL\" = \"1\" ] && [ \"$VERCEL_ENV\" = \"preview\" ]; then if [ -z \"$DATABASE_URL\" ]; then echo 'DATABASE_URL is required for integration tests.'; exit 1; fi; bun run test:integration; else echo 'Skipping integration tests (requires Vercel preview).'; fi",
     "lint": "eslint --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
     "prebuild": "bun ../../packages/scripts/vercel-env.ts"
@@ -32,6 +38,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/prettier-config": "*",
+    "@repo/testing": "*",
     "@repo/typescript-config": "*",
     "@types/node": "^22.15.3",
     "@types/react": "19.2.2",

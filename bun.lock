@@ -42,6 +42,7 @@
       "devDependencies": {
         "@repo/eslint-config": "*",
         "@repo/prettier-config": "*",
+        "@repo/testing": "*",
         "@repo/typescript-config": "*",
         "@repo/ui": "*",
         "@types/node": "^22.15.3",
