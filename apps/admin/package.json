@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev --port 3002",
     "build": "next build",
-    "postbuild": "bun run test:integration:preview",
+    "postbuild": "bun run test && bun run test:integration:preview",
     "start": "next start",
     "test": "vitest run",
     "test:watch": "vitest",
