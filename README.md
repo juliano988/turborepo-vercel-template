@@ -84,6 +84,36 @@ Infraestrutura e utilitários reutilizados por todos os contextos:
 
 Aplicação principal do produto. É onde vivem os fluxos centrais de negócio e as features que representam o domínio principal do sistema.
 
+A estrutura interna segue os princípios da **Arquitetura Limpa**, separando domínio, casos de uso e infraestrutura:
+
+```txt
+apps/app/
+  agregates/          # Entidades e Value Objects do domínio
+    File/
+      vo/             # Value Objects (FileId, FileName, FileSize…)
+      repository/     # Interface do repositório (contrato)
+      types/
+    User/
+      vo/             # Value Objects (UserId, ApiKey)
+      repository/
+      types/
+  useCases/           # Casos de uso — regras de negócio da aplicação
+    DeleteManyFilesUseCase/
+    DownloadFileByNameUseCase/
+    ListUserFilesUseCase/
+    UploadManyFilesUseCase/
+  repository/         # Implementações concretas dos repositórios (Prisma)
+    File/
+    User/
+  app/                # Camada Next.js (rotas, Server Actions, componentes)
+    functions/        # Server Actions que invocam os casos de uso
+    api/              # Route Handlers (ex: download de arquivos)
+    components/       # Componentes React do contexto
+  events/             # Handlers de eventos recebidos via QStash
+```
+
+Cada **caso de uso** encapsula uma única operação de negócio, recebe suas dependências por injeção via construtor e é completamente agnóstico ao framework. As Server Actions em `app/functions/` são a cola entre o Next.js e os casos de uso — elas instanciam as dependências concretas e delegam a execução.
+
 ### `apps/admin` (Backoffice)
 
 Painel administrativo para operação interna. Reúne funcionalidades de gestão, suporte e manutenção do produto sem acoplamento direto à experiência do usuário final.
