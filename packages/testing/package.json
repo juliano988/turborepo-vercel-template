@@ -1,0 +1,32 @@
+{
+  "name": "@repo/testing",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": "./index.ts",
+    "./vitest/node": "./vitest.node.ts",
+    "./vitest/react": "./vitest.react.ts",
+    "./setup/react": "./setup/react.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "vitest": "^3.2.4"
+  },
+  "peerDependencies": {
+    "@testing-library/react": ">=16",
+    "@testing-library/user-event": ">=14",
+    "jsdom": ">=26",
+    "msw": ">=2",
+    "react": ">=19"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/node": "^26.0.1",
+    "typescript": "5.9.2"
+  }
+}
