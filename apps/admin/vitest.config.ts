@@ -6,8 +6,8 @@ export default defineConfig(
     test: {
       exclude: ["**/*.integration.spec.ts"],
       include: [
-        "active_records/**/*.{test,spec}.ts",
-        "app/**/*.{test,spec}.ts",
+        "active_records/**/*.unit.spec.ts",
+        "app/**/*.unit.spec.ts",
       ],
     },
   })

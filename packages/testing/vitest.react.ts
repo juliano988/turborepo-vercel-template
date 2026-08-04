@@ -8,7 +8,7 @@ const reactTestConfig = defineConfig({
     globals: true,
     css: true,
     setupFiles: ["@repo/testing/setup/react"],
-    include: ["**/*.{test,spec}.{ts,tsx}"]
+    include: ["**/*.unit.spec.ts", "**/*.unit.spec.tsx", "**/*.integration.spec.ts", "**/*.integration.spec.tsx"]
   }
 });
 

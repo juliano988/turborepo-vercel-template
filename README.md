@@ -282,6 +282,7 @@ Nos subdomínios de suporte (ex.: `admin`, `landing`, integrações de plataform
 2. **Centro mais largo: integração e testes de contrato**
   - Integração entre app, banco, auth, mensageria e serviços externos
   - Maior foco em comportamento entre fronteiras do sistema
+  - Registros ativos
 
 3. **Topo moderado: E2E de jornada**
   - Menos volume que integração, mas mais presente que na pirâmide pura
@@ -291,8 +292,8 @@ Em resumo: no **subdomínio principal** concentramos massa em unitário (pirâmi
 
 ### Organização no `apps/app`
 
-- Testes unitários usam `vitest.config.ts` e **excluem** `*.integration.spec.ts`.
-- Testes de integração real usam `vitest.integration.config.ts` e incluem apenas `repository/**/*.integration.spec.ts`.
+- Testes unitários usam `vitest.config.ts` e seguem o padrão `*.unit.spec.ts`.
+- Testes de integração real usam `vitest.integration.config.ts` e seguem o padrão `*.integration.spec.ts`.
 
 ### Como os comandos funcionam
 

@@ -6,11 +6,11 @@ export default defineConfig(
     test: {
       exclude: ["**/*.integration.spec.ts"],
       include: [
-        "agregates/**/*.{test,spec}.ts",
-        "repository/**/*.{test,spec}.ts",
-        "useCases/**/*.{test,spec}.ts",
-        "app/functions/**/*.{test,spec}.ts",
-        "app/api/**/*.{test,spec}.ts",
+        "agregates/**/*.unit.spec.ts",
+        "repository/**/*.unit.spec.ts",
+        "useCases/**/*.unit.spec.ts",
+        "app/functions/**/*.unit.spec.ts",
+        "app/api/**/*.unit.spec.ts",
       ],
     },
   })

@@ -34,7 +34,7 @@ export function createNodeTestConfig(overrides: UserConfig = {}) {
   return createSharedTestConfig({
     test: {
       environment: "node",
-      include: ["**/*.{test,spec}.ts"]
+      include: ["**/*.unit.spec.ts", "**/*.integration.spec.ts"]
     },
     ...overrides
   });
