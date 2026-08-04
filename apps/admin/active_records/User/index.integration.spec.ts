@@ -50,11 +50,13 @@ function createAdminUser(data: {
 describe("Admin User active record integration", () => {
   it("lista com filtros de busca/role/emailVerified e paginação", async () => {
     const now = Date.now();
+    const marker = `it-admin-filter-${crypto.randomUUID()}`;
+    const expectedId = `it-admin-user-${crypto.randomUUID()}`;
 
     await createAdminUser({
-      id: `it-admin-user-${crypto.randomUUID()}`,
-      name: "Ana Admin",
-      email: `ana-${crypto.randomUUID()}@example.com`,
+      id: expectedId,
+      name: `Ana ${marker}`,
+      email: `ana-${marker}@example.com`,
       createdAt: new Date(now - 2000),
       role: "admin",
       emailVerified: true,
@@ -72,7 +74,7 @@ describe("Admin User active record integration", () => {
     const output = await User.list({
       page: 1,
       pageSize: 10,
-      search: "ana",
+      search: marker,
       role: "admin",
       emailVerified: true,
     });
@@ -82,31 +84,32 @@ describe("Admin User active record integration", () => {
     expect(output.meta.total).toBe(1);
     expect(output.meta.totalPages).toBe(1);
     expect(output.data).toHaveLength(1);
-    expect(output.data[0]?.toJSON().name).toBe("Ana Admin");
+    expect(output.data[0]?.id).toBe(expectedId);
   });
 
   it("ordena por createdAt desc e limita por pageSize", async () => {
+    const marker = `it-admin-order-${crypto.randomUUID()}`;
     const oldId = `it-admin-user-${crypto.randomUUID()}`;
     const newId = `it-admin-user-${crypto.randomUUID()}`;
 
     await createAdminUser({
       id: oldId,
-      name: "Old",
-      email: `old-${crypto.randomUUID()}@example.com`,
+      name: `Old ${marker}`,
+      email: `old-${marker}@example.com`,
       createdAt: new Date("2024-01-01T00:00:00.000Z"),
     });
 
     await createAdminUser({
       id: newId,
-      name: "New",
-      email: `new-${crypto.randomUUID()}@example.com`,
+      name: `New ${marker}`,
+      email: `new-${marker}@example.com`,
       createdAt: new Date("2024-01-02T00:00:00.000Z"),
     });
 
-    const output = await User.list({ page: 1, pageSize: 1 });
+    const output = await User.list({ page: 1, pageSize: 1, search: marker });
 
     expect(output.data).toHaveLength(1);
     expect(output.data[0]?.id).toBe(newId);
-    expect(output.meta.total).toBeGreaterThanOrEqual(2);
+    expect(output.meta.total).toBe(2);
   });
 });
