@@ -4,6 +4,7 @@ import { UserId } from "../../../agregates/User/vo/UserId";
 export type DownloadFileByNameInput = {
   filename: string;
   ownerId: UserId;
+  apiKey?: string;
 };
 
 export type DownloadFileByNameOutput = {

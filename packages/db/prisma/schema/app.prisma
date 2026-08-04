@@ -1,6 +1,7 @@
 model AppUser {
-  id    String @id
-  files AppFile[]
+  id     String    @id
+  files  AppFile[]
+  apiKey String?   @default("") @db.VarChar(255)
 
   @@map("user")
   @@schema("app")
@@ -14,7 +15,7 @@ model AppFile {
   ownerId    String
   blobUrl    String
   uploadedAt DateTime
-  owner      AppUser     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  owner      AppUser  @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 
   @@map("file")
   @@schema("app")

@@ -1,7 +1,11 @@
+"use client";
+
 import { signOut, useSession } from "@repo/auth/client";
-import { CloudUpload, ThemeToggleAntd } from "@repo/ui";
+import { CloudUpload, CopyIcon, ThemeToggleAntd } from "@repo/ui";
 import { Button, Space, theme, Typography } from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { getCurrentApiKeyAction } from "../../../../functions/getCurrentApiKeyAction";
 import {
   FILE_MANAGER_HEADER_LABELS,
   FILE_MANAGER_HEADER_SIZES,
@@ -15,8 +19,27 @@ export function FileManagerHeader(props: FileManagerHeaderProps) {
   const { token } = theme.useToken();
   const { data: session } = useSession();
   const router = useRouter();
+  const [apiKey, setApiKey] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
   const name = session?.user?.name ?? "Usuário";
   const email = session?.user?.email ?? "";
+
+  useEffect(() => {
+    void (async () => {
+      const key = await getCurrentApiKeyAction();
+      setApiKey(key);
+    })();
+  }, []);
+
+  const handleCopyApiKey = async () => {
+    if (!apiKey) {
+      return;
+    }
+
+    await navigator.clipboard.writeText(apiKey);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleLogout = async () => {
     await signOut({ fetchOptions: { onSuccess: () => router.push("/") } });
@@ -74,7 +97,14 @@ export function FileManagerHeader(props: FileManagerHeaderProps) {
         </div>
       </Space>
       <Space align="center" size={8}>
-        <div style={{ textAlign: "right" }}>
+        <div
+          style={{
+            textAlign: "right",
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+          }}
+        >
           <Text strong style={{ display: "block", lineHeight: 1.2 }}>
             {name}
           </Text>
@@ -82,6 +112,17 @@ export function FileManagerHeader(props: FileManagerHeaderProps) {
             <Text type="secondary" style={{ fontSize: 12, lineHeight: 1.2 }}>
               {email}
             </Text>
+          ) : null}
+          {apiKey ? (
+            <Button
+              type="text"
+              size="small"
+              icon={<CopyIcon size={10} />}
+              onClick={handleCopyApiKey}
+              style={{ padding: 0, height: "auto", fontSize: 12 }}
+            >
+              {copied ? "Copiada" : "Copiar API key"}
+            </Button>
           ) : null}
         </div>
         <ThemeToggleAntd />

@@ -1,13 +1,17 @@
 import { prisma } from "@repo/db";
 import type { UserCreatedPayload } from "@repo/events";
 import { verifySignatureAppRouter } from "@repo/mq";
+import { randomBytes } from "node:crypto";
 
 async function handler(req: Request) {
   const { id } = (await req.json()) as UserCreatedPayload;
 
   await prisma.appUser.upsert({
     where: { id },
-    create: { id },
+    create: {
+      id,
+      apiKey: randomBytes(32).toString("hex"),
+    },
     update: {},
   });
 
