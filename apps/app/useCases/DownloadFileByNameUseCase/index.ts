@@ -6,7 +6,7 @@ import type {
   DownloadFileByNameOutput,
 } from "./types";
 
-export class DownloadFileByNameService {
+export class DownloadFileByNameUseCase {
   constructor(
     private readonly userRepository: iUserRepository,
     private readonly fileRepository: iFileRepository

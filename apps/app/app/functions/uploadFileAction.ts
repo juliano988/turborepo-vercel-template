@@ -2,9 +2,9 @@
 
 import createFileAddedEvent from "../../events/file.added";
 import { FileRepository } from "../../repository/File";
-import { UploadManyFilesService } from "../../services/UploadManyFilesService";
-import type { UploadManyFilesOutput } from "../../services/UploadManyFilesService/types";
-import { requireSession } from "./requireSession";
+import { UploadManyFilesUseCase } from "../../useCases/UploadManyFilesUseCase";
+import type { UploadManyFilesOutput } from "../../useCases/UploadManyFilesUseCase/types";
+import { requireSession } from "../utils/requireSession";
 
 export async function uploadFileAction(formData: FormData) {
   const session = await requireSession();
@@ -20,7 +20,7 @@ export async function uploadFileAction(formData: FormData) {
   }
 
   const repository = new FileRepository();
-  const service = new UploadManyFilesService(repository);
+  const service = new UploadManyFilesUseCase(repository);
 
   const result: UploadManyFilesOutput = await service.execute({
     files: files.map((file) => ({

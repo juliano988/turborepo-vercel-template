@@ -3,7 +3,7 @@ import type { iFileRepository } from "../../agregates/File/repository";
 import { FileId } from "../../agregates/File/vo/FileId";
 import { DeleteManyFilesInput, DeleteManyFilesOutput } from "./types";
 
-export class DeleteManyFilesService {
+export class DeleteManyFilesUseCase {
   constructor(private readonly fileRepository: iFileRepository) {}
 
   async execute(input: DeleteManyFilesInput): Promise<DeleteManyFilesOutput> {

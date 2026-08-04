@@ -3,8 +3,8 @@
 import { UserId } from "../../agregates/User/vo/UserId";
 import { FileRepository } from "../../repository/File";
 import { UserRepository } from "../../repository/User";
-import { DownloadFileByNameService } from "../../services/DownloadFileByNameService";
-import { requireSession } from "./requireSession";
+import { DownloadFileByNameUseCase } from "../../useCases/DownloadFileByNameUseCase";
+import { requireSession } from "../utils/requireSession";
 
 export async function downloadFileByNameAction(filename: string) {
   const session = await requireSession();
@@ -12,7 +12,7 @@ export async function downloadFileByNameAction(filename: string) {
   const repository = new FileRepository();
   const userRepository = new UserRepository();
   const currentUser = await userRepository.findById(UserId.from(session.user.id));
-  const service = new DownloadFileByNameService(userRepository, repository);
+  const service = new DownloadFileByNameUseCase(userRepository, repository);
 
   return service.execute({
     filename,

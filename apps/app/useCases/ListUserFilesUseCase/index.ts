@@ -1,7 +1,7 @@
 import type { iFileRepository } from "../../agregates/File/repository";
 import { ListUserFilesInput, ListUserFilesOutput } from "./types";
 
-export class ListUserFilesService {
+export class ListUserFilesUseCase {
   constructor(private readonly fileRepository: iFileRepository) {}
 
   async execute(input: ListUserFilesInput): Promise<ListUserFilesOutput> {
