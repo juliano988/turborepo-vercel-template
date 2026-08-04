@@ -2,7 +2,7 @@
 
 import { UserId } from "../../agregates/User/vo/UserId";
 import { UserRepository } from "../../repository/User";
-import { requireSession } from "./requireSession";
+import { requireSession } from "../utils/requireSession";
 
 export async function getCurrentApiKeyAction() {
   const session = await requireSession();

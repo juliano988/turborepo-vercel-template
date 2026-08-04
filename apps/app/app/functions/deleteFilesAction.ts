@@ -2,8 +2,8 @@
 
 import { UserId } from "../../agregates/User/vo/UserId";
 import { FileRepository } from "../../repository/File";
-import { DeleteManyFilesService } from "../../services/DeleteManyFilesService";
-import { requireSession } from "./requireSession";
+import { DeleteManyFilesUseCase } from "../../useCases/DeleteManyFilesUseCase";
+import { requireSession } from "../utils/requireSession";
 
 export async function deleteFilesAction(fileIds: string[]) {
   const session = await requireSession();
@@ -16,7 +16,7 @@ export async function deleteFilesAction(fileIds: string[]) {
   }
 
   const repository = new FileRepository();
-  const service = new DeleteManyFilesService(repository);
+  const service = new DeleteManyFilesUseCase(repository);
 
   return service.execute({
     ownerId: UserId.from(session.user.id),

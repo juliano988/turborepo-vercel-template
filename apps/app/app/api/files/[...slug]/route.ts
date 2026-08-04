@@ -2,8 +2,8 @@ import { NextRequest } from "next/server";
 import { FileRepository } from "../../../../repository/File";
 import { UserRepository } from "../../../../repository/User";
 import { serveBlob } from "@repo/storage";
-import { requireSession } from "../../../functions/requireSession";
-import { DownloadFileByNameService } from "../../../../services/DownloadFileByNameService";
+import { requireSession } from "../../../utils/requireSession";
+import { DownloadFileByNameUseCase } from "../../../../useCases/DownloadFileByNameUseCase";
 import { UserId } from "../../../../agregates/User/vo/UserId";
 
 type RouteContext = {
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest, context: RouteContext) {
 
   const fileRepository = new FileRepository();
   const userRepository = new UserRepository();
-  const service = new DownloadFileByNameService(userRepository, fileRepository);
+  const service = new DownloadFileByNameUseCase(userRepository, fileRepository);
   const result = await service.execute({
     filename: decodedFilename,
     ownerId: UserId.from(ownerId),

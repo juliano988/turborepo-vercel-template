@@ -3,7 +3,7 @@ import { File } from "../../agregates/File";
 import type { iFileRepository } from "../../agregates/File/repository";
 import { UploadManyFilesInput, UploadManyFilesOutput } from "./types";
 
-export class UploadManyFilesService {
+export class UploadManyFilesUseCase {
   constructor(private readonly fileRepository: iFileRepository) {}
 
   async execute(input: UploadManyFilesInput): Promise<UploadManyFilesOutput> {

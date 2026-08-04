@@ -5,6 +5,10 @@
     "build": "turbo run build",
     "start": "turbo run start",
     "dev": "turbo run dev",
+    "test:unit": "turbo run test",
+    "test:integration": "bun run --filter app test:integration:preview && bun run --filter admin test:integration:preview",
+    "test": "bun run test:unit && bun run test:integration",
+    "test:coverage": "turbo run test:coverage",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
@@ -18,11 +22,18 @@
   },
   "prettier": "@repo/prettier-config",
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitest/coverage-v8": "^3.2.4",
     "@repo/prettier-config": "*",
     "effect": "3.21.0",
+    "jsdom": "^26.1.0",
+    "msw": "^2.11.3",
     "prettier": "^3.7.4",
     "turbo": "^2.10.0",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "vitest": "^3.2.4"
   },
   "engines": {
     "node": ">=18"
