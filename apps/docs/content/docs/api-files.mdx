@@ -1,0 +1,37 @@
+---
+title: API de arquivos
+description: Como baixar arquivos pela rota /api/files
+---
+
+Baixe arquivos privados por nome, com sessão autenticada ou chave de API.
+
+## Endpoints
+
+- `GET /api/files/:filename`
+- `GET /api/files/:apiKey/:filename`
+
+## Regras
+
+- Sem `apiKey`, a rota usa a sessão logada.
+- Com `apiKey`, a rota valida o usuário pela chave.
+- A resposta vem como download, não como visualização.
+- A `apiKey` fica disponível na seção logada do sistema.
+
+## Respostas
+
+- `200`: arquivo enviado com sucesso.
+- `400`: nome do arquivo ausente.
+- `401`: `apiKey` inválida.
+- `404`: arquivo não encontrado.
+
+## Exemplo
+
+```http
+GET /api/files/relatorio.pdf
+```
+
+Com chave de API:
+
+```http
+GET /api/files/sua-api-key/relatorio.pdf
+```
