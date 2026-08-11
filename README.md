@@ -374,6 +374,12 @@ Observações:
 
 - A URL base dos testes é derivada automaticamente do preview de cada app (`APP_PREVIEW_URL`/`ADMIN_PREVIEW_URL`).
 - Se os previews estiverem protegidos na Vercel, mantenha o `VERCEL_AUTOMATION_BYPASS_SECRET` configurado conforme a seção de deploy.
+- Em caso de falha, o workflow gera artefatos no GitHub Actions (`endform-e2e-artifacts-<run_id>`) com evidências de erro.
+- Artefatos coletados (quando existirem):
+  - `apps/app/e2e/test-results/**`
+  - `apps/admin/e2e/test-results/**`
+  - `apps/app/playwright-report/**`
+  - `apps/admin/playwright-report/**`
 
 ## Eventos entre bounded contexts (QStash)
 

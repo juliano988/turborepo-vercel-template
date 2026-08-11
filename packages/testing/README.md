@@ -70,6 +70,8 @@ Quando executa, ele aguarda o deployment do projeto alvo, injeta `PLAYWRIGHT_BAS
 - `bunx endform@latest test --config apps/app/playwright.config.ts apps/app/e2e/unauthenticated.e2e.spec.ts`
 - `bunx endform@latest test --config apps/admin/playwright.config.ts apps/admin/e2e/unauthenticated.e2e.spec.ts`
 
+Quando há falha, o workflow publica artefatos no GitHub Actions com o nome `endform-e2e-artifacts-<run_id>` contendo os diretórios de resultados e relatórios dos testes.
+
 Secrets obrigatórios no GitHub:
 
 - `E2E_USER_EMAIL`
