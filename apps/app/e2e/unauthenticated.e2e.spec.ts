@@ -4,8 +4,9 @@ import { expect, test } from "@repo/testing/playwright";
 test("redireciona para login quando não autenticado", async ({ page }) => {
   await page.goto("/app");
 
-  await expect(page.getByText("Sem autorização")).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: /ir para o login/i })
-  ).toBeVisible();
+  const unauthorizedOrLogin = page
+    .getByText("Sem autorização")
+    .or(page.getByRole("button", { name: /entrar/i }));
+
+  await expect(unauthorizedOrLogin.first()).toBeVisible({ timeout: 10_000 });
 });

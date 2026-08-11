@@ -1,5 +1,5 @@
 import { expect, test } from "@repo/testing/playwright";
-import type { Page, Response } from "@repo/testing/playwright";
+import type { Page } from "@repo/testing/playwright";
 
 async function signIn(page: Page) {
   const email = process.env["E2E_USER_EMAIL"];
@@ -15,15 +15,10 @@ async function signIn(page: Page) {
   await page.getByLabel(/e-mail/i).fill(email);
   await page.getByLabel(/senha/i).fill(password);
 
-  await Promise.all([
-    page.waitForResponse(
-      (response: Response) =>
-        response.url().includes("/api/auth/sign-in/email") &&
-        response.status() === 200,
-      { timeout: 15_000 }
-    ),
-    page.getByRole("button", { name: /entrar/i }).click(),
-  ]);
+  await page.getByRole("button", { name: /entrar/i }).click();
+  await page.waitForURL((url) => !url.pathname.endsWith("/login"), {
+    timeout: 15_000,
+  });
 }
 
 test.beforeEach(async ({ page }) => {
