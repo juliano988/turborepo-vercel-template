@@ -61,6 +61,7 @@ O repositório já possui workflow para rodar E2E contra preview deploy da Verce
 Antes de usar o workflow, **instale o GitHub App do Endform no repositório**.
 Também é necessário **conectar no Endform os projetos da Vercel** usados nesse fluxo:
 
+- `trvt-landing` (obrigatório: todo o tráfego passa pelo proxy da landing)
 - `trvt-app`
 - `trvt-admin`
 
