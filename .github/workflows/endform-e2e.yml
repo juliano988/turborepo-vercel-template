@@ -44,11 +44,13 @@ jobs:
         uses: endformdev/actions/run-with-vercel-deployment@main
         with:
           project-name: trvt-app
+          set-url-env-var: APP_PREVIEW_URL
 
       - name: Wait admin preview
         uses: endformdev/actions/run-with-vercel-deployment@main
         with:
           project-name: trvt-admin
+          set-url-env-var: ADMIN_PREVIEW_URL
 
       - name: Run app E2E with Endform
         env:
