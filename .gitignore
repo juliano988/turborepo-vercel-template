@@ -27,6 +27,10 @@ out/
 build
 dist
 
+# Graphify / knowledge graph output
+graphify-out/
+**/graphify-out/
+.venv
 
 # Debug
 npm-debug.log*

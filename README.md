@@ -131,6 +131,20 @@ No template, o `landing` atua como **âncora do projeto**: é ele que hospeda as
 
 Portal de documentação técnica e de produto (Fuma Docs). Serve para onboarding, guias de uso, referência e conteúdo para times internos e externos.
 
+## Graphify: mapa de código para IA e arquitetura
+
+Este template também foi pensado para trabalhar bem com ferramentas de navegação semântica de código. O [Graphify](https://graphify.com/) transforma a estrutura do monorepo em um grafo de conhecimento: entidades, relações, comunidades e caminhos entre módulos ficam explícitos, o que ajuda tanto desenvolvedores quanto agentes de IA a entenderem a arquitetura antes de alterar código.
+
+Em prática, o Graphify é útil para:
+
+- mapear relações entre apps, packages e módulos do domínio
+- descobrir dependências ocultas ou comunidades funcionais
+- orientar agentes de IA em buscas de contexto mais precisas
+- reduzir o tempo de onboarding em monorepos maiores
+- documentar arquitetura e fluxos de negócio de forma navegável
+
+No contexto desse repositório, ele funciona como uma camada extra de "cartografia do sistema": em vez de ler arquivos isoladamente, você consegue visualizar como `app/`, `admin/`, `landing/`, `docs/` e os packages compartilhados se conectam entre si.
+
 ## Tecnologias
 
 | Categoria                 | Tecnologia                                        |
