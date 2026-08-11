@@ -16,6 +16,7 @@
         "!.next/dev/**"
       ],
       "env": [
+        "VERCEL",
         "VERCEL_ENV",
         "VERCEL_BRANCH_URL",
         "VERCEL_PROJECT_PRODUCTION_URL",
@@ -23,6 +24,7 @@
         "NEXT_PUBLIC_ADMIN_URL",
         "NEXT_PUBLIC_DOCS_URL",
         "DATABASE_URL",
+        "SHADOW_DATABASE_URL",
         "POSTGRES_URL",
         "PRISMA_DATABASE_URL",
         "BETTER_AUTH_SECRET",

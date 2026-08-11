@@ -25,7 +25,10 @@ export async function serveBlob(
 
   // 304 Not Modified — blob não mudou desde o último request condicional
   if (result.statusCode === 304) {
-    return new Response(null, { status: 304, headers: result.headers });
+    return new Response(null, {
+      status: 304,
+      headers: result.headers as unknown as HeadersInit,
+    });
   }
 
   return new Response(result.stream, {
