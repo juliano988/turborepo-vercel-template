@@ -1,6 +1,12 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "E2E_USER_EMAIL",
+    "E2E_USER_PASSWORD",
+    "PLAYWRIGHT_BASE_URL",
+    "VERCEL_AUTOMATION_BYPASS_SECRET"
+  ],
   "tasks": {
     "build": {
       "dependsOn": [
@@ -41,7 +47,8 @@
         "QSTASH_CURRENT_SIGNING_KEY",
         "QSTASH_NEXT_SIGNING_KEY",
         "QSTASH_TOKEN",
-        "QSTASH_URL"
+        "QSTASH_URL",
+        "VERCEL_AUTOMATION_BYPASS_SECRET"
       ]
     },
     "lint": {
