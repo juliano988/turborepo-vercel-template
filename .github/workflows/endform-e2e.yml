@@ -85,7 +85,7 @@ jobs:
         run: echo "No app/admin e2e-relevant changes detected. Skipping Endform run."
 
       - name: Upload E2E artifacts
-        if: always()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: endform-e2e-artifacts-${{ github.run_id }}
