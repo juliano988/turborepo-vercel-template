@@ -34,34 +34,50 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Wait landing preview and set base URL
-        uses: endformdev/actions/run-with-vercel-deployment@main
+      - name: Detect changed apps
+        id: changes
+        uses: dorny/paths-filter@v3
         with:
-          project-name: trvt-landing
-          set-url-env-var: PLAYWRIGHT_BASE_URL
+          filters: |
+            app:
+              - 'apps/app/**'
+              - 'packages/testing/**'
+              - '.github/workflows/endform-e2e.yml'
+            admin:
+              - 'apps/admin/**'
+              - 'packages/testing/**'
+              - '.github/workflows/endform-e2e.yml'
 
       - name: Wait app preview
+        if: steps.changes.outputs.app == 'true'
         uses: endformdev/actions/run-with-vercel-deployment@main
         with:
           project-name: trvt-app
           set-url-env-var: APP_PREVIEW_URL
 
       - name: Wait admin preview
+        if: steps.changes.outputs.admin == 'true'
         uses: endformdev/actions/run-with-vercel-deployment@main
         with:
           project-name: trvt-admin
           set-url-env-var: ADMIN_PREVIEW_URL
 
       - name: Run app E2E with Endform
+        if: steps.changes.outputs.app == 'true'
         env:
-          PLAYWRIGHT_BASE_URL: ${{ env.PLAYWRIGHT_BASE_URL }}
+          PLAYWRIGHT_BASE_URL: ${{ env.APP_PREVIEW_URL }}
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
-        run: bunx endform@latest test --config apps/app/playwright.config.ts
+        run: bunx endform@latest test --config apps/app/playwright.config.ts apps/app/e2e/unauthenticated.e2e.spec.ts
 
       - name: Run admin E2E with Endform
+        if: steps.changes.outputs.admin == 'true'
         env:
-          PLAYWRIGHT_BASE_URL: ${{ env.PLAYWRIGHT_BASE_URL }}
+          PLAYWRIGHT_BASE_URL: ${{ env.ADMIN_PREVIEW_URL }}
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
-        run: bunx endform@latest test --config apps/admin/playwright.config.ts
+        run: bunx endform@latest test --config apps/admin/playwright.config.ts apps/admin/e2e/unauthenticated.e2e.spec.ts
+
+      - name: No e2e changes
+        if: steps.changes.outputs.app != 'true' && steps.changes.outputs.admin != 'true'
+        run: echo "No app/admin e2e-relevant changes detected. Skipping Endform run."

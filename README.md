@@ -346,15 +346,17 @@ O monorepo já possui um workflow pronto para executar os testes E2E do `app` e 
 
 - Workflow: `.github/workflows/endform-e2e.yml`
 - Trigger: `pull_request` para `main`
-- Projetos aguardados na Vercel:
-  - `trvt-landing` (define `PLAYWRIGHT_BASE_URL`)
-  - `trvt-app`
-  - `trvt-admin`
+
+Comportamento do workflow:
+
+- Detecta mudanças por app (`apps/app/**` e `apps/admin/**`, além de `packages/testing/**` e do próprio workflow).
+- Só aguarda deployment dos projetos que mudaram (`trvt-app` e/ou `trvt-admin`).
+- Se não houver mudança relevante para E2E, faz skip explícito.
 
 Os comandos executados no CI são:
 
-- `bunx endform@latest test --config apps/app/playwright.config.ts`
-- `bunx endform@latest test --config apps/admin/playwright.config.ts`
+- `bunx endform@latest test --config apps/app/playwright.config.ts apps/app/e2e/unauthenticated.e2e.spec.ts`
+- `bunx endform@latest test --config apps/admin/playwright.config.ts apps/admin/e2e/unauthenticated.e2e.spec.ts`
 
 Pré-requisitos no GitHub (Repository secrets):
 
@@ -365,13 +367,12 @@ Pré-requisito de integração:
 
 - **Instale o GitHub App do Endform no repositório** antes de executar o workflow.
 - **Conecte no Endform os projetos da Vercel** usados no workflow:
-  - `trvt-landing`
   - `trvt-app`
   - `trvt-admin`
 
 Observações:
 
-- A URL base dos testes é derivada automaticamente do preview da landing.
+- A URL base dos testes é derivada automaticamente do preview de cada app (`APP_PREVIEW_URL`/`ADMIN_PREVIEW_URL`).
 - Se os previews estiverem protegidos na Vercel, mantenha o `VERCEL_AUTOMATION_BYPASS_SECRET` configurado conforme a seção de deploy.
 
 ## Eventos entre bounded contexts (QStash)

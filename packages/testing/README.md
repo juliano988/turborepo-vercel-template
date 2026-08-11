@@ -61,14 +61,14 @@ O repositório já possui workflow para rodar E2E contra preview deploy da Verce
 Antes de usar o workflow, **instale o GitHub App do Endform no repositório**.
 Também é necessário **conectar no Endform os projetos da Vercel** usados nesse fluxo:
 
-- `trvt-landing`
 - `trvt-app`
 - `trvt-admin`
 
-Esse fluxo aguarda os deployments de `landing`, `app` e `admin`, injeta `PLAYWRIGHT_BASE_URL` e executa:
+Esse fluxo detecta os apps alterados no PR e só roda E2E para os projetos impactados (`app` e/ou `admin`).
+Quando executa, ele aguarda o deployment do projeto alvo, injeta `PLAYWRIGHT_BASE_URL` e roda os specs não autenticados:
 
-- `bunx endform@latest test --config apps/app/playwright.config.ts`
-- `bunx endform@latest test --config apps/admin/playwright.config.ts`
+- `bunx endform@latest test --config apps/app/playwright.config.ts apps/app/e2e/unauthenticated.e2e.spec.ts`
+- `bunx endform@latest test --config apps/admin/playwright.config.ts apps/admin/e2e/unauthenticated.e2e.spec.ts`
 
 Secrets obrigatórios no GitHub:
 
