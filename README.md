@@ -202,6 +202,12 @@ QSTASH_TOKEN=eyJVc2VySUQiOiJkZWZhdWx0VXNlciIsIlBhc3N3b3JkIjoiZGVmYXVsdFBhc3N3b3J
 QSTASH_CURRENT_SIGNING_KEY=sig_7kYjw48mhY7kAjqNGcy6cr29RJ6r
 QSTASH_NEXT_SIGNING_KEY=sig_5ZB6DVzB1wjE8S6rZ7eenA8Pdnhs
 
+# Para rodar os testes e2e
+E2E_USER_EMAIL=admin@admin.com
+E2E_USER_PASSWORD=@dmin123
+PLAYWRIGHT_BASE_URL=http://localhost:3000
+
+
 # Vercel protection bypass para preview deploys
 # Gere uma chave uma única vez e replique exatamente o mesmo valor
 # em todos os projetos Vercel, tanto em Deployment Protection quanto
@@ -333,6 +339,32 @@ Isso significa que:
 2. Em Production Deploy e ambiente local, essa etapa não roda (skip).
 
 Essa estratégia mantém o pipeline simples e evita acoplar infraestrutura de desenvolvimento local no build remoto.
+
+### E2E em Preview com Endform
+
+O monorepo já possui um workflow pronto para executar os testes E2E do `app` e do `admin` contra os preview deploys da Vercel:
+
+- Workflow: `.github/workflows/endform-e2e.yml`
+- Trigger: `pull_request` para `main`
+- Projetos aguardados na Vercel:
+  - `trvt-landing` (define `PLAYWRIGHT_BASE_URL`)
+  - `trvt-app`
+  - `trvt-admin`
+
+Os comandos executados no CI são:
+
+- `bunx endform@latest test --config apps/app/playwright.config.ts`
+- `bunx endform@latest test --config apps/admin/playwright.config.ts`
+
+Pré-requisitos no GitHub (Repository secrets):
+
+- `E2E_USER_EMAIL`
+- `E2E_USER_PASSWORD`
+
+Observações:
+
+- A URL base dos testes é derivada automaticamente do preview da landing.
+- Se os previews estiverem protegidos na Vercel, mantenha o `VERCEL_AUTOMATION_BYPASS_SECRET` configurado conforme a seção de deploy.
 
 ## Eventos entre bounded contexts (QStash)
 

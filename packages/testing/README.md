@@ -51,3 +51,19 @@ Cada app com E2E deve manter `@playwright/test` em `devDependencies` para usar o
 - `baseURL` (obrigatório)
 - `testDir` (opcional, padrão: `e2e`)
 - `outputDir` (opcional, padrão: `test-results`)
+
+## Execução em CI com Endform
+
+O repositório já possui workflow para rodar E2E contra preview deploy da Vercel:
+
+- `.github/workflows/endform-e2e.yml`
+
+Esse fluxo aguarda os deployments de `app` e `admin`, injeta `PLAYWRIGHT_BASE_URL` e executa:
+
+- `bunx endform@latest test --config apps/app/playwright.config.ts`
+- `bunx endform@latest test --config apps/admin/playwright.config.ts`
+
+Secrets obrigatórios no GitHub:
+
+- `E2E_USER_EMAIL`
+- `E2E_USER_PASSWORD`
