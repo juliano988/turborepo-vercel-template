@@ -361,6 +361,10 @@ Pré-requisitos no GitHub (Repository secrets):
 - `E2E_USER_EMAIL`
 - `E2E_USER_PASSWORD`
 
+Pré-requisito de integração:
+
+- **Instale o GitHub App do Endform no repositório** antes de executar o workflow.
+
 Observações:
 
 - A URL base dos testes é derivada automaticamente do preview da landing.

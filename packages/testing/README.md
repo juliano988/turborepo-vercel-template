@@ -58,7 +58,9 @@ O repositório já possui workflow para rodar E2E contra preview deploy da Verce
 
 - `.github/workflows/endform-e2e.yml`
 
-Esse fluxo aguarda os deployments de `app` e `admin`, injeta `PLAYWRIGHT_BASE_URL` e executa:
+Antes de usar o workflow, **instale o GitHub App do Endform no repositório**.
+
+Esse fluxo aguarda os deployments de `landing`, `app` e `admin`, injeta `PLAYWRIGHT_BASE_URL` e executa:
 
 - `bunx endform@latest test --config apps/app/playwright.config.ts`
 - `bunx endform@latest test --config apps/admin/playwright.config.ts`
