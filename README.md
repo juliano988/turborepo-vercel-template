@@ -364,6 +364,10 @@ Pré-requisitos no GitHub (Repository secrets):
 Pré-requisito de integração:
 
 - **Instale o GitHub App do Endform no repositório** antes de executar o workflow.
+- **Conecte no Endform os projetos da Vercel** usados no workflow:
+  - `trvt-landing`
+  - `trvt-app`
+  - `trvt-admin`
 
 Observações:
 
