@@ -50,6 +50,13 @@ jobs:
               - 'packages/testing/**'
               - '.github/workflows/endform-e2e.yml'
 
+      - name: Wait landing preview
+        if: steps.changes.outputs.app == 'true' || steps.changes.outputs.admin == 'true'
+        uses: endformdev/actions/run-with-vercel-deployment@main
+        with:
+          project-name: trvt-landing
+          set-url-env-var: LANDING_PREVIEW_URL
+
       - name: Wait app preview
         if: steps.changes.outputs.app == 'true'
         uses: endformdev/actions/run-with-vercel-deployment@main
@@ -67,20 +74,20 @@ jobs:
       - name: Run app E2E with Endform
         if: steps.changes.outputs.app == 'true'
         env:
-          PLAYWRIGHT_BASE_URL: ${{ env.APP_PREVIEW_URL }}
+          PLAYWRIGHT_BASE_URL: ${{ env.LANDING_PREVIEW_URL }}
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: bunx endform@latest test --config apps/app/playwright.config.ts apps/app/e2e/unauthenticated.e2e.spec.ts
+        run: bunx endform@latest test --config apps/app/playwright.config.ts
 
       - name: Run admin E2E with Endform
         if: steps.changes.outputs.admin == 'true'
         env:
-          PLAYWRIGHT_BASE_URL: ${{ env.ADMIN_PREVIEW_URL }}
+          PLAYWRIGHT_BASE_URL: ${{ env.LANDING_PREVIEW_URL }}
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
-        run: bunx endform@latest test --config apps/admin/playwright.config.ts apps/admin/e2e/unauthenticated.e2e.spec.ts
+        run: bunx endform@latest test --config apps/admin/playwright.config.ts
 
       - name: No e2e changes
         if: steps.changes.outputs.app != 'true' && steps.changes.outputs.admin != 'true'
