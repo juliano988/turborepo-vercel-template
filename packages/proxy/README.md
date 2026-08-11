@@ -4,8 +4,8 @@ Fonte única de verdade para roteamento do monorepo. Centraliza a configuração
 
 ## Apps registrados
 
-| App       | `basePath` | Env var                       | Projeto Vercel                      |
-| --------- | ---------- | ----------------------------- | ----------------------------------- |
+| App       | `basePath` | Env var                       | Projeto Vercel |
+| --------- | ---------- | ----------------------------- | -------------- |
 | `landing` | `/`        | `NEXT_PUBLIC_BETTER_AUTH_URL` | `trvt-landing` |
 | `app`     | `/app`     | `NEXT_PUBLIC_APP_URL`         | `trvt-app`     |
 | `admin`   | `/admin`   | `NEXT_PUBLIC_ADMIN_URL`       | `trvt-admin`   |

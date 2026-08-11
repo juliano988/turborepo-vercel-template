@@ -49,7 +49,13 @@ describe("DeleteManyFilesUseCase", () => {
 
     const result = await useCase.execute({
       ownerId,
-      fileIds: [duplicateId, duplicateId, foreignFile.id.toString(), invalidFileId, missingFileId],
+      fileIds: [
+        duplicateId,
+        duplicateId,
+        foreignFile.id.toString(),
+        invalidFileId,
+        missingFileId,
+      ],
     });
 
     expect(fileRepository.findByIds).toHaveBeenCalledWith([

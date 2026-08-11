@@ -13,6 +13,8 @@
     "test:coverage": "vitest run --coverage",
     "test:integration": "bun run --filter @repo/db build && vitest run --config vitest.integration.config.ts",
     "test:integration:preview": "if [ \"$VERCEL\" = \"1\" ] && [ \"$VERCEL_ENV\" = \"preview\" ]; then if [ -z \"$DATABASE_URL\" ]; then echo 'DATABASE_URL is required for integration tests.'; exit 1; fi; bun run test:integration; else echo 'Skipping integration tests (requires Vercel preview).'; fi",
+    "test:e2e": "node --env-file=../../.env ./node_modules/.bin/playwright test --config playwright.config.ts",
+    "test:e2e:ui": "node --env-file=../../.env ./node_modules/.bin/playwright test --config playwright.config.ts --ui",
     "lint": "eslint --fix --max-warnings 0",
     "check-types": "next typegen && tsc --noEmit",
     "prebuild": "bun ../../packages/scripts/vercel-env.ts"
@@ -34,6 +36,7 @@
   },
   "prettier": "@repo/prettier-config",
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@repo/eslint-config": "*",
     "@repo/prettier-config": "*",
     "@repo/testing": "*",

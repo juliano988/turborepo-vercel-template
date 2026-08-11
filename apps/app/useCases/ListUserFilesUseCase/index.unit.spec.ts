@@ -16,7 +16,10 @@ function createFile(ownerId: string, name: string) {
 describe("ListUserFilesUseCase", () => {
   it("lista e serializa os arquivos do usuario", async () => {
     const ownerId = UserId.from("owner-1");
-    const files = [createFile(ownerId.toString(), "one.pdf"), createFile(ownerId.toString(), "two.pdf")];
+    const files = [
+      createFile(ownerId.toString(), "one.pdf"),
+      createFile(ownerId.toString(), "two.pdf"),
+    ];
     const fileRepository = {
       save: vi.fn(),
       saveMany: vi.fn(),

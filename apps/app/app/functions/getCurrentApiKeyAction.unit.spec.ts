@@ -19,12 +19,16 @@ describe("getCurrentApiKeyAction", () => {
   });
 
   it("retorna a apiKey atual do usuario autenticado", async () => {
-    vi.spyOn(requireSessionModule, "requireSession").mockResolvedValue({ user: { id: "user-1" } } as never);
-    const findByIdSpy = vi.spyOn(UserRepository.prototype, "findById").mockResolvedValue({
-      apiKey: {
-        toString: () => "api-key-1",
-      },
+    vi.spyOn(requireSessionModule, "requireSession").mockResolvedValue({
+      user: { id: "user-1" },
     } as never);
+    const findByIdSpy = vi
+      .spyOn(UserRepository.prototype, "findById")
+      .mockResolvedValue({
+        apiKey: {
+          toString: () => "api-key-1",
+        },
+      } as never);
 
     const result = await getCurrentApiKeyAction();
 
@@ -35,7 +39,9 @@ describe("getCurrentApiKeyAction", () => {
   });
 
   it("retorna nulo quando o usuario nao possui apiKey", async () => {
-    vi.spyOn(requireSessionModule, "requireSession").mockResolvedValue({ user: { id: "user-1" } } as never);
+    vi.spyOn(requireSessionModule, "requireSession").mockResolvedValue({
+      user: { id: "user-1" },
+    } as never);
     vi.spyOn(UserRepository.prototype, "findById").mockResolvedValue(null);
 
     const result = await getCurrentApiKeyAction();

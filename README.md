@@ -74,6 +74,7 @@ Infraestrutura e utilitários reutilizados por todos os contextos:
 | `ui/`                | Componentes de UI (Ant Design, DaisyUI, Fuma Docs)                   |
 | `proxy/`             | Configuração do proxy reverso entre apps                             |
 | `scripts/`           | Scripts utilitários do monorepo (ex: sincronização de env na Vercel) |
+| `testing/`           | Presets compartilhados de testes (Vitest + Playwright)               |
 | `eslint-config/`     | Configurações ESLint reutilizáveis                                   |
 | `prettier-config/`   | Configuração Prettier compartilhada                                  |
 | `typescript-config/` | Configurações TypeScript base                                        |
@@ -239,9 +240,10 @@ bun run lint
 | `bun run db:studio`             | Abre o Prisma Studio para o banco atual                       |
 | `bun run mq:dev`                | Sobe o servidor QStash local via Docker (porta 8080)          |
 | `bun run dev`                   | Inicia todos os apps em modo desenvolvimento                  |
-| `bun run test:unit`             | Executa apenas os testes unitários do monorepo               |
-| `bun run test:integration`      | Dispara testes de integração (gateado para preview Vercel)   |
-| `bun run test`                  | Executa unitários + etapa de integração gateada              |
+| `bun run test:unit`             | Executa apenas os testes unitários do monorepo                |
+| `bun run test:integration`      | Dispara testes de integração (gateado para preview Vercel)    |
+| `bun run test:e2e`              | Executa E2E do `app` e do `admin`                             |
+| `bun run test`                  | Executa unitários + integração gateada + E2E                  |
 | `bun run build`                 | Build de produção (com cache do Turbo)                        |
 | `bun run start`                 | Inicia todos os apps em modo produção                         |
 | `bun run lint`                  | Executa ESLint em todo o monorepo                             |
@@ -258,35 +260,41 @@ O projeto combina duas estratégias, de acordo com o tipo de subdomínio:
 Nos contextos principais de negócio (ex.: `apps/app`), usamos a **pirâmide de testes** para privilegiar velocidade, feedback rápido e segurança de regra de negócio:
 
 1. **Base (maior volume): testes unitários**
-  - Dominio (`agregates/vo`)
-  - Casos de uso (`useCases/`)
-  - Server Actions finas (`app/functions/`)
-  - Repositórios com Prisma mockado (contrato/mapeamento)
+
+- Dominio (`agregates/vo`)
+- Casos de uso (`useCases/`)
+- Server Actions finas (`app/functions/`)
+- Repositórios com Prisma mockado (contrato/mapeamento)
 
 2. **Meio (volume reduzido): integração real com banco**
-  - Repositórios críticos do `apps/app/repository`
-  - Execução contra `DATABASE_URL` real
-  - Setup/cleanup por teste para isolamento
+
+- Repositórios críticos do `apps/app/repository`
+- Execução contra `DATABASE_URL` real
+- Setup/cleanup por teste para isolamento
 
 3. **Topo (menor volume): E2E**
-  - Fluxos ponta a ponta (login, upload, listagem, download)
-  - Deve ficar enxuto para manter custo e estabilidade
+
+- Fluxos ponta a ponta (login, upload, listagem, download)
+- Deve ficar enxuto para manter custo e estabilidade
 
 ### Subdomínios de suporte: losango de testes
 
 Nos subdomínios de suporte (ex.: `admin`, `landing`, integrações de plataforma e camadas transversais), usamos o **losango de testes**:
 
 1. **Base moderada: unitários essenciais**
-  - Regras locais e utilitários críticos
+
+- Regras locais e utilitários críticos
 
 2. **Centro mais largo: integração e testes de contrato**
-  - Integração entre app, banco, auth, mensageria e serviços externos
-  - Maior foco em comportamento entre fronteiras do sistema
-  - Registros ativos
+
+- Integração entre app, banco, auth, mensageria e serviços externos
+- Maior foco em comportamento entre fronteiras do sistema
+- Registros ativos
 
 3. **Topo moderado: E2E de jornada**
-  - Menos volume que integração, mas mais presente que na pirâmide pura
-  - Cobre caminhos de negócio e fluxos cross-app mais sensíveis
+
+- Menos volume que integração, mas mais presente que na pirâmide pura
+- Cobre caminhos de negócio e fluxos cross-app mais sensíveis
 
 Em resumo: no **subdomínio principal** concentramos massa em unitário (pirâmide); nos **subdomínios de suporte** deslocamos mais esforço para integração/contrato (losango).
 
@@ -300,8 +308,9 @@ Em resumo: no **subdomínio principal** concentramos massa em unitário (pirâmi
 No root:
 
 - `bun run test:unit` roda `turbo run test`.
-- `bun run test:integration` chama `apps/app` com gate de preview.
-- `bun run test` executa `test:unit` seguido de `test:integration`.
+- `bun run test:integration` chama `apps/app` e `apps/admin` com gate de preview.
+- `bun run test:e2e` executa os E2E de `apps/app` e `apps/admin`.
+- `bun run test` executa `test:unit`, `test:integration` e `test:e2e`.
 
 No `apps/app`:
 
@@ -316,7 +325,7 @@ Fora desse contexto, o comando faz skip explícito.
 
 ### Execução na Vercel Preview
 
-No `apps/app`, o `postbuild` executa `test:integration:preview`.
+No `apps/app` e no `apps/admin`, o `postbuild` executa `test:integration:preview`.
 
 Isso significa que:
 

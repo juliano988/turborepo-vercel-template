@@ -1,6 +1,6 @@
 export function toPositiveInt(
   value: string | undefined,
-  fallback: number,
+  fallback: number
 ): number {
   const parsed = Number(value);
 

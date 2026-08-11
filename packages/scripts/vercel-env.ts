@@ -93,8 +93,7 @@ if (VERCEL_ENV === "production") {
     }
   } else {
     lines = Object.entries(mappings).map(
-      ([varName, projectName]) =>
-        `${varName}=https://${projectName}.vercel.app`
+      ([varName, projectName]) => `${varName}=https://${projectName}.vercel.app`
     );
   }
 

@@ -40,11 +40,15 @@ describe("deleteFilesAction", () => {
   });
 
   it("delega a exclusao para o use case com ownerId da sessao", async () => {
-    vi.spyOn(requireSessionModule, "requireSession").mockResolvedValue({ user: { id: "user-1" } } as never);
-    const executeSpy = vi.spyOn(DeleteManyFilesUseCase.prototype, "execute").mockResolvedValue({
-      deletedFileIds: ["file-1"],
-      skippedFileIds: ["file-2"],
-    });
+    vi.spyOn(requireSessionModule, "requireSession").mockResolvedValue({
+      user: { id: "user-1" },
+    } as never);
+    const executeSpy = vi
+      .spyOn(DeleteManyFilesUseCase.prototype, "execute")
+      .mockResolvedValue({
+        deletedFileIds: ["file-1"],
+        skippedFileIds: ["file-2"],
+      });
 
     const result = await deleteFilesAction(["file-1", "file-2"]);
 

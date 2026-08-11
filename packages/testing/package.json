@@ -7,6 +7,7 @@
     ".": "./index.ts",
     "./vitest/node": "./vitest.node.ts",
     "./vitest/react": "./vitest.react.ts",
+    "./playwright": "./playwright.base.ts",
     "./setup/react": "./setup/react.ts"
   },
   "scripts": {
@@ -25,6 +26,7 @@
     "react": ">=19"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@repo/typescript-config": "*",
     "@types/node": "^26.0.1",
     "typescript": "5.9.2"

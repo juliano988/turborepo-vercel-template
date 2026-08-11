@@ -9,7 +9,7 @@ export const defaultCoverageExclusions = [
   "**/postcss.config.*",
   "**/*.config.*",
   "**/.next/**",
-  "**/coverage/**"
+  "**/coverage/**",
 ];
 
 const sharedTestConfig = defineConfig({
@@ -21,9 +21,9 @@ const sharedTestConfig = defineConfig({
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
-      exclude: defaultCoverageExclusions
-    }
-  }
+      exclude: defaultCoverageExclusions,
+    },
+  },
 });
 
 export function createSharedTestConfig(overrides: UserConfig = {}) {
@@ -34,8 +34,8 @@ export function createNodeTestConfig(overrides: UserConfig = {}) {
   return createSharedTestConfig({
     test: {
       environment: "node",
-      include: ["**/*.unit.spec.ts", "**/*.integration.spec.ts"]
+      include: ["**/*.unit.spec.ts", "**/*.integration.spec.ts"],
     },
-    ...overrides
+    ...overrides,
   });
 }
