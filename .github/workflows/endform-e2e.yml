@@ -83,3 +83,16 @@ jobs:
       - name: No e2e changes
         if: steps.changes.outputs.app != 'true' && steps.changes.outputs.admin != 'true'
         run: echo "No app/admin e2e-relevant changes detected. Skipping Endform run."
+
+      - name: Upload E2E artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: endform-e2e-artifacts-${{ github.run_id }}
+          path: |
+            apps/app/e2e/test-results/**
+            apps/admin/e2e/test-results/**
+            apps/app/playwright-report/**
+            apps/admin/playwright-report/**
+          if-no-files-found: ignore
+          retention-days: 14
