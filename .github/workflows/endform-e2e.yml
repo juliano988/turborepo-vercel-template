@@ -55,6 +55,18 @@ jobs:
           project-name: trvt-landing
           set-url-env-var: LANDING_PREVIEW_URL
 
+      # NEXT_PUBLIC_BETTER_AUTH_URL é fixado no bundle do client no alias git-branch
+      # (trvt-landing-git-<branch>-<team>.vercel.app), diferente da URL única de deployment
+      # retornada acima. Sem isso, o login falha: authClient chama uma origem cross-domain
+      # bloqueada pelo Deployment Protection.
+      - name: Rewrite landing preview URL to git-branch alias
+        if: steps.changes.outputs.app == 'true' || steps.changes.outputs.admin == 'true'
+        run: |
+          host="${LANDING_PREVIEW_URL#https://}"
+          suffix="${host#trvt-landing-*-}"
+          branch_slug=$(echo "${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')
+          echo "LANDING_PREVIEW_URL=https://trvt-landing-git-${branch_slug}-${suffix}" >> "$GITHUB_ENV"
+
       - name: Wait app preview
         if: steps.changes.outputs.app == 'true'
         uses: endformdev/actions/run-with-vercel-deployment@main
