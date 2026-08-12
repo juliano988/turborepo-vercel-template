@@ -16,8 +16,6 @@ concurrency:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    env:
-      ENDFORM_EXTRA_HTTP_HEADERS: '{"x-vercel-protection-bypass":"${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}"}'
 
     steps:
       - name: Checkout
@@ -77,7 +75,6 @@ jobs:
           PLAYWRIGHT_BASE_URL: ${{ env.LANDING_PREVIEW_URL }}
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
-          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: bunx endform@latest test --config apps/app/playwright.config.ts
 
       - name: Run admin E2E with Endform
@@ -86,7 +83,6 @@ jobs:
           PLAYWRIGHT_BASE_URL: ${{ env.LANDING_PREVIEW_URL }}
           E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
           E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
-          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}
         run: bunx endform@latest test --config apps/admin/playwright.config.ts
 
       - name: No e2e changes

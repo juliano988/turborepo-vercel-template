@@ -388,7 +388,7 @@ Pré-requisito de integração:
 Observações:
 
 - A URL base dos testes é derivada automaticamente do preview de cada app (`APP_PREVIEW_URL`/`ADMIN_PREVIEW_URL`).
-- Se os previews estiverem protegidos na Vercel, mantenha o `VERCEL_AUTOMATION_BYPASS_SECRET` configurado conforme a seção de deploy.
+- O bypass de Deployment Protection da Vercel é obtido e injetado automaticamente pela action `endformdev/actions/run-with-vercel-deployment` (via `deployment-protection-bypass: true`, padrão). Não defina `VERCEL_AUTOMATION_BYPASS_SECRET`/`ENDFORM_EXTRA_HTTP_HEADERS` manualmente no workflow — isso sobrescreve o header com um valor vazio e quebra o bypass.
 - Em caso de falha, o workflow gera artefatos no GitHub Actions (`endform-e2e-artifacts-<run_id>`) com evidências de erro.
 - Artefatos coletados (quando existirem):
   - `apps/app/e2e/test-results/**`
