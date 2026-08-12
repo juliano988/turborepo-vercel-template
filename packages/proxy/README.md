@@ -27,6 +27,8 @@ export default withBasePath("app");
 
 Gera as regras de rewrite para o app `landing` redirecionar requisições para cada sub-app. Lê as URLs de `process.env` com base na configuração central.
 
+Se `VERCEL_AUTOMATION_BYPASS_SECRET` estiver definido, o valor é anexado como query string (`x-vercel-protection-bypass`) no destino do rewrite. Isso é necessário porque cada sub-app é um projeto Vercel distinto com sua própria Deployment Protection — sem o bypass, o rewrite cai na tela de SSO da Vercel ao invés de servir o conteúdo do sub-app.
+
 ```ts
 // apps/landing/next.config.js
 import { withEnv } from "@repo/env";
