@@ -1,6 +1,12 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "E2E_USER_EMAIL",
+    "E2E_USER_PASSWORD",
+    "PLAYWRIGHT_BASE_URL",
+    "VERCEL_AUTOMATION_BYPASS_SECRET"
+  ],
   "tasks": {
     "build": {
       "dependsOn": [
@@ -16,6 +22,7 @@
         "!.next/dev/**"
       ],
       "env": [
+        "VERCEL",
         "VERCEL_ENV",
         "VERCEL_BRANCH_URL",
         "VERCEL_PROJECT_PRODUCTION_URL",
@@ -23,12 +30,16 @@
         "NEXT_PUBLIC_ADMIN_URL",
         "NEXT_PUBLIC_DOCS_URL",
         "DATABASE_URL",
+        "SHADOW_DATABASE_URL",
         "POSTGRES_URL",
         "PRISMA_DATABASE_URL",
         "BETTER_AUTH_SECRET",
         "NEXT_PUBLIC_BETTER_AUTH_URL",
         "ADMIN_USER",
         "ADMIN_PASS",
+        "E2E_USER_EMAIL",
+        "E2E_USER_PASSWORD",
+        "PLAYWRIGHT_BASE_URL",
         "NODE_ENV",
         "NEXT_RUNTIME",
         "BLOB_STORE_ID",
@@ -36,7 +47,8 @@
         "QSTASH_CURRENT_SIGNING_KEY",
         "QSTASH_NEXT_SIGNING_KEY",
         "QSTASH_TOKEN",
-        "QSTASH_URL"
+        "QSTASH_URL",
+        "VERCEL_AUTOMATION_BYPASS_SECRET"
       ]
     },
     "lint": {

@@ -47,7 +47,7 @@ Exemplo:
 export const ORDER_CREATED = "order.created" as const;
 
 export type OrderCreatedPayload = {
-	id: string;
-	createdAt: string;
+  id: string;
+  createdAt: string;
 };
 ```

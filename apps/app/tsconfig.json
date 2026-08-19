@@ -1,5 +1,8 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
+  "extends": [
+    "@repo/typescript-config/nextjs.json",
+    "../../packages/testing/tsconfig.e2e.json"
+  ],
   "compilerOptions": {
     "allowImportingTsExtensions": true,
     "plugins": [

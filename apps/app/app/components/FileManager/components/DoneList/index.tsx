@@ -24,7 +24,7 @@ export function DoneList({
   }
 
   return (
-    <div>
+    <div data-testid="file-list">
       <div
         style={{
           display: "flex",

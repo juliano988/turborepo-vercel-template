@@ -11,7 +11,9 @@ export async function downloadFileByNameAction(filename: string) {
 
   const repository = new FileRepository();
   const userRepository = new UserRepository();
-  const currentUser = await userRepository.findById(UserId.from(session.user.id));
+  const currentUser = await userRepository.findById(
+    UserId.from(session.user.id)
+  );
   const service = new DownloadFileByNameUseCase(userRepository, repository);
 
   return service.execute({

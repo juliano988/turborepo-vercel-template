@@ -84,7 +84,10 @@ export class FileRepository implements iFileRepository {
     return records.map(FileRepository.toDomain);
   }
 
-  async findByNameAndOwner(name: FileName, ownerId: UserId): Promise<File | null> {
+  async findByNameAndOwner(
+    name: FileName,
+    ownerId: UserId
+  ): Promise<File | null> {
     const record = await prisma.appFile.findFirst({
       where: {
         name: name.full,

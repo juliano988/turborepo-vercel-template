@@ -1,0 +1,115 @@
+name: Endform E2E
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: endform-e2e-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Detect changed apps
+        id: changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            app:
+              - 'apps/app/**'
+              - 'packages/testing/**'
+              - '.github/workflows/endform-e2e.yml'
+            admin:
+              - 'apps/admin/**'
+              - 'packages/testing/**'
+              - '.github/workflows/endform-e2e.yml'
+
+      - name: Wait landing preview
+        if: steps.changes.outputs.app == 'true' || steps.changes.outputs.admin == 'true'
+        uses: endformdev/actions/run-with-vercel-deployment@main
+        with:
+          project-name: trvt-landing
+          set-url-env-var: LANDING_PREVIEW_URL
+
+      # NEXT_PUBLIC_BETTER_AUTH_URL é fixado no bundle do client no alias git-branch
+      # (trvt-landing-git-<branch>-<team>.vercel.app), diferente da URL única de deployment
+      # retornada acima. Sem isso, o login falha: authClient chama uma origem cross-domain
+      # bloqueada pelo Deployment Protection.
+      - name: Rewrite landing preview URL to git-branch alias
+        if: steps.changes.outputs.app == 'true' || steps.changes.outputs.admin == 'true'
+        run: |
+          host="${LANDING_PREVIEW_URL#https://}"
+          suffix="${host#trvt-landing-*-}"
+          branch_slug=$(echo "${{ github.head_ref }}" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')
+          echo "LANDING_PREVIEW_URL=https://trvt-landing-git-${branch_slug}-${suffix}" >> "$GITHUB_ENV"
+
+      - name: Wait app preview
+        if: steps.changes.outputs.app == 'true'
+        uses: endformdev/actions/run-with-vercel-deployment@main
+        with:
+          project-name: trvt-app
+          set-url-env-var: APP_PREVIEW_URL
+
+      - name: Wait admin preview
+        if: steps.changes.outputs.admin == 'true'
+        uses: endformdev/actions/run-with-vercel-deployment@main
+        with:
+          project-name: trvt-admin
+          set-url-env-var: ADMIN_PREVIEW_URL
+
+      - name: Run app E2E with Endform
+        if: steps.changes.outputs.app == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ env.LANDING_PREVIEW_URL }}
+          E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
+          E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
+        run: bunx endform@latest test --config apps/app/playwright.config.ts
+
+      - name: Run admin E2E with Endform
+        if: steps.changes.outputs.admin == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ env.LANDING_PREVIEW_URL }}
+          E2E_USER_EMAIL: ${{ secrets.E2E_USER_EMAIL }}
+          E2E_USER_PASSWORD: ${{ secrets.E2E_USER_PASSWORD }}
+        run: bunx endform@latest test --config apps/admin/playwright.config.ts
+
+      - name: No e2e changes
+        if: steps.changes.outputs.app != 'true' && steps.changes.outputs.admin != 'true'
+        run: echo "No app/admin e2e-relevant changes detected. Skipping Endform run."
+
+      - name: Upload E2E artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: endform-e2e-artifacts-${{ github.run_id }}
+          path: |
+            apps/app/e2e/test-results/**
+            apps/admin/e2e/test-results/**
+            apps/app/playwright-report/**
+            apps/admin/playwright-report/**
+          if-no-files-found: ignore
+          retention-days: 14

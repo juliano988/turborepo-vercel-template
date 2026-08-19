@@ -8,10 +8,18 @@ const reactTestConfig = defineConfig({
     globals: true,
     css: true,
     setupFiles: ["@repo/testing/setup/react"],
-    include: ["**/*.unit.spec.ts", "**/*.unit.spec.tsx", "**/*.integration.spec.ts", "**/*.integration.spec.tsx"]
-  }
+    include: [
+      "**/*.unit.spec.ts",
+      "**/*.unit.spec.tsx",
+      "**/*.integration.spec.ts",
+      "**/*.integration.spec.tsx",
+    ],
+  },
 });
 
 export function createReactTestConfig(overrides: UserConfig = {}) {
-  return mergeConfig(createSharedTestConfig(), mergeConfig(reactTestConfig, defineConfig(overrides)));
+  return mergeConfig(
+    createSharedTestConfig(),
+    mergeConfig(reactTestConfig, defineConfig(overrides))
+  );
 }

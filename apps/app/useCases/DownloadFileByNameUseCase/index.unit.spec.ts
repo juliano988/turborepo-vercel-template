@@ -39,7 +39,10 @@ describe("DownloadFileByNameUseCase", () => {
       removeMany: vi.fn(),
     };
 
-    const useCase = new DownloadFileByNameUseCase(userRepository, fileRepository);
+    const useCase = new DownloadFileByNameUseCase(
+      userRepository,
+      fileRepository
+    );
     const ownerId = UserId.from("owner-1");
 
     const result = await useCase.execute({
@@ -76,7 +79,10 @@ describe("DownloadFileByNameUseCase", () => {
       removeMany: vi.fn(),
     };
 
-    const useCase = new DownloadFileByNameUseCase(userRepository, fileRepository);
+    const useCase = new DownloadFileByNameUseCase(
+      userRepository,
+      fileRepository
+    );
 
     const result = await useCase.execute({
       filename: "invoice 2026.pdf",
@@ -108,7 +114,10 @@ describe("DownloadFileByNameUseCase", () => {
       removeMany: vi.fn(),
     };
 
-    const useCase = new DownloadFileByNameUseCase(userRepository, fileRepository);
+    const useCase = new DownloadFileByNameUseCase(
+      userRepository,
+      fileRepository
+    );
 
     const result = await useCase.execute({
       filename: "report.pdf",
@@ -139,7 +148,10 @@ describe("DownloadFileByNameUseCase", () => {
       removeMany: vi.fn(),
     };
 
-    const useCase = new DownloadFileByNameUseCase(userRepository, fileRepository);
+    const useCase = new DownloadFileByNameUseCase(
+      userRepository,
+      fileRepository
+    );
 
     const result = await useCase.execute({
       filename: "report.pdf",

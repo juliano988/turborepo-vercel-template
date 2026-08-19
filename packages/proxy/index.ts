@@ -49,6 +49,10 @@ export function withBasePath(
  * Gera as rewrites de proxy para o landing apontar para cada sub-app.
  * Lê automaticamente as URLs de process.env com base na config central.
  *
+ * Quando `VERCEL_AUTOMATION_BYPASS_SECRET` está definido, ele é anexado como
+ * query string do destino: sem isso, o rewrite para um sub-app com Deployment
+ * Protection própria (projeto Vercel distinto) cai na tela de SSO da Vercel.
+ *
  * @example
  * // apps/landing/next.config.js
  * import { withEnv } from '@repo/env';
@@ -57,11 +61,19 @@ export function withBasePath(
  */
 export function getProxyRewrites() {
   const proxied = Object.values(apps).filter((app) => app.basePath !== "/");
+  const bypassSecret = process.env["VERCEL_AUTOMATION_BYPASS_SECRET"];
+  const bypassQuery = bypassSecret
+    ? `?x-vercel-protection-bypass=${bypassSecret}&x-vercel-set-bypass-cookie=samesitenone;secure`
+    : "";
+
   return proxied.flatMap(({ basePath, envVar }) => {
     const url = (process.env[envVar] as string | undefined) ?? "";
     return [
-      { source: basePath, destination: `${url}${basePath}` },
-      { source: `${basePath}/:path*`, destination: `${url}${basePath}/:path*` },
+      { source: basePath, destination: `${url}${basePath}${bypassQuery}` },
+      {
+        source: `${basePath}/:path*`,
+        destination: `${url}${basePath}/:path*${bypassQuery}`,
+      },
     ];
   });
 }

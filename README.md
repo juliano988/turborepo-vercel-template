@@ -74,6 +74,7 @@ Infraestrutura e utilitários reutilizados por todos os contextos:
 | `ui/`                | Componentes de UI (Ant Design, DaisyUI, Fuma Docs)                   |
 | `proxy/`             | Configuração do proxy reverso entre apps                             |
 | `scripts/`           | Scripts utilitários do monorepo (ex: sincronização de env na Vercel) |
+| `testing/`           | Presets compartilhados de testes (Vitest + Playwright)               |
 | `eslint-config/`     | Configurações ESLint reutilizáveis                                   |
 | `prettier-config/`   | Configuração Prettier compartilhada                                  |
 | `typescript-config/` | Configurações TypeScript base                                        |
@@ -129,6 +130,20 @@ No template, o `landing` atua como **âncora do projeto**: é ele que hospeda as
 ### `apps/docs` (Documentação)
 
 Portal de documentação técnica e de produto (Fuma Docs). Serve para onboarding, guias de uso, referência e conteúdo para times internos e externos.
+
+## Graphify: mapa de código para IA e arquitetura
+
+Este template também foi pensado para trabalhar bem com ferramentas de navegação semântica de código. O [Graphify](https://graphify.com/) transforma a estrutura do monorepo em um grafo de conhecimento: entidades, relações, comunidades e caminhos entre módulos ficam explícitos, o que ajuda tanto desenvolvedores quanto agentes de IA a entenderem a arquitetura antes de alterar código.
+
+Em prática, o Graphify é útil para:
+
+- mapear relações entre apps, packages e módulos do domínio
+- descobrir dependências ocultas ou comunidades funcionais
+- orientar agentes de IA em buscas de contexto mais precisas
+- reduzir o tempo de onboarding em monorepos maiores
+- documentar arquitetura e fluxos de negócio de forma navegável
+
+No contexto desse repositório, ele funciona como uma camada extra de "cartografia do sistema": em vez de ler arquivos isoladamente, você consegue visualizar como `app/`, `admin/`, `landing/`, `docs/` e os packages compartilhados se conectam entre si.
 
 ## Tecnologias
 
@@ -201,6 +216,12 @@ QSTASH_TOKEN=eyJVc2VySUQiOiJkZWZhdWx0VXNlciIsIlBhc3N3b3JkIjoiZGVmYXVsdFBhc3N3b3J
 QSTASH_CURRENT_SIGNING_KEY=sig_7kYjw48mhY7kAjqNGcy6cr29RJ6r
 QSTASH_NEXT_SIGNING_KEY=sig_5ZB6DVzB1wjE8S6rZ7eenA8Pdnhs
 
+# Para rodar os testes e2e
+E2E_USER_EMAIL=admin@admin.com
+E2E_USER_PASSWORD=@dmin123
+PLAYWRIGHT_BASE_URL=http://localhost:3000
+
+
 # Vercel protection bypass para preview deploys
 # Gere uma chave uma única vez e replique exatamente o mesmo valor
 # em todos os projetos Vercel, tanto em Deployment Protection quanto
@@ -239,9 +260,10 @@ bun run lint
 | `bun run db:studio`             | Abre o Prisma Studio para o banco atual                       |
 | `bun run mq:dev`                | Sobe o servidor QStash local via Docker (porta 8080)          |
 | `bun run dev`                   | Inicia todos os apps em modo desenvolvimento                  |
-| `bun run test:unit`             | Executa apenas os testes unitários do monorepo               |
-| `bun run test:integration`      | Dispara testes de integração (gateado para preview Vercel)   |
-| `bun run test`                  | Executa unitários + etapa de integração gateada              |
+| `bun run test:unit`             | Executa apenas os testes unitários do monorepo                |
+| `bun run test:integration`      | Dispara testes de integração (gateado para preview Vercel)    |
+| `bun run test:e2e`              | Executa E2E do `app` e do `admin`                             |
+| `bun run test`                  | Executa unitários + integração gateada + E2E                  |
 | `bun run build`                 | Build de produção (com cache do Turbo)                        |
 | `bun run start`                 | Inicia todos os apps em modo produção                         |
 | `bun run lint`                  | Executa ESLint em todo o monorepo                             |
@@ -258,35 +280,41 @@ O projeto combina duas estratégias, de acordo com o tipo de subdomínio:
 Nos contextos principais de negócio (ex.: `apps/app`), usamos a **pirâmide de testes** para privilegiar velocidade, feedback rápido e segurança de regra de negócio:
 
 1. **Base (maior volume): testes unitários**
-  - Dominio (`agregates/vo`)
-  - Casos de uso (`useCases/`)
-  - Server Actions finas (`app/functions/`)
-  - Repositórios com Prisma mockado (contrato/mapeamento)
+
+- Dominio (`agregates/vo`)
+- Casos de uso (`useCases/`)
+- Server Actions finas (`app/functions/`)
+- Repositórios com Prisma mockado (contrato/mapeamento)
 
 2. **Meio (volume reduzido): integração real com banco**
-  - Repositórios críticos do `apps/app/repository`
-  - Execução contra `DATABASE_URL` real
-  - Setup/cleanup por teste para isolamento
+
+- Repositórios críticos do `apps/app/repository`
+- Execução contra `DATABASE_URL` real
+- Setup/cleanup por teste para isolamento
 
 3. **Topo (menor volume): E2E**
-  - Fluxos ponta a ponta (login, upload, listagem, download)
-  - Deve ficar enxuto para manter custo e estabilidade
+
+- Fluxos ponta a ponta (login, upload, listagem, download)
+- Deve ficar enxuto para manter custo e estabilidade
 
 ### Subdomínios de suporte: losango de testes
 
 Nos subdomínios de suporte (ex.: `admin`, `landing`, integrações de plataforma e camadas transversais), usamos o **losango de testes**:
 
 1. **Base moderada: unitários essenciais**
-  - Regras locais e utilitários críticos
+
+- Regras locais e utilitários críticos
 
 2. **Centro mais largo: integração e testes de contrato**
-  - Integração entre app, banco, auth, mensageria e serviços externos
-  - Maior foco em comportamento entre fronteiras do sistema
-  - Registros ativos
+
+- Integração entre app, banco, auth, mensageria e serviços externos
+- Maior foco em comportamento entre fronteiras do sistema
+- Registros ativos
 
 3. **Topo moderado: E2E de jornada**
-  - Menos volume que integração, mas mais presente que na pirâmide pura
-  - Cobre caminhos de negócio e fluxos cross-app mais sensíveis
+
+- Menos volume que integração, mas mais presente que na pirâmide pura
+- Cobre caminhos de negócio e fluxos cross-app mais sensíveis
 
 Em resumo: no **subdomínio principal** concentramos massa em unitário (pirâmide); nos **subdomínios de suporte** deslocamos mais esforço para integração/contrato (losango).
 
@@ -300,8 +328,9 @@ Em resumo: no **subdomínio principal** concentramos massa em unitário (pirâmi
 No root:
 
 - `bun run test:unit` roda `turbo run test`.
-- `bun run test:integration` chama `apps/app` com gate de preview.
-- `bun run test` executa `test:unit` seguido de `test:integration`.
+- `bun run test:integration` chama `apps/app` e `apps/admin` com gate de preview.
+- `bun run test:e2e` executa os E2E de `apps/app` e `apps/admin`.
+- `bun run test` executa `test:unit`, `test:integration` e `test:e2e`.
 
 No `apps/app`:
 
@@ -316,7 +345,7 @@ Fora desse contexto, o comando faz skip explícito.
 
 ### Execução na Vercel Preview
 
-No `apps/app`, o `postbuild` executa `test:integration:preview`.
+No `apps/app` e no `apps/admin`, o `postbuild` executa `test:integration:preview`.
 
 Isso significa que:
 
@@ -324,6 +353,48 @@ Isso significa que:
 2. Em Production Deploy e ambiente local, essa etapa não roda (skip).
 
 Essa estratégia mantém o pipeline simples e evita acoplar infraestrutura de desenvolvimento local no build remoto.
+
+### E2E em Preview com Endform
+
+O monorepo já possui um workflow pronto para executar os testes E2E do `app` e do `admin` contra os preview deploys da Vercel:
+
+- Workflow: `.github/workflows/endform-e2e.yml`
+- Trigger: `pull_request` para `main`
+
+Comportamento do workflow:
+
+- Detecta mudanças por app (`apps/app/**` e `apps/admin/**`, além de `packages/testing/**` e do próprio workflow).
+- Só aguarda deployment dos projetos que mudaram (`trvt-app` e/ou `trvt-admin`).
+- Se não houver mudança relevante para E2E, faz skip explícito.
+
+Os comandos executados no CI são:
+
+- `bunx endform@latest test --config apps/app/playwright.config.ts apps/app/e2e/unauthenticated.e2e.spec.ts`
+- `bunx endform@latest test --config apps/admin/playwright.config.ts apps/admin/e2e/unauthenticated.e2e.spec.ts`
+
+Pré-requisitos no GitHub (Repository secrets):
+
+- `E2E_USER_EMAIL`
+- `E2E_USER_PASSWORD`
+
+Pré-requisito de integração:
+
+- **Instale o GitHub App do Endform no repositório** antes de executar o workflow.
+- **Conecte no Endform os projetos da Vercel** usados no workflow:
+  - `trvt-landing` (obrigatório: todo o tráfego passa pelo proxy da landing)
+  - `trvt-app`
+  - `trvt-admin`
+
+Observações:
+
+- A URL base dos testes é derivada automaticamente do preview de cada app (`APP_PREVIEW_URL`/`ADMIN_PREVIEW_URL`).
+- O bypass de Deployment Protection da Vercel é obtido e injetado automaticamente pela action `endformdev/actions/run-with-vercel-deployment` (via `deployment-protection-bypass: true`, padrão). Não defina `VERCEL_AUTOMATION_BYPASS_SECRET`/`ENDFORM_EXTRA_HTTP_HEADERS` manualmente no workflow — isso sobrescreve o header com um valor vazio e quebra o bypass.
+- Em caso de falha, o workflow gera artefatos no GitHub Actions (`endform-e2e-artifacts-<run_id>`) com evidências de erro.
+- Artefatos coletados (quando existirem):
+  - `apps/app/e2e/test-results/**`
+  - `apps/admin/e2e/test-results/**`
+  - `apps/app/playwright-report/**`
+  - `apps/admin/playwright-report/**`
 
 ## Eventos entre bounded contexts (QStash)
 
@@ -540,3 +611,4 @@ A escolha da biblioteca de UI não é uniforme — ela varia de acordo com as ne
 **DaisyUI** (usado no `landing`) é uma biblioteca de componentes puramente CSS construída sobre Tailwind. Não adiciona nenhum JavaScript ao bundle, o que a torna ideal para páginas públicas onde performance de carregamento e SEO são críticos. Menos JS significa menos trabalho para o crawler, menor LCP e melhor Core Web Vitals. O Tailwind como base ainda permite customizações rápidas e consistentes sem sair do HTML.
 
 **Ant Design** (usado no `app` e `admin`) é uma biblioteca rica em componentes interativos, adequada para interfaces administrativas e dashboards onde a experiência do usuário autenticado importa mais do que métricas de SEO. O custo de bundle é aceitável nesses contextos porque as páginas são protegidas por autenticação e não são indexadas por buscadores. Além disso, o ecossistema do Ant Design — especialmente via [Ant Design Charts](https://charts.ant.design/) e a `Table` nativa com ordenação, filtros e paginação embutidos — mitiga a necessidade de adicionar libs externas para gráficos, tabelas avançadas, formulários complexos e outros componentes típicos de backoffices, reduzindo a fragmentação de dependências no projeto.
+

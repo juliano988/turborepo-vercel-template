@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "typeRoots": ["./node_modules/@types", "../../node_modules/@types"],
+    "types": ["node"],
+    "paths": {
+      "@repo/testing/playwright": ["./playwright.base.ts"]
+    }
+  }
+}

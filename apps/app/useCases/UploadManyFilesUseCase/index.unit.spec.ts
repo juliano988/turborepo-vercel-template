@@ -53,20 +53,32 @@ describe("UploadManyFilesUseCase", () => {
       removeMany: vi.fn(),
     };
 
-    uploadManyMock.mockImplementation(async (items: Array<{ filename: string; options: { multipart: boolean; folder: string; contentType: string; access: string } }>) => ({
-      successes: [
-        {
-          item: items[0],
-          blob: { url: "https://blob.example.com/report.pdf" },
-        },
-      ],
-      failures: [
-        {
-          item: { filename: "failed.pdf" },
-          error: new Error("upload failed"),
-        },
-      ],
-    }));
+    uploadManyMock.mockImplementation(
+      async (
+        items: Array<{
+          filename: string;
+          options: {
+            multipart: boolean;
+            folder: string;
+            contentType: string;
+            access: string;
+          };
+        }>
+      ) => ({
+        successes: [
+          {
+            item: items[0],
+            blob: { url: "https://blob.example.com/report.pdf" },
+          },
+        ],
+        failures: [
+          {
+            item: { filename: "failed.pdf" },
+            error: new Error("upload failed"),
+          },
+        ],
+      })
+    );
 
     const useCase = new UploadManyFilesUseCase(fileRepository);
 
@@ -125,15 +137,17 @@ describe("UploadManyFilesUseCase", () => {
       removeMany: vi.fn(),
     };
 
-    uploadManyMock.mockImplementation(async (items: Array<{ filename: string }>) => ({
-      successes: [
-        {
-          item: items[0],
-          blob: { url: "https://blob.example.com/report.pdf" },
-        },
-      ],
-      failures: [],
-    }));
+    uploadManyMock.mockImplementation(
+      async (items: Array<{ filename: string }>) => ({
+        successes: [
+          {
+            item: items[0],
+            blob: { url: "https://blob.example.com/report.pdf" },
+          },
+        ],
+        failures: [],
+      })
+    );
 
     const useCase = new UploadManyFilesUseCase(fileRepository);
 
@@ -151,6 +165,8 @@ describe("UploadManyFilesUseCase", () => {
       })
     ).rejects.toThrow(persistenceError);
 
-    expect(removeMock).toHaveBeenCalledWith(["https://blob.example.com/report.pdf"]);
+    expect(removeMock).toHaveBeenCalledWith([
+      "https://blob.example.com/report.pdf",
+    ]);
   });
 });

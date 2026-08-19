@@ -19,14 +19,20 @@ describe("FileName", () => {
   });
 
   it("rejeita nome vazio", () => {
-    expect(() => FileName.from("   ")).toThrow("Nome do arquivo não pode ser vazio");
+    expect(() => FileName.from("   ")).toThrow(
+      "Nome do arquivo não pode ser vazio"
+    );
   });
 
   it("rejeita arquivo sem extensao", () => {
-    expect(() => FileName.from("report")).toThrow("Arquivo deve ter uma extensão");
+    expect(() => FileName.from("report")).toThrow(
+      "Arquivo deve ter uma extensão"
+    );
   });
 
   it("rejeita extensao nao permitida", () => {
-    expect(() => FileName.from("report.exe")).toThrow('Extensão ".exe" não é permitida');
+    expect(() => FileName.from("report.exe")).toThrow(
+      'Extensão ".exe" não é permitida'
+    );
   });
 });
