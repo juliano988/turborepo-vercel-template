@@ -16,8 +16,10 @@ async function signIn(page: Page) {
   await page.getByLabel(/senha/i).fill(password);
 
   await page.getByRole("button", { name: /entrar/i }).click();
+  // waitUntil: "commit" evita net::ERR_ABORTED durante a cadeia de redirects do bypass cookie
   await page.waitForURL((url) => !url.pathname.endsWith("/login"), {
     timeout: 15_000,
+    waitUntil: "commit",
   });
 }
 
